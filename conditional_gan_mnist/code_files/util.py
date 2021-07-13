@@ -1,5 +1,8 @@
 import torch
+import wandb
 from torch import nn
+import matplotlib.pyplot as plt
+from torchvision.utils import make_grid
 
 def get_input_dimensions(z_dim, mnist_shape, n_classes):
     '''
@@ -24,3 +27,13 @@ def weights_init(m):
 
 def get_noise(n_samples, input_dim, device='cpu'):
     return torch.randn(n_samples, input_dim, device=device)
+
+def make_img_array(n_img, img_tensor):
+    img_num = 0
+    img_array = []
+    for i in img_tensor:
+        img_array += [wandb.Image(i)]
+        img_num += 1
+        if img_num >= n_img:
+            break
+    return img_array

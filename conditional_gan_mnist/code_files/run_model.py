@@ -3,6 +3,9 @@ from networks import Generator, Discriminator
 import util, training
 
 from torch import nn
+import wandb
+
+wandb.init(project="mnist-test", config=config)
 
 mnist_shape = (1, 28, 28)
 criterion = nn.BCEWithLogitsLoss()

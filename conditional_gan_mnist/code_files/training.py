@@ -1,9 +1,9 @@
-from params import config
 import preprocessing
 import util
 
 import os
 import torch
+import wandb
 from torch import nn
 from tqdm.auto import tqdm
 from torchvision import transforms
@@ -91,6 +91,13 @@ def train(gen, disc, mnist_shape, n_classes, criterion, n_epochs, z_dim, batch_s
 
             # Keep track of the generator losses
             generator_losses += [gen_loss.item()]
+
+            wandb.log({"gen loss":gen_loss.item()})
+            wandb.log({"disc loss":disc_loss.item()})
+            wandb.log({"fake":util.make_img_array(25,fake)})
+            wandb.log({"real":util.make_img_array(25,real)})
+            #wandb.log({"fake" : [wandb.Image(i) for i in fake]})
+            #wandb.log({"real" : [wandb.Image(i) for i in real]})
 
             if cur_step % display_step == 0 and cur_step > 0:
                 gen_mean = sum(generator_losses[-display_step:]) / display_step
