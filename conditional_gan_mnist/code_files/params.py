@@ -1,0 +1,9 @@
+config = dict(
+    epochs=200,
+    classes=10,
+    z_dim = 64,
+    batch_size=128,
+    learning_rate=0.0002,
+    dataset="MNIST",
+    architecture="DCGAN",
+    device='cpu')
