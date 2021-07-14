@@ -22,7 +22,7 @@ class Generator(nn.Module):
         else:
             return nn.Sequential(
                 nn.ConvTranspose2d(input_channels, output_channels, kernel_size, stride),
-                nn.Sigmoid(),
+                nn.Tanh(),
             )
 
     def forward(self, noise):
@@ -49,7 +49,6 @@ class Discriminator(nn.Module):
         else:
             return nn.Sequential(
                 nn.Conv2d(input_channels, output_channels, kernel_size, stride),
-                nn.Sigmoid(),
             )
 
     def forward(self, image):
