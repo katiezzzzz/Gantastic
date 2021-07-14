@@ -45,7 +45,7 @@ def train(gen, disc, mnist_shape, n_classes, criterion, n_epochs, z_dim, batch_s
             fake_noise = util.get_noise(cur_batch_size, z_dim, device=device)
         
             noise_and_labels = preprocessing.combine_vectors(fake_noise, one_hot_labels)
-            fake = gen(noise_and_labels)
+            fake = gen.forward(noise_and_labels)
             
             # Make sure that enough images were generated
             assert len(fake) == len(real)
@@ -57,8 +57,8 @@ def train(gen, disc, mnist_shape, n_classes, criterion, n_epochs, z_dim, batch_s
             # get the predictions from the discriminator
             fake_image_and_labels = preprocessing.combine_vectors(fake, image_one_hot_labels).detach()
             real_image_and_labels = preprocessing.combine_vectors(real, image_one_hot_labels)
-            disc_fake_pred = disc(fake_image_and_labels)
-            disc_real_pred = disc(real_image_and_labels)
+            disc_fake_pred = disc.forward(fake_image_and_labels)
+            disc_real_pred = disc.forward(real_image_and_labels)
             
             # Make sure shapes are correct 
             assert tuple(fake_image_and_labels.shape) == (len(real), fake.detach().shape[1] + image_one_hot_labels.shape[1], 28 ,28)
