@@ -22,7 +22,7 @@ class Generator(nn.Module):
         else:
             return nn.Sequential(
                 nn.ConvTranspose2d(input_channels, output_channels, kernel_size, stride),
-                nn.Tanh(),
+                nn.Sigmoid(),
             )
 
     def forward(self, noise):
