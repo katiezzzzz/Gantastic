@@ -6,4 +6,4 @@ config = dict(
     learning_rate=0.0002,
     dataset="MNIST",
     architecture="DCGAN",
-    device='cpu')
+    device='cuda')
