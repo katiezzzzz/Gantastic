@@ -92,13 +92,12 @@ def train(gen, disc, mnist_shape, n_classes, criterion, n_epochs, z_dim, batch_s
             # Keep track of the generator losses
             generator_losses += [gen_loss.item()]
 
-            wandb.log({"gen loss":gen_loss.item()})
-            wandb.log({"disc loss":disc_loss.item()})
-            wandb.log({"fake":util.make_img_array(8,fake)})
-            wandb.log({"real":util.make_img_array(8,real)})
-
             if cur_step % display_step == 0 and cur_step > 0:
                 gen_mean = sum(generator_losses[-display_step:]) / display_step
                 disc_mean = sum(discriminator_losses[-display_step:]) / display_step
                 print(f"Step {cur_step}: Generator loss: {gen_mean}, discriminator loss: {disc_mean}")
             cur_step += 1
+        wandb.log({"gen loss":gen_loss.item()})
+        wandb.log({"disc loss":disc_loss.item()})
+        wandb.log({"fake":util.make_img_array(8,fake)})
+        wandb.log({"real":util.make_img_array(8,real)})
