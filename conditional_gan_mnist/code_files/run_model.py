@@ -2,8 +2,10 @@ from params import config
 from networks import Generator, Discriminator
 import util, training
 
-from torch import nn
 import wandb
+import torch
+from torch import nn
+
 
 wandb.init(project="mnist-test", config=config)
 
@@ -14,7 +16,7 @@ n_classes = config['classes']
 z_dim = config['z_dim']
 batch_size = config['batch_size']
 lr = config['learning_rate']
-device = config['device']
+device = torch.device("cuda" if(torch.cuda.is_available() and ngpu > 0) else "cpu")
 
 
 generator_input_dim, discriminator_im_chan = util.get_input_dimensions(z_dim, mnist_shape, n_classes)
