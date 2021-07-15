@@ -1,26 +1,13 @@
-import preprocessing
 import util
+import preprocessing
 
-import os
 import torch
 import wandb
-from torch import nn
 from tqdm.auto import tqdm
-from torchvision import transforms
-from torchvision.datasets import MNIST
-from torch.utils.data import DataLoader
 
-def train(gen, disc, mnist_shape, n_classes, criterion, n_epochs, z_dim, batch_size, lr, device):
+def train(path, gen, disc, mnist_shape, n_classes, criterion, n_epochs, z_dim, batch_size, lr, device):
 
-    transform = transforms.Compose([
-        transforms.ToTensor(),
-        transforms.Normalize((0.5,), (0.5,)),
-        ])
-
-    dataloader = DataLoader(
-        MNIST(os.path.dirname(os.path.realpath(__file__))+'/data', download=True, transform=transform),
-        batch_size=batch_size,
-        shuffle=True)
+    trainloader = util.load_data(path=path, train=True, batch_size=batch_size)
 
     gen_opt = torch.optim.Adam(gen.parameters(), lr=lr)
     disc_opt = torch.optim.Adam(disc.parameters(), lr=lr)
@@ -31,7 +18,7 @@ def train(gen, disc, mnist_shape, n_classes, criterion, n_epochs, z_dim, batch_s
     display_step = 500
 
     for epoch in range(n_epochs):
-        for real, labels in tqdm(dataloader):
+        for real, labels in tqdm(trainloader):
             cur_batch_size = len(real)
             # Flatten the batch of real images from the dataset
             real = real.to(device)
@@ -45,7 +32,7 @@ def train(gen, disc, mnist_shape, n_classes, criterion, n_epochs, z_dim, batch_s
             fake_noise = util.get_noise(cur_batch_size, z_dim, device=device)
         
             noise_and_labels = preprocessing.combine_vectors(fake_noise, one_hot_labels)
-            fake = gen.forward(noise_and_labels)
+            fake = gen(noise_and_labels)
             
             # Make sure that enough images were generated
             assert len(fake) == len(real)
@@ -57,8 +44,8 @@ def train(gen, disc, mnist_shape, n_classes, criterion, n_epochs, z_dim, batch_s
             # get the predictions from the discriminator
             fake_image_and_labels = preprocessing.combine_vectors(fake, image_one_hot_labels).detach()
             real_image_and_labels = preprocessing.combine_vectors(real, image_one_hot_labels)
-            disc_fake_pred = disc.forward(fake_image_and_labels)
-            disc_real_pred = disc.forward(real_image_and_labels)
+            disc_fake_pred = disc(fake_image_and_labels)
+            disc_real_pred = disc(real_image_and_labels)
             
             # Make sure shapes are correct 
             assert tuple(fake_image_and_labels.shape) == (len(real), fake.detach().shape[1] + image_one_hot_labels.shape[1], 28 ,28)
@@ -97,6 +84,9 @@ def train(gen, disc, mnist_shape, n_classes, criterion, n_epochs, z_dim, batch_s
                 disc_mean = sum(discriminator_losses[-display_step:]) / display_step
                 print(f"Step {cur_step}: Generator loss: {gen_mean}, discriminator loss: {disc_mean}")
             cur_step += 1
+
+        torch.save(gen.state_dict(), path+'/store/gen.pkl')
+        torch.save(disc.state_dict(), path+'/store/disc.pkl')
         wandb.log({"gen loss":gen_loss.item()})
         wandb.log({"disc loss":disc_loss.item()})
         wandb.log({"fake":util.make_img_array(8,fake)})
