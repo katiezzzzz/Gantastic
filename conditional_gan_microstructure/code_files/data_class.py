@@ -1,3 +1,5 @@
+from time import sleep
+from tqdm import tqdm
 import numpy as np
 import pickle
 
@@ -51,7 +53,7 @@ class CircleGenerator():
         self.centres = np.array([])
         # the number of centres generated depends on the pixel to image ratio
         total = int(self.ratio * (self.length/(2*self.radius))**2)
-        for n in range(total):
+        for n in tqdm(range(total)):
             if len(self.centres) == 0:
                 self.centres = np.random.randint(self.radius, self.length-self.radius, 2)
             else:
@@ -72,6 +74,7 @@ class CircleGenerator():
                         else:
                             overlap = False
                 self.centres = np.vstack((self.centres,new_centre))
+            sleep(0.001)
         return self.centres
     
     def make_images(self, n_images, path):
