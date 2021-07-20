@@ -4,7 +4,7 @@ from data_class import CircleGenerator
 PATH = os.path.dirname(os.path.realpath(__file__))
 
 # make small circles, image size 800 x 800
-image_length = 10000
+image_length = 8000
 small_radius = 3
 big_radius = 8
 n_images = 1
