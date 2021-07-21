@@ -15,7 +15,7 @@ def conditional_trainer(pth, imtype, real_data, labels, Disc, Gen, isotropic, nc
     ngpu = 1
     nlabels = len(labels[0])
     batch_size = 8
-    D_batch_size = 9
+    D_batch_size = 8
     num_epochs = 100
     iters = 30000//batch_size
     lrg = 0.0004
@@ -72,6 +72,7 @@ def conditional_trainer(pth, imtype, real_data, labels, Disc, Gen, isotropic, nc
             ### Discriminator
             ## Generate fake image batch with G
             noise = torch.randn(D_batch_size, nz, lz, lz, lz, device=device)
+            print(lbl)
             print(noise.shape)
             print(G_labels.shape)
             print('=================================')
