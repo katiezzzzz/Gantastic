@@ -60,9 +60,9 @@ def batch(imgs, lbls, l, bs, device):
     nimgs = len(imgs)
     for img,lbl in zip(imgs, lbls):
         x_max, y_max = img.shape[1:]
-        f = [1,2,3]
+        f = [1,2]
         np.random.shuffle(f)
-        img.permute(0, f[0], f[1], f[2])
+        img.permute(0, f[0], f[1])
         if bs < nimgs:
             print('ERROR batch size smaller than n imgs')
             raise ValueError
