@@ -26,7 +26,7 @@ def conditional_trainer(pth, imtype, real_data, labels, Disc, Gen, isotropic, nc
     critic_iters = 5
     cudnn.benchmark = True
     workers = 0
-    lz = 6
+    lz = 4
     ##Dataloaders for each orientation
     device = torch.device("cuda:0" if(torch.cuda.is_available() and ngpu > 0) else "cpu")
     print(device, " will be used.\n")
