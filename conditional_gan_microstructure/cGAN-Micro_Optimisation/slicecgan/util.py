@@ -249,7 +249,7 @@ def wandb_init(name):
     load_dotenv(os.path.join(os.path.dirname(__file__),'.env'))
     API_KEY = os.getenv('WANDB_API_KEY')
     print("Logging into W and B using API key {}".format(API_KEY))
-    process = subprocess.run(["wandb", "login", API_KEY], capture_output=True)
+    process = subprocess.run(["wandb", "login", API_KEY])
     print("stderr:", process.stderr)
 
     ENTITY = os.getenv('WANDB_ENTITY')
