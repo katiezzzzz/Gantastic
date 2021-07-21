@@ -5,8 +5,10 @@ from slicecgan import *
 
 ## Make directory
 
-Project_name = 'Alej_batch5'
-Project_dir = 'trained_generators/NMC_Alej/'
+
+PATH = os.path.dirname(os.path.realpath(__file__))
+Project_name = 'cgan_microstructure'
+Project_dir = PATH+'/trained_generators/microstructure/'
 
 ## Data Processing
 image_type = 'twophase' # threephase, twophase or colour
@@ -16,21 +18,14 @@ labels = []
 # # # Scotts labels
 
 wandb_name = Project_name
-# for ca, ca_lab in zip(['000.10','100.00'], [0, 1]):
-#     for cc, cc_lab  in zip(['000.10','100.00'], [0, 1]):
-#         for por, por_lab in zip(['30','40','50'], [0, 0.5, 1]):
-#             # for wt_lab, wt in enumerate(zip(['90','96']),1):
-#             file = 'ds_wt0.92_ca{}_cc{}_case01_porosity0.{}_phases.npy'.format(ca, cc, por)
-#             data_path.append('Examples/Scott_NMC/round1_2/'+ file) # path to training data.
-#             labels.append([ca_lab, cc_lab, por_lab])
 
 for r, r_lab in zip(['6', '10'], [0, 1]):
-    file = 'training_data/r{}.pkl'.format(r)
+    file = PATH+'/training_data/r{}.tiff'.format(r)
     data_path.append(file) # path to training data.
     labels.append([r_lab])
 
 isotropic = True
-Training = 1 # Run with False to show an image during training
+Training = True # Run with False to show an image during training
 Project_path = mkdr(Project_name, Project_dir, Training)
 print('Using project name {}'.format(Project_path))
 

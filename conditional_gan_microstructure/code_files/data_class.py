@@ -1,3 +1,4 @@
+from PIL import Image
 from time import sleep
 from tqdm import tqdm
 import numpy as np
@@ -77,28 +78,26 @@ class CircleGenerator():
             sleep(0.001)
         return self.centres
     
-    def make_images(self, n_images, path):
+    def make_image(self, path):
         '''
         Make images of circles
         Parameters:
             n_images: number of images to be generated
             path: system path of saving the images
         Return:
-            array of size (n_images, self.length, self.length)
+            array of size (self.length, self.length)
         '''
         image_array = np.array([])
-        for n in range(n_images):
-            x = np.zeros((self.length, self.length))
-            centres = self.generate_centres()
-            for centre in centres:
-                x[self.make_circles(centre)] = 1
-            if len(image_array) == 0:
-                image_array = np.copy(x)
-            else:
-                image_array = np.vstack((image_array,x))
-        image_array = np.reshape(image_array, (n_images, self.length, self.length))
-        with open(path, 'wb') as f:
-            pickle.dump(image_array, f)
-        
+        x = np.zeros((self.length, self.length))
+        centres = self.generate_centres()
+        for centre in centres:
+            x[self.make_circles(centre)] = 1
+        if len(image_array) == 0:
+            image_array = np.copy(x)
+        else:
+            image_array = np.vstack((image_array,x))
+        image_array = np.reshape(image_array, (self.length, self.length)).astype(np.uint8)
+        im = Image.fromarray(image_array)
+        im.save(path)
         return image_array
             
