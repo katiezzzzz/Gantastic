@@ -14,7 +14,7 @@ def conditional_trainer(pth, imtype, real_data, labels, Disc, Gen, isotropic, nc
     # matplotlib.use('Agg')
     ngpu = 1
     nlabels = len(labels[0])
-    batch_size = 9
+    batch_size = 8
     D_batch_size = 9
     num_epochs = 100
     iters = 30000//batch_size
@@ -72,6 +72,9 @@ def conditional_trainer(pth, imtype, real_data, labels, Disc, Gen, isotropic, nc
             ### Discriminator
             ## Generate fake image batch with G
             noise = torch.randn(D_batch_size, nz, lz, lz, lz, device=device)
+            print(noise.shape)
+            print(G_labels.shape)
+            print('=================================')
             fake_data = netG(noise, G_labels).detach()
             # For each dimension
             start_disc = time.time()
