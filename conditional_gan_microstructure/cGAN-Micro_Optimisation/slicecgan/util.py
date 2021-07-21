@@ -54,12 +54,12 @@ def pre_proc(paths, sf):
 
 def batch(imgs, lbls, l, bs, device):
     nlabs = len(lbls[0])
-    data = np.empty([bs, 3, l, l])
-    labelset = np.zeros([bs, nlabs * 2, 1, 1, 1])
+    data = np.empty([bs, 2, l, l])
+    labelset = np.zeros([bs, nlabs * 2, 1, 1])
     p = 0
     nimgs = len(imgs)
     for img,lbl in zip(imgs, lbls):
-        x_max, y_max, z_max = img.shape[1:]
+        x_max, y_max = img.shape[1:]
         f = [1,2,3]
         np.random.shuffle(f)
         img.permute(0, f[0], f[1], f[2])
@@ -72,8 +72,7 @@ def batch(imgs, lbls, l, bs, device):
                 labelset[p, j+nlabs] = 1 - lb
             x = np.random.randint(1, x_max - l - 1)
             y = np.random.randint(1, y_max - l - 1)
-            z = np.random.randint(1, z_max-1)
-            data[p] = img[:, x:x + l, y:y + l, z]
+            data[p] = img[:, x:x + l, y:y + l]
             p += 1
     return torch.FloatTensor(data).to(device), torch.FloatTensor(labelset).to(device)
 
