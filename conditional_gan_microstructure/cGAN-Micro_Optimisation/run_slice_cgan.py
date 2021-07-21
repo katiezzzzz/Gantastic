@@ -9,7 +9,7 @@ Project_name = 'Alej_batch5'
 Project_dir = 'trained_generators/NMC_Alej/'
 
 ## Data Processing
-image_type = 'threephase' # threephase, twophase or colour
+image_type = 'twophase' # threephase, twophase or colour
 data_type = 'self' # png, jpg, tif, array, array2D
 data_path = []
 labels = []
@@ -24,19 +24,10 @@ wandb_name = Project_name
 #             data_path.append('Examples/Scott_NMC/round1_2/'+ file) # path to training data.
 #             labels.append([ca_lab, cc_lab, por_lab])
 
-for wt, wt_lab in zip(['85', '90', '95'], [0, 0.5, 1]):
-    # for psd, psd_lab in zip(['0', '0.5', '1'], [0, 0.5, 1]):
-    for psd, psd_lab in zip(['1'], [1]):
-        for comp, comp_lab in zip(['0','10','20'], [0, 0.5, 1]):
-            # for wt_lab, wt in enumerate(zip(['90','96']),1):
-            file = 'training_data/Alej_NMC/batch5/processed_1/wt{}_psd1frac{}_comp{}.tif'.format(wt, psd, comp)
-            data_path.append(file) # path to training data.
-            labels.append([wt_lab, psd_lab, comp_lab])
-
-# # Alej labels
-# for wt, NMC in zip(['94','95', '96'],[0, 0.5, 1]):
-#     data_path.append('training_data/Alej_NMC/batch2/{}.npy'.format(lab))
-#     labels.append([NMC])
+for r, r_lab in zip(['6', '10'], [0, 1]):
+    file = 'training_data/r{}.pkl'.format(r)
+    data_path.append(file) # path to training data.
+    labels.append([r_lab])
 
 isotropic = True
 Training = 1 # Run with False to show an image during training
@@ -55,7 +46,7 @@ df, gf = [channels, 64, 128, 256, 512, 1], [nz, 512, 256, 128, 64, channels]  # 
 dp, gp = [1, 1, 1, 1, 0], [2, 2, 2, 2, 3]
 
 ##Create Networks
-netD, netG = slicecgan_rc_pc_nets(Project_path, Training, lbls, dk, ds, df,dp, gk ,gs, gf, gp)
+netD, netG = slicecgan_rc_nets(Project_path, Training, lbls, dk, ds, df,dp, gk ,gs, gf, gp)
 
 if Training:
     data = conditional_trainer(Project_path, image_type, data_path, labels, netD, netG, isotropic, channels, imsize, nz, sf, wandb_name)
