@@ -75,8 +75,8 @@ def conditional_trainer(pth, imtype, real_data, labels, Disc, Gen, isotropic, nc
             fake_data = netG(noise, G_labels).detach()
             # For each dimension
             start_disc = time.time()
-            for dim, (netD, optimizer, d1, d2, d3) in enumerate(
-                    zip(netDs, optDs, [2, 3, 4], [3, 2, 2], [4, 4, 3])):
+            for dim, (netD, optimizer, d1, d2) in enumerate(
+                    zip(netDs, optDs, [2, 3, 4], [3, 2, 2])):
                 if isotropic:
                     netD = netDs[0]
                     optimizer = optDs[0]
