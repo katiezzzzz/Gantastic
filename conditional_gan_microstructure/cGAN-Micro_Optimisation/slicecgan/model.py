@@ -44,7 +44,7 @@ def conditional_trainer(pth, imtype, real_data, labels, Disc, Gen, isotropic, nc
     # Define 1 discriminator and optimizer for each plane in each dimension
     netDs = []
     optDs = []
-    for i in range(3):
+    for i in range(2):
         netD = Disc()
         if rt:
             netD.load_state_dict(torch.load('trained_generators/NMC_Alej/Alej_batch5_{}/Alej_batch5_{}_Disc.pt'.format(rt, rt)))
@@ -66,16 +66,12 @@ def conditional_trainer(pth, imtype, real_data, labels, Disc, Gen, isotropic, nc
         # For each batch in the dataloader
         for i in range(iters):
             real_data, lbl = batch(training_imgs, labels, l, D_batch_size, device)
-            G_labels = lbl.repeat(8, 1, lz, lz, lz).to(device)
+            G_labels = lbl.repeat(1, 1, lz, lz).to(device)
             D_labels_real = lbl.repeat(1, 1, l, l, l)[:, :, 0]
             D_labels_fake = D_labels_real.repeat(1, l, 1 ,1).reshape(-1, nlabels*2, l, l)
             ### Discriminator
             ## Generate fake image batch with G
-            noise = torch.randn(D_batch_size, nz, lz, lz, lz, device=device)
-            print(lbl)
-            print(noise.shape)
-            print(G_labels.shape)
-            print('=================================')
+            noise = torch.randn(D_batch_size, nz, lz, lz, device=device)
             fake_data = netG(noise, G_labels).detach()
             # For each dimension
             start_disc = time.time()
@@ -87,6 +83,9 @@ def conditional_trainer(pth, imtype, real_data, labels, Disc, Gen, isotropic, nc
                 ##train on real images
                 netD.zero_grad()
                 # Forward pass real batch through D
+                print(real_data.shape)
+                print(D_labels_real.shape)
+                print('========================')
                 out_real = netD(real_data, D_labels_real).view(-1).mean()
                 # train on fake images
                 fake_data_perm = fake_data.permute(0, d1, 1, d2, d3).reshape(l * D_batch_size, nc, l, l)
@@ -114,7 +113,7 @@ def conditional_trainer(pth, imtype, real_data, labels, Disc, Gen, isotropic, nc
             if i % int(critic_iters) == 0:
                 netG.zero_grad()
                 errG = 0
-                noise = torch.randn(D_batch_size, nz, lz, lz, lz, device=device)
+                noise = torch.randn(D_batch_size, nz, lz, lz, device=device)
                 fake = netG(noise, G_labels)
                 for dim, (netD, d1, d2, d3) in enumerate(
                         zip(netDs, [2, 3, 4], [3, 2, 2], [4, 4, 3])):

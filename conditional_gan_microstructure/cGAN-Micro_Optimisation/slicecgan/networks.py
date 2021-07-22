@@ -78,10 +78,10 @@ def slicecgan_rc_nets(pth, Training, lbls, *args):
             super(GeneratorWGAN, self).__init__()
             self.convs = nn.ModuleList()
             self.bns = nn.ModuleList()
-            self.rcconv = nn.Conv3d(gf[-2],gf[-1],3,1,0)
+            self.rcconv = nn.Conv2d(gf[-2],gf[-1],2,1,0)
             for lay, (k,s,p) in enumerate(zip(gk,gs,gp)):
-                self.convs.append(nn.ConvTranspose3d(gf[lay] if lay != 0 else gf[lay]+lbls, gf[lay+1], k, s, p, bias=False))
-                self.bns.append(nn.BatchNorm3d(gf[lay+1]))
+                self.convs.append(nn.ConvTranspose2d(gf[lay] if lay != 0 else gf[lay]+lbls, gf[lay+1], k, s, p, bias=False))
+                self.bns.append(nn.BatchNorm2d(gf[lay+1]))
                 # self.bns.append(nn.InstanceNorm3d(gf[lay+1]))
 
 
