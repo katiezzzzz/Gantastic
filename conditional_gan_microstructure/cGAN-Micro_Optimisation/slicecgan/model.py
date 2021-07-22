@@ -67,7 +67,7 @@ def conditional_trainer(pth, imtype, real_data, labels, Disc, Gen, isotropic, nc
         for i in range(iters):
             real_data, lbl = batch(training_imgs, labels, l, D_batch_size, device)
             G_labels = lbl.repeat(1, 1, lz, lz).to(device)
-            D_labels_real = lbl.repeat(1, 1, l, l)[:, :, 0]
+            D_labels_real = lbl.repeat(1, 1, l, l)[:, :, :]
             D_labels_fake = D_labels_real.repeat(1, l, 1 ,1).reshape(-1, nlabels*2, l, l)
             ### Discriminator
             ## Generate fake image batch with G
