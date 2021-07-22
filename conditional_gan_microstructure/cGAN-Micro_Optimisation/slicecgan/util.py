@@ -40,11 +40,12 @@ def pre_proc(paths, sf):
     for img in paths:
         img = tifffile.imread(img) # [30:-30]
         img = torch.tensor(img[::sf, ::sf])
-        if len(img.shape) > 3:
-            img = img[:, :, :, 0]
+        if len(img.shape) > 2:
+            img = img[:, :, 0]
         h ,w = img.shape
         print(img.shape)
         phases = np.unique(img)
+        # returns array([0,1])
         print(phases)
         oh_img = torch.zeros([len(phases), h, w])
         for ch, ph in enumerate(phases):
