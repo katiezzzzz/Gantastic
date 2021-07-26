@@ -2,12 +2,13 @@
 ####### Steve Kench #######
 
 from slicecgan import *
+import numpy as np
 
 ## Make directory
 
 
 PATH = os.path.dirname(os.path.realpath(__file__))
-Project_name = 'cgan_microstructure'
+Project_name = 'cgan_microstructure_22'
 Project_dir = PATH+'/trained_generators/microstructure/'
 
 ## Data Processing
@@ -25,7 +26,7 @@ for r, r_lab in zip(['6', '8', '10'], [0, 0.5, 1]):
     labels.append([r_lab])
 
 isotropic = True
-Training = 1 # Run with False to show an image during training
+Training = 0 # Run with False to show an image during training
 Project_path = mkdr(Project_name, Project_dir, Training)
 print('Using project name {}'.format(Project_path))
 
@@ -47,7 +48,10 @@ if Training:
     data = conditional_trainer(Project_path, image_type, data_path, labels, netD, netG, isotropic, channels, imsize, nz, sf, wandb_name)
 
 else:
-    labels.append([0.5])
+    numbers = np.arange(0,1.1,0.1)
+    labels = []
+    for n in numbers:
+        labels.append([n])
     with torch.no_grad():
         imgs, raw, netG = test_2d_cgan(Project_path, labels, image_type, netG(), nz,  lf=8)
         for im in imgs:
