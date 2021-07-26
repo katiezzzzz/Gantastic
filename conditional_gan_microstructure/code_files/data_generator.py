@@ -1,4 +1,5 @@
 import os
+from mixture_class import CircleMixtureGenerator
 from data_class import CircleGenerator
 
 PATH = os.path.dirname(os.path.realpath(__file__))
@@ -12,8 +13,10 @@ ratio = 0.4
 
 #SmallGenerator = CircleGenerator(image_length, small_radius, ratio)
 #BigGenerator = CircleGenerator(image_length, big_radius, ratio)
-MediumGenerator = CircleGenerator(image_length, medium_radius, ratio)
+#MediumGenerator = CircleGenerator(image_length, medium_radius, ratio)
+MixtureGenerator = CircleMixtureGenerator(image_length, small_radius, big_radius, 0.4)
 
 #SmallGenerator.make_image(PATH+'/data/SmallCircles.tiff')
 #BigGenerator.make_image(PATH+'/data/BigCircles.tiff')
-MediumGenerator.make_image(PATH+'/data/r8.tiff')
+#MediumGenerator.make_image(PATH+'/data/r8.tiff')
+MixtureGenerator.make_image(PATH+'/data/r_mix.tiff')
