@@ -7,7 +7,7 @@ from slicecgan import *
 
 
 PATH = os.path.dirname(os.path.realpath(__file__))
-Project_name = 'cgan_microstructure_20'
+Project_name = 'cgan_microstructure'
 Project_dir = PATH+'/trained_generators/microstructure/'
 
 ## Data Processing
@@ -19,13 +19,13 @@ labels = []
 
 wandb_name = Project_name
 
-for r, r_lab in zip(['6', '10'], [0, 1]):
+for r, r_lab in zip(['6', '8', '10'], [0, 0.5, 1]):
     file = PATH+'/training_data/r{}.tiff'.format(r)
     data_path.append(file) # path to training data.
     labels.append([r_lab])
 
 isotropic = True
-Training = 0 # Run with False to show an image during training
+Training = 1 # Run with False to show an image during training
 Project_path = mkdr(Project_name, Project_dir, Training)
 print('Using project name {}'.format(Project_path))
 
