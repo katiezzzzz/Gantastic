@@ -30,7 +30,7 @@ Project_path = mkdr(Project_name, Project_dir, Training)
 print('Using project name {}'.format(Project_path))
 
 # Network Architectures
-imsize, nz,  channels, sf, lbls = 64, 32, 3, 1, len(labels[0]*2)
+imsize, nz,  channels, sf, lbls = 64, 32, 2, 1, len(labels[0]*2)
 lays = 5
 laysd = 5
 dk, gk = [4]*laysd, [4]*lays                                    # kernal sizes
