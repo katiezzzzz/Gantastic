@@ -13,9 +13,9 @@ def conditional_trainer(pth, imtype, real_data, labels, Disc, Gen, isotropic, nc
     ## Constants for NNs
     ngpu = 1
     nlabels = len(labels[0])
-    batch_size = 8
-    D_batch_size = 8
-    num_epochs = 100
+    batch_size = 1
+    D_batch_size = 1
+    num_epochs = 300
     iters = 30000//batch_size
     lrg = 0.0004
     lr = 0.0001
@@ -34,16 +34,16 @@ def conditional_trainer(pth, imtype, real_data, labels, Disc, Gen, isotropic, nc
 
     # Create the Genetator network
     netG = Gen().to(device)
-    rt = 0
+    rt = 1
 
     if rt:
-        netG.load_state_dict(torch.load('trained_generators/NMC_Alej/Alej_batch5_{}/Alej_batch5_{}_Gen.pt'.format(rt, rt)))
+        netG.load_state_dict(torch.load('trained_generators/microstructure/cgan_microstructure_18/cgan_microstructure_18_Gen.pt'))
     optG = optim.Adam(netG.parameters(), lr=lrg, betas=(beta1, beta2))
 
     # Define 1 discriminator and optimizer
     netD = Disc().to(device)
     if rt:
-        netD.load_state_dict(torch.load('trained_generators/NMC_Alej/Alej_batch5_{}/Alej_batch5_{}_Disc.pt'.format(rt, rt)))
+        netD.load_state_dict(torch.load('trained_generators/microstructure/cgan_microstructure_18/cgan_microstructure_18_Disc.pt'))
     optD = optim.Adam(netD.parameters(), lr=lr, betas=(beta1, beta2))
 
     disc_real_log = []

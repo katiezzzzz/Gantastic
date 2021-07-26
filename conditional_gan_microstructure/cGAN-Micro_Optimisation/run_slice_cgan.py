@@ -7,7 +7,7 @@ from slicecgan import *
 
 
 PATH = os.path.dirname(os.path.realpath(__file__))
-Project_name = 'cgan_microstructure'
+Project_name = 'cgan_microstructure_18'
 Project_dir = PATH+'/trained_generators/microstructure/'
 
 ## Data Processing
@@ -25,7 +25,7 @@ for r, r_lab in zip(['6', '10'], [0, 1]):
     labels.append([r_lab])
 
 isotropic = True
-Training = True # Run with False to show an image during training
+Training = 0 # Run with False to show an image during training
 Project_path = mkdr(Project_name, Project_dir, Training)
 print('Using project name {}'.format(Project_path))
 
@@ -48,7 +48,7 @@ if Training:
 
 else:
     with torch.no_grad():
-        imgs, raw, netG = test_img_cgan(Project_path, labels[1:3], image_type, netG(), nz,  lf=8, twoph=0)
+        imgs, raw, netG = test_2d_cgan(Project_path, labels, image_type, netG(), nz,  lf=8)
         for im in imgs:
-            for ph in [0, 1, 2]:
+            for ph in [0, 1]:
                 print(len(im[im == ph]) / im.size)

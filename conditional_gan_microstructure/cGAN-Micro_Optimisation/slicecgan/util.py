@@ -157,6 +157,10 @@ def post_proc(img, imtype):
     if imtype == 'grayscale':
         return 255*img[:][0]
 
+def post_proc_2d(img):
+    img = img.cpu().detach().numpy()[0]
+    img = np.argmax(img, axis=0)
+
 def test_plotter(sqrs, slcs, imtype, pth, wandb_flag):
     sqrs = post_proc(sqrs,imtype)[0]
     if wandb_flag:
@@ -243,6 +247,35 @@ def test_img_cgan(pth, label_list, imtype, netG, nz = 64, lf = 4, twoph = True):
         tifs.append(tif)
         raws.append(raw.cpu())
     return tifs, raws, netG
+
+def test_2d_cgan(pth, label_list, imtype, netG, nz = 64, lf = 4):
+    device = torch.device("cpu")
+    try:
+        netG.load_state_dict(torch.load(pth + '_Gen.pt'))
+    except:
+        netG = nn.DataParallel(netG)
+        netG.load_state_dict(torch.load(pth + '_Gen.pt'))
+    
+    netG.to(device)
+    tifs, raws = [], []
+    noise = torch.randn(1, nz, lf, lf, device=device)
+    netG.eval()
+    for lbls in label_list:
+        fake_labels = torch.ones([1, len(lbls) * 2, 1, 1], device=device)
+        for ch, lbl in enumerate(lbls):
+            fake_labels[:, ch] = lbl
+            fake_labels[:, ch+len(lbls)] = 1 - lbl
+        fake_labels = fake_labels.repeat(1, 1, lf, lf)
+        print(fake_labels[0, :, 0, 0])
+        with torch.no_grad():
+            raw = netG(noise, fake_labels)
+        print('Postprocessing')
+        gb = post_proc_2d(raw,imtype)
+        tif = np.int_(gb)
+        tifffile.imwrite(pth + str(lbls)+ '.tif', tif)
+        tifs.append(tif)
+        raws.append(raw.cpu())
+    return tifs, raws, netG    
 
 
 def wandb_init(name):
