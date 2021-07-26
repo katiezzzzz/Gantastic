@@ -11,7 +11,6 @@ import torch.nn as nn
 def conditional_trainer(pth, imtype, real_data, labels, Disc, Gen, isotropic, nc, l, nz, sf, wandb_name):
     print('Loading Dataset...')
     ## Constants for NNs
-    # matplotlib.use('Agg')
     ngpu = 1
     nlabels = len(labels[0])
     batch_size = 8
@@ -41,15 +40,11 @@ def conditional_trainer(pth, imtype, real_data, labels, Disc, Gen, isotropic, nc
         netG.load_state_dict(torch.load('trained_generators/NMC_Alej/Alej_batch5_{}/Alej_batch5_{}_Gen.pt'.format(rt, rt)))
     optG = optim.Adam(netG.parameters(), lr=lrg, betas=(beta1, beta2))
 
-    # Define 1 discriminator and optimizer for each plane in each dimension
-    netDs = []
-    optDs = []
-    for i in range(2):
-        netD = Disc()
-        if rt:
-            netD.load_state_dict(torch.load('trained_generators/NMC_Alej/Alej_batch5_{}/Alej_batch5_{}_Disc.pt'.format(rt, rt)))
-        netDs.append(netD.cuda())
-        optDs.append(optim.Adam(netDs[i].parameters(), lr=lr, betas=(beta1, beta2)))
+    # Define 1 discriminator and optimizer
+    netD = Disc().to(device)
+    if rt:
+        netD.load_state_dict(torch.load('trained_generators/NMC_Alej/Alej_batch5_{}/Alej_batch5_{}_Disc.pt'.format(rt, rt)))
+    optD = optim.Adam(netD.parameters(), lr=lr, betas=(beta1, beta2))
 
     disc_real_log = []
     disc_fake_log = []
@@ -67,37 +62,28 @@ def conditional_trainer(pth, imtype, real_data, labels, Disc, Gen, isotropic, nc
         for i in range(iters):
             real_data, lbl = batch(training_imgs, labels, l, D_batch_size, device)
             G_labels = lbl.repeat(1, 1, lz, lz).to(device)
-            D_labels_real = lbl.repeat(1, 1, l, l, l)[:, :, 0]
-            D_labels_fake = D_labels_real.repeat(1, l, 1 ,1).reshape(-1, nlabels*2, l, l)
+            D_labels = lbl.repeat(1, 1, l, l).to(device)
             ### Discriminator
             ## Generate fake image batch with G
             noise = torch.randn(D_batch_size, nz, lz, lz, device=device)
             fake_data = netG(noise, G_labels).detach()
             # For each dimension
             start_disc = time.time()
-            for dim, (netD, optimizer, d1, d2) in enumerate(
-                    zip(netDs, optDs, [2, 3, 4], [3, 2, 2])):
-                if isotropic:
-                    netD = netDs[0]
-                    optimizer = optDs[0]
-                ##train on real images
-                netD.zero_grad()
-                # Forward pass real batch through D
-                print(real_data.shape)
-                print(D_labels_real.shape)
-                print('========================')
-                out_real = netD(real_data, D_labels_real).view(-1).mean()
-                # train on fake images
-                fake_data_perm = fake_data.permute(0, d1, 1, d2, d3).reshape(l * D_batch_size, nc, l, l)
-                out_fake = netD(fake_data_perm, D_labels_fake).mean()
-                #grad calc
-                gradient_penalty = cond_calc_gradient_penalty(netD, real_data, fake_data_perm[::l],
-                                                              D_batch_size, l,
-                                                              device, Lambda, nc, D_labels_real)
+            ##train on real images
+            netD.zero_grad()
+            # Forward pass real batch through D
+            out_real = netD(real_data, D_labels).view(-1).mean()
+            # train on fake images
+            #fake_data_perm = fake_data.permute(0, d1, 1, d2, d3).reshape(l * D_batch_size, nc, l, l)
+            out_fake = netD(fake_data, D_labels).mean()
+            #grad calc
+            gradient_penalty = cond_calc_gradient_penalty(netD, real_data, fake_data,
+                                                          D_batch_size, l,
+                                                          device, Lambda, nc, D_labels)
 
-                disc_cost = out_fake - out_real + gradient_penalty
-                disc_cost.backward()
-                optimizer.step()
+            disc_cost = out_fake - out_real + gradient_penalty
+            disc_cost.backward()
+            optD.step()
 
             disc_real_log.append(out_real.item())
             disc_fake_log.append(out_fake.item())
@@ -115,15 +101,10 @@ def conditional_trainer(pth, imtype, real_data, labels, Disc, Gen, isotropic, nc
                 errG = 0
                 noise = torch.randn(D_batch_size, nz, lz, lz, device=device)
                 fake = netG(noise, G_labels)
-                for dim, (netD, d1, d2, d3) in enumerate(
-                        zip(netDs, [2, 3, 4], [3, 2, 2], [4, 4, 3])):
-                    if isotropic:
-                        netD = netDs[0]
-                    # For each plane
-                    fake_data_perm = fake.permute(0, d1, 1, d2, d3).reshape(l * D_batch_size, nc, l, l)
-                    output = netD(fake_data_perm, D_labels_fake)
-                    errG -= output.mean()
-                    # Calculate gradients for G
+                # For each plane
+                output = netD(fake, D_labels)
+                errG -= output.mean()
+                # Calculate gradients for G
                 errG.backward()
                 optG.step()
             # Output training stats & show imgs
@@ -133,11 +114,10 @@ def conditional_trainer(pth, imtype, real_data, labels, Disc, Gen, isotropic, nc
                 if wandb_name:
                     wandb_save_models(pth, '_Gen.pt')
                     wandb_save_models(pth, '_Disc.pt')
-                noise = torch.randn(1, nz, lz + 2, lz + 2, lz + 2, device=device)
+                noise = torch.randn(1, nz, lz + 2, lz + 2, device=device)
                 netG.eval()
-                imgs = []
                 for tst_lbls in labels:
-                    lbl = torch.zeros(1, nlabels * 2, lz + 2, lz + 2, lz + 2)
+                    lbl = torch.zeros(1, nlabels * 2, lz + 2, lz + 2)
                     lbl_str = ''
                     for lb in range(nlabels):
                         lbl[:, lb] = tst_lbls[lb]
@@ -145,8 +125,12 @@ def conditional_trainer(pth, imtype, real_data, labels, Disc, Gen, isotropic, nc
                         lbl_str += '_' + str(tst_lbls[lb])
                     with torch.no_grad():
                         img = netG(noise, lbl.type(torch.FloatTensor).cuda())
-                    imgs.append(img)
-                    test_plotter(img, 3, imtype, pth+lbl_str, wandb_name)
+                    img = img.cpu().detach().numpy()[0]
+                    img = np.argmax(img, axis=0)
+                    wandb.log({"fake" : wandb.Image(img)})
+                    # img: list of tensors of shape [1,2,64,64]
+                    # turn into shape into shapes [64,64]
+                    # take argmax over 1st dimension
                 netG.train()
 
             ###Print progress
