@@ -157,9 +157,10 @@ def post_proc(img, imtype):
     if imtype == 'grayscale':
         return 255*img[:][0]
 
-def post_proc_2d(img):
+def post_proc_2d(img, imtype):
     img = img.cpu().detach().numpy()[0]
     img = np.argmax(img, axis=0)
+    return img
 
 def test_plotter(sqrs, slcs, imtype, pth, wandb_flag):
     sqrs = post_proc(sqrs,imtype)[0]
@@ -249,7 +250,7 @@ def test_img_cgan(pth, label_list, imtype, netG, nz = 64, lf = 4, twoph = True):
     return tifs, raws, netG
 
 def test_2d_cgan(pth, label_list, imtype, netG, nz = 64, lf = 4):
-    device = torch.device("cpu")
+    device = torch.device("cuda:0")
     try:
         netG.load_state_dict(torch.load(pth + '_Gen.pt'))
     except:
@@ -272,6 +273,7 @@ def test_2d_cgan(pth, label_list, imtype, netG, nz = 64, lf = 4):
         print('Postprocessing')
         gb = post_proc_2d(raw,imtype)
         tif = np.int_(gb)
+        print(tif.shape)
         tifffile.imwrite(pth + str(lbls)+ '.tif', tif)
         tifs.append(tif)
         raws.append(raw.cpu())

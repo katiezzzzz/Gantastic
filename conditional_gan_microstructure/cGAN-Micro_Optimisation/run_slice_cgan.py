@@ -7,7 +7,7 @@ from slicecgan import *
 
 
 PATH = os.path.dirname(os.path.realpath(__file__))
-Project_name = 'cgan_microstructure_18'
+Project_name = 'cgan_microstructure_20'
 Project_dir = PATH+'/trained_generators/microstructure/'
 
 ## Data Processing
@@ -47,6 +47,7 @@ if Training:
     data = conditional_trainer(Project_path, image_type, data_path, labels, netD, netG, isotropic, channels, imsize, nz, sf, wandb_name)
 
 else:
+    labels.append([0.5])
     with torch.no_grad():
         imgs, raw, netG = test_2d_cgan(Project_path, labels, image_type, netG(), nz,  lf=8)
         for im in imgs:
