@@ -13,8 +13,8 @@ def conditional_trainer(pth, imtype, real_data, labels, Disc, Gen, isotropic, nc
     ## Constants for NNs
     ngpu = 1
     nlabels = len(labels[0])
-    batch_size = 9
-    D_batch_size = 9
+    batch_size = 1
+    D_batch_size = 1
     num_epochs = 600
     iters = 30000//batch_size
     lrg = 0.0004
@@ -34,7 +34,7 @@ def conditional_trainer(pth, imtype, real_data, labels, Disc, Gen, isotropic, nc
 
     # Create the Genetator network
     netG = Gen().to(device)
-    rt = 0
+    rt = 1
 
     if rt:
         netG.load_state_dict(torch.load('trained_generators/microstructure/cgan_microstructure_18/cgan_microstructure_20_Gen.pt'))
