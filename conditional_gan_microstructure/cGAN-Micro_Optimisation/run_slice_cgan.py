@@ -8,7 +8,7 @@ import numpy as np
 
 
 PATH = os.path.dirname(os.path.realpath(__file__))
-Project_name = 'cgan_microstructure_24'
+Project_name = 'cgan_microstructure_22'
 Project_dir = PATH+'/trained_generators/microstructure/'
 
 ## Data Processing
@@ -48,7 +48,7 @@ if Training:
     data = conditional_trainer(Project_path, image_type, data_path, labels, netD, netG, isotropic, channels, imsize, nz, sf, wandb_name)
 
 else:
-    numbers = np.round(np.arange(0,1.1,0.1),1)
+    numbers = np.round(np.linspace(0,1,9),2)
     labels = []
     for n in numbers:
         labels.append([n])
