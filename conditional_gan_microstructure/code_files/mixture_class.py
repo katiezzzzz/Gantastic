@@ -50,6 +50,15 @@ class CircleMixtureGenerator():
             return False
 
     def count_centre_overlap(self, centre, other_centres):
+        '''
+        Count the number of times the created centre overlap with existing other_centres
+        (different radius)
+        Parameters:
+            centre: numpy array of shape (2,)
+            other_centres: numpy array of shape (n, 2)
+        Return:
+            number of times they have overlapped
+        '''
         count = 0
         for other_centre in other_centres:
             if self.check_centre_distance(centre, other_centre, self.radius1+self.radius2) == False:
