@@ -48,7 +48,7 @@ if Training:
     data = conditional_trainer(Project_path, image_type, data_path, labels, netD, netG, isotropic, channels, imsize, nz, sf, wandb_name)
 
 else:
-    numbers = np.arange(0,1.1,0.1)
+    numbers = np.round(np.arange(0,1.1,0.1),1)
     labels = []
     for n in numbers:
         labels.append([n])
