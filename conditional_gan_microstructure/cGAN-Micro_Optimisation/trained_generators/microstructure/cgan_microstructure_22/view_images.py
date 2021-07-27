@@ -6,7 +6,6 @@ import os
 
 PATH = os.path.dirname(os.path.realpath(__file__))
 numbers = np.around(np.arange(0,1.1,0.1),1)
-figure(figsize=(10, 10))
 i = 0
 f, axarr = plt.subplots(1,11)
 for n in numbers:
