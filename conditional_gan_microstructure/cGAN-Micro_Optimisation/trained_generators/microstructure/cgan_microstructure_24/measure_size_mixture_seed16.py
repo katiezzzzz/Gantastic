@@ -13,8 +13,7 @@ import os
 PATH = os.path.dirname(os.path.realpath(__file__))
 
 current_fig = 0.5
-
-img = cv2.imread(PATH+f"/cgan_microstructure_22[{current_fig}].tif", cv2.IMREAD_UNCHANGED)
+img = cv2.imread(PATH+f"/cgan_microstructure_24[{current_fig}].tif", cv2.IMREAD_UNCHANGED)
 
 # clean up specks
 a_thr = binary_erosion(img, iterations = 1)
@@ -26,7 +25,7 @@ img = np.where(img <= 0, img, 1)
 img = img.astype(int)
 
 # watershed segmentation
-coords = peak_local_max(distances, exclude_border=(15,15), footprint=np.ones((5,5)), labels=img)
+coords = peak_local_max(distances, exclude_border=(15,15), footprint=np.ones((3,3)), labels=img)
 mask = np.zeros(distances.shape, dtype=bool)
 mask[tuple(coords.T)] = True
 markers, _ = ndi.label(mask)
