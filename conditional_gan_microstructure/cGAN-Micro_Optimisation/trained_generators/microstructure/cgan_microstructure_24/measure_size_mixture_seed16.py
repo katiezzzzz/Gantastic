@@ -12,7 +12,7 @@ import os
 
 PATH = os.path.dirname(os.path.realpath(__file__))
 
-current_fig = 0.5
+current_fig = 1.0
 img = cv2.imread(PATH+f"/cgan_microstructure_24[{current_fig}].tif", cv2.IMREAD_UNCHANGED)
 
 # clean up specks

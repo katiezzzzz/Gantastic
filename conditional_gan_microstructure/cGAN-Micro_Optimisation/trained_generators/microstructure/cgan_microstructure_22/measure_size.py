@@ -12,7 +12,7 @@ import os
 
 PATH = os.path.dirname(os.path.realpath(__file__))
 
-current_fig = 0.5
+current_fig = 1.0
 
 img = cv2.imread(PATH+f"/cgan_microstructure_22[{current_fig}].tif", cv2.IMREAD_UNCHANGED)
 
@@ -43,7 +43,7 @@ for p in props:
     entry = [p['label'], p['area'], p['perimeter'], *p['centroid']]
     # calculate radius, assuming spherical particles
     entry.append(np.round(np.sqrt(entry[1]/np.pi),1))
-    if entry[1] > 40 and len(entries) > 0:
+    if entry[1] > 48 and len(entries) > 0:
         overlap = False
         overlap_store = []
         row = 0
@@ -53,21 +53,8 @@ for p in props:
             x_dist = abs(entry[4] - particle[4])
             # additional parameter to deal with mixture
             if particle[1] < 200:
-                dist_lim = 5
+                dist_lim = 8
                 # hard code to remove artefect
-                '''
-                if 65 < entry[4] < 84 and 72 < entry[3] < 88:
-                    dist_lim = 10
-                if 137 < entry[4] < 151 and 114 < entry[3] < 127:
-                    dist_lim = 10
-                
-                [0.1]: x(125, 143); y(51, 71)
-                [0.12]: x(61, 74); y(120, 132)
-                [0.25]: x(28, 43); y(135, 147)
-                [0.5]: x(137, 151); y(114, 127)
-                       x(65, 84); y(72, 88)
-                [1.0]: x(152, 173); y(103, 128)
-                '''
             else:
                 dist_lim = 10
             if x_dist < dist_lim and y_dist < dist_lim:
