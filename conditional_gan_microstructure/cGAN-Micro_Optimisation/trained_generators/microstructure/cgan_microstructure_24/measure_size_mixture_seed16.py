@@ -13,8 +13,7 @@ import os
 PATH = os.path.dirname(os.path.realpath(__file__))
 
 current_fig = 0.5
-
-img = cv2.imread(PATH+f"/cgan_microstructure_22[{current_fig}].tif", cv2.IMREAD_UNCHANGED)
+img = cv2.imread(PATH+f"/cgan_microstructure_24[{current_fig}].tif", cv2.IMREAD_UNCHANGED)
 
 # clean up specks
 a_thr = binary_erosion(img, iterations = 1)
@@ -26,7 +25,7 @@ img = np.where(img <= 0, img, 1)
 img = img.astype(int)
 
 # watershed segmentation
-coords = peak_local_max(distances, exclude_border=(15,15), footprint=np.ones((5,5)), labels=img)
+coords = peak_local_max(distances, exclude_border=(15,15), footprint=np.ones((3,3)), labels=img)
 mask = np.zeros(distances.shape, dtype=bool)
 mask[tuple(coords.T)] = True
 markers, _ = ndi.label(mask)
@@ -54,20 +53,6 @@ for p in props:
             # additional parameter to deal with mixture
             if particle[1] < 200:
                 dist_lim = 5
-                # hard code to remove artefect
-                '''
-                if 65 < entry[4] < 84 and 72 < entry[3] < 88:
-                    dist_lim = 10
-                if 137 < entry[4] < 151 and 114 < entry[3] < 127:
-                    dist_lim = 10
-                
-                [0.1]: x(125, 143); y(51, 71)
-                [0.12]: x(61, 74); y(120, 132)
-                [0.25]: x(28, 43); y(135, 147)
-                [0.5]: x(137, 151); y(114, 127)
-                       x(65, 84); y(72, 88)
-                [1.0]: x(152, 173); y(103, 128)
-                '''
             else:
                 dist_lim = 10
             if x_dist < dist_lim and y_dist < dist_lim:
