@@ -8,7 +8,7 @@ import numpy as np
 
 
 PATH = os.path.dirname(os.path.realpath(__file__))
-Project_name = 'cgan_microstructure_22'
+Project_name = 'cgan_microstructure_26'
 Project_dir = PATH+'/trained_generators/microstructure/'
 
 ## Data Processing
@@ -20,7 +20,7 @@ labels = []
 
 wandb_name = Project_name
 
-for r, r_lab in zip(['6', '_mix', '10'], [0, 0.5, 1]):
+for r, r_lab in zip(['6', '_egg', '10'], [0, 0.5, 1]):
     file = PATH+'/training_data/r{}.tiff'.format(r)
     data_path.append(file) # path to training data.
     labels.append([r_lab])
@@ -53,7 +53,7 @@ else:
     for n in numbers:
         labels.append([n])
     with torch.no_grad():
-        imgs, raw, netG = test_2d_cgan(Project_path, labels, image_type, netG(), nz,  lf=8)
+        imgs, raw, netG = test_2d_cgan(Project_path, labels, image_type, netG(), nz,  lf=16)
         for im in imgs:
             for ph in [0, 1]:
                 print(len(im[im == ph]) / im.size)
