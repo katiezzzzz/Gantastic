@@ -14,7 +14,7 @@ def conditional_trainer(pth, imtype, real_data, labels, Disc, Gen, isotropic, nc
     ## Constants for NNs
     ngpu = 1
     nlabels = len(labels[0])
-    D_batch_size = 9
+    D_batch_size = 8
     num_epochs = 600
     iters = 30000//D_batch_size
     lrg = 0.0004
@@ -34,20 +34,20 @@ def conditional_trainer(pth, imtype, real_data, labels, Disc, Gen, isotropic, nc
 
     # Create the Genetator network
     netG = Gen().to(device)
-    rt = 0
+    rt = 1
     
     if Training == False:
         rt = 1
         D_batch_size = 1
 
     if rt:
-        netG.load_state_dict(torch.load('trained_generators/microstructure/cgan_microstructure_26/cgan_microstructure_26_Gen.pt'))
+        netG.load_state_dict(torch.load('trained_generators/microstructure/cgan_microstructure_29/cgan_microstructure_29_Gen.pt'))
     optG = optim.Adam(netG.parameters(), lr=lrg, betas=(beta1, beta2))
 
     # Define 1 discriminator and optimizer
     netD = Disc().to(device)
     if rt:
-        netD.load_state_dict(torch.load('trained_generators/microstructure/cgan_microstructure_26/cgan_microstructure_26_Disc.pt'))
+        netD.load_state_dict(torch.load('trained_generators/microstructure/cgan_microstructure_29/cgan_microstructure_29_Disc.pt'))
     optD = optim.Adam(netD.parameters(), lr=lr, betas=(beta1, beta2))
 
     disc_real_log = []
@@ -78,7 +78,6 @@ def conditional_trainer(pth, imtype, real_data, labels, Disc, Gen, isotropic, nc
             # Forward pass real batch through D
             out_real = netD(real_data, D_labels).view(-1).mean()
             # train on fake images
-            #fake_data_perm = fake_data.permute(0, d1, 1, d2, d3).reshape(l * D_batch_size, nc, l, l)
             out_fake = netD(fake_data, D_labels).mean()
             #grad calc
             gradient_penalty = cond_calc_gradient_penalty(netD, real_data, fake_data,
