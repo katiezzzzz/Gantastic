@@ -8,7 +8,7 @@ import numpy as np
 
 
 PATH = os.path.dirname(os.path.realpath(__file__))
-Project_name = 'cgan_microstructure_29'
+Project_name = 'cgan_microstructure_30'
 Project_dir = PATH+'/trained_generators/microstructure/'
 
 ## Data Processing
@@ -52,7 +52,7 @@ else:
     labels = []
     for n in numbers:
         labels.append([n])
-    labels = [[1.5], [2], [3], [4], [5]]
+    #labels = [[1.5], [2], [3], [4], [5]]
     with torch.no_grad():
         imgs, raw, netG = test_2d_cgan(Project_path, labels, image_type, netG(), nz,  lf=16)
         for im in imgs:
