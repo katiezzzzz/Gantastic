@@ -41,13 +41,13 @@ def conditional_trainer(pth, imtype, real_data, labels, Disc, Gen, isotropic, nc
         D_batch_size = 1
 
     if rt:
-        netG.load_state_dict(torch.load('trained_generators/microstructure/cgan_microstructure_30/cgan_microstructure_30_Gen.pt'))
+        netG.load_state_dict(torch.load('trained_generators/microstructure/cgan_microstructure_27/cgan_microstructure_27_Gen.pt'))
     optG = optim.Adam(netG.parameters(), lr=lrg, betas=(beta1, beta2))
 
     # Define 1 discriminator and optimizer
     netD = Disc().to(device)
     if rt:
-        netD.load_state_dict(torch.load('trained_generators/microstructure/cgan_microstructure_30/cgan_microstructure_30_Disc.pt'))
+        netD.load_state_dict(torch.load('trained_generators/microstructure/cgan_microstructure_27/cgan_microstructure_27_Disc.pt'))
     optD = optim.Adam(netD.parameters(), lr=lr, betas=(beta1, beta2))
 
     disc_real_log = []
