@@ -80,6 +80,7 @@ def slicecgan_rc_nets(pth, Training, lbls, *args):
             self.bns = nn.ModuleList()
             self.rcconv = nn.Conv2d(gf[-2],gf[-1],3,1,0)
             for lay, (k,s,p) in enumerate(zip(gk,gs,gp)):
+                # why gf[lay]+lbls?
                 self.convs.append(nn.ConvTranspose2d(gf[lay] if lay != 0 else gf[lay]+lbls, gf[lay+1], k, s, p, bias=False))
                 self.bns.append(nn.BatchNorm2d(gf[lay+1]))
 
@@ -88,6 +89,7 @@ def slicecgan_rc_nets(pth, Training, lbls, *args):
             x = torch.cat([x, y], 1)
             for lay, (conv, bn) in enumerate(zip(self.convs[:-1],self.bns[:-1])):
                 x = F.relu_(bn(conv(x)))
+            # why this particular spatial output size from upsampling?
             up = nn.Upsample(size = x.shape[2]*2-2)
             out = torch.softmax(self.rcconv(up(x)), 1)
             return out
