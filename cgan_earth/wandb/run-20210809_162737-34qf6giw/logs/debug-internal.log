@@ -1,0 +1,167 @@
+2021-08-09 16:27:38,649 INFO    MainThread:1052938 [internal.py:wandb_internal():91] W&B internal server running at pid: 1052938, started at: 2021-08-09 16:27:38.648208
+2021-08-09 16:27:38,653 INFO    WriterThread:1052938 [datastore.py:open_for_write():80] open: /rds/general/user/jz12018/home/cgan_earth/wandb/run-20210809_162737-34qf6giw/run-34qf6giw.wandb
+2021-08-09 16:27:38,654 DEBUG   HandlerThread:1052938 [handler.py:handle_request():124] handle_request: check_version
+2021-08-09 16:27:38,656 DEBUG   SenderThread:1052938 [sender.py:send():179] send: header
+2021-08-09 16:27:38,657 DEBUG   SenderThread:1052938 [sender.py:send_request():193] send_request: check_version
+2021-08-09 16:27:38,735 DEBUG   SenderThread:1052938 [sender.py:send():179] send: run
+2021-08-09 16:27:38,926 INFO    SenderThread:1052938 [dir_watcher.py:__init__():168] watching files in: /rds/general/user/jz12018/home/cgan_earth/wandb/run-20210809_162737-34qf6giw/files
+2021-08-09 16:27:38,926 INFO    SenderThread:1052938 [sender.py:_start_run_threads():719] run started: 34qf6giw with start time 1628522857
+2021-08-09 16:27:38,927 DEBUG   SenderThread:1052938 [sender.py:send():179] send: summary
+2021-08-09 16:27:38,928 DEBUG   HandlerThread:1052938 [handler.py:handle_request():124] handle_request: run_start
+2021-08-09 16:27:38,929 INFO    SenderThread:1052938 [sender.py:_save_file():841] saving file wandb-summary.json with policy end
+2021-08-09 16:27:38,936 DEBUG   HandlerThread:1052938 [meta.py:__init__():39] meta init
+2021-08-09 16:27:38,936 DEBUG   HandlerThread:1052938 [meta.py:__init__():53] meta init done
+2021-08-09 16:27:38,936 DEBUG   HandlerThread:1052938 [meta.py:probe():210] probe
+2021-08-09 16:27:38,945 DEBUG   HandlerThread:1052938 [meta.py:_setup_git():200] setup git
+2021-08-09 16:27:38,972 DEBUG   HandlerThread:1052938 [meta.py:_setup_git():207] setup git done
+2021-08-09 16:27:38,973 DEBUG   HandlerThread:1052938 [meta.py:_save_pip():57] save pip
+2021-08-09 16:27:38,976 DEBUG   HandlerThread:1052938 [meta.py:_save_pip():71] save pip done
+2021-08-09 16:27:38,976 DEBUG   HandlerThread:1052938 [meta.py:probe():252] probe done
+2021-08-09 16:27:38,987 DEBUG   SenderThread:1052938 [sender.py:send():179] send: files
+2021-08-09 16:27:38,987 INFO    SenderThread:1052938 [sender.py:_save_file():841] saving file wandb-metadata.json with policy now
+2021-08-09 16:27:38,998 DEBUG   HandlerThread:1052938 [handler.py:handle_request():124] handle_request: stop_status
+2021-08-09 16:27:38,999 DEBUG   SenderThread:1052938 [sender.py:send_request():193] send_request: stop_status
+2021-08-09 16:27:39,140 DEBUG   SenderThread:1052938 [sender.py:send():179] send: config
+2021-08-09 16:27:39,141 DEBUG   SenderThread:1052938 [sender.py:send():179] send: config
+2021-08-09 16:27:39,141 DEBUG   SenderThread:1052938 [sender.py:send():179] send: config
+2021-08-09 16:27:39,142 DEBUG   SenderThread:1052938 [sender.py:send():179] send: files
+2021-08-09 16:27:39,142 INFO    SenderThread:1052938 [sender.py:_save_file():841] saving file media/graph/graph_1_summary_46170f09af16dee61f47.graph.json with policy now
+2021-08-09 16:27:39,143 DEBUG   SenderThread:1052938 [sender.py:send():179] send: summary
+2021-08-09 16:27:39,150 INFO    SenderThread:1052938 [sender.py:_save_file():841] saving file wandb-summary.json with policy end
+2021-08-09 16:27:39,151 DEBUG   SenderThread:1052938 [sender.py:send():179] send: files
+2021-08-09 16:27:39,151 INFO    SenderThread:1052938 [sender.py:_save_file():841] saving file media/graph/graph_0_summary_5a939a60e82d8a80a8e6.graph.json with policy now
+2021-08-09 16:27:39,152 DEBUG   SenderThread:1052938 [sender.py:send():179] send: summary
+2021-08-09 16:27:39,161 INFO    SenderThread:1052938 [sender.py:_save_file():841] saving file wandb-summary.json with policy end
+2021-08-09 16:27:39,330 DEBUG   SenderThread:1052938 [sender.py:send():179] send: history
+2021-08-09 16:27:39,330 DEBUG   SenderThread:1052938 [sender.py:send():179] send: summary
+2021-08-09 16:27:39,340 INFO    SenderThread:1052938 [sender.py:_save_file():841] saving file wandb-summary.json with policy end
+2021-08-09 16:27:39,340 DEBUG   SenderThread:1052938 [sender.py:send():179] send: history
+2021-08-09 16:27:39,341 DEBUG   SenderThread:1052938 [sender.py:send():179] send: summary
+2021-08-09 16:27:39,344 INFO    SenderThread:1052938 [sender.py:_save_file():841] saving file wandb-summary.json with policy end
+2021-08-09 16:27:39,345 DEBUG   SenderThread:1052938 [sender.py:send():179] send: history
+2021-08-09 16:27:39,345 DEBUG   SenderThread:1052938 [sender.py:send():179] send: summary
+2021-08-09 16:27:39,349 INFO    SenderThread:1052938 [sender.py:_save_file():841] saving file wandb-summary.json with policy end
+2021-08-09 16:27:39,349 DEBUG   SenderThread:1052938 [sender.py:send():179] send: history
+2021-08-09 16:27:39,350 DEBUG   SenderThread:1052938 [sender.py:send():179] send: summary
+2021-08-09 16:27:39,353 INFO    SenderThread:1052938 [sender.py:_save_file():841] saving file wandb-summary.json with policy end
+2021-08-09 16:27:39,491 INFO    Thread-11 :1052938 [upload_job.py:push():137] Uploaded file /var/tmp/pbs.4260560.pbs/tmph1uj_5gzwandb/1yu4bpxi-wandb-metadata.json
+2021-08-09 16:27:39,610 INFO    Thread-12 :1052938 [upload_job.py:push():137] Uploaded file /var/tmp/pbs.4260560.pbs/tmph1uj_5gzwandb/k6we0pms-media/graph/graph_1_summary_46170f09af16dee61f47.graph.json
+2021-08-09 16:27:39,673 INFO    Thread-13 :1052938 [upload_job.py:push():137] Uploaded file /var/tmp/pbs.4260560.pbs/tmph1uj_5gzwandb/1k9ylrlr-media/graph/graph_0_summary_5a939a60e82d8a80a8e6.graph.json
+2021-08-09 16:27:39,930 INFO    Thread-8  :1052938 [dir_watcher.py:_on_file_created():216] file/dir created: /rds/general/user/jz12018/home/cgan_earth/wandb/run-20210809_162737-34qf6giw/files/media/graph/graph_1_summary_46170f09af16dee61f47.graph.json
+2021-08-09 16:27:39,931 INFO    Thread-8  :1052938 [dir_watcher.py:_on_file_created():216] file/dir created: /rds/general/user/jz12018/home/cgan_earth/wandb/run-20210809_162737-34qf6giw/files/output.log
+2021-08-09 16:27:39,931 INFO    Thread-8  :1052938 [dir_watcher.py:_on_file_created():216] file/dir created: /rds/general/user/jz12018/home/cgan_earth/wandb/run-20210809_162737-34qf6giw/files/wandb-metadata.json
+2021-08-09 16:27:39,932 INFO    Thread-8  :1052938 [dir_watcher.py:_on_file_created():216] file/dir created: /rds/general/user/jz12018/home/cgan_earth/wandb/run-20210809_162737-34qf6giw/files/wandb-summary.json
+2021-08-09 16:27:39,932 INFO    Thread-8  :1052938 [dir_watcher.py:_on_file_created():216] file/dir created: /rds/general/user/jz12018/home/cgan_earth/wandb/run-20210809_162737-34qf6giw/files/requirements.txt
+2021-08-09 16:27:39,933 INFO    Thread-8  :1052938 [dir_watcher.py:_on_file_created():216] file/dir created: /rds/general/user/jz12018/home/cgan_earth/wandb/run-20210809_162737-34qf6giw/files/media/graph/graph_0_summary_5a939a60e82d8a80a8e6.graph.json
+2021-08-09 16:27:39,933 INFO    Thread-8  :1052938 [dir_watcher.py:_on_file_created():216] file/dir created: /rds/general/user/jz12018/home/cgan_earth/wandb/run-20210809_162737-34qf6giw/files/media/graph
+2021-08-09 16:27:39,934 INFO    Thread-8  :1052938 [dir_watcher.py:_on_file_created():216] file/dir created: /rds/general/user/jz12018/home/cgan_earth/wandb/run-20210809_162737-34qf6giw/files/media
+2021-08-09 16:27:40,929 INFO    Thread-8  :1052938 [dir_watcher.py:_on_file_modified():229] file/dir modified: /rds/general/user/jz12018/home/cgan_earth/wandb/run-20210809_162737-34qf6giw/files/output.log
+2021-08-09 16:27:41,511 DEBUG   SenderThread:1052938 [sender.py:send():179] send: telemetry
+2021-08-09 16:27:41,511 DEBUG   HandlerThread:1052938 [handler.py:handle_request():124] handle_request: poll_exit
+2021-08-09 16:27:41,511 DEBUG   SenderThread:1052938 [sender.py:send():179] send: exit
+2021-08-09 16:27:41,512 INFO    SenderThread:1052938 [sender.py:send_exit():287] handling exit code: 1
+2021-08-09 16:27:41,513 INFO    SenderThread:1052938 [sender.py:send_exit():295] send defer
+2021-08-09 16:27:41,514 DEBUG   SenderThread:1052938 [sender.py:send_request():193] send_request: poll_exit
+2021-08-09 16:27:41,515 DEBUG   HandlerThread:1052938 [handler.py:handle_request():124] handle_request: defer
+2021-08-09 16:27:41,515 INFO    HandlerThread:1052938 [handler.py:handle_request_defer():141] handle defer: 0
+2021-08-09 16:27:41,516 DEBUG   SenderThread:1052938 [sender.py:send_request():193] send_request: defer
+2021-08-09 16:27:41,516 INFO    SenderThread:1052938 [sender.py:send_request_defer():304] handle sender defer: 0
+2021-08-09 16:27:41,516 INFO    SenderThread:1052938 [sender.py:transition_state():308] send defer: 1
+2021-08-09 16:27:41,517 DEBUG   HandlerThread:1052938 [handler.py:handle_request():124] handle_request: defer
+2021-08-09 16:27:41,517 INFO    HandlerThread:1052938 [handler.py:handle_request_defer():141] handle defer: 1
+2021-08-09 16:27:41,593 DEBUG   SenderThread:1052938 [sender.py:send_request():193] send_request: defer
+2021-08-09 16:27:41,593 INFO    SenderThread:1052938 [sender.py:send_request_defer():304] handle sender defer: 1
+2021-08-09 16:27:41,594 INFO    SenderThread:1052938 [sender.py:transition_state():308] send defer: 2
+2021-08-09 16:27:41,594 DEBUG   SenderThread:1052938 [sender.py:send():179] send: stats
+2021-08-09 16:27:41,595 DEBUG   HandlerThread:1052938 [handler.py:handle_request():124] handle_request: defer
+2021-08-09 16:27:41,596 INFO    HandlerThread:1052938 [handler.py:handle_request_defer():141] handle defer: 2
+2021-08-09 16:27:41,596 DEBUG   SenderThread:1052938 [sender.py:send_request():193] send_request: defer
+2021-08-09 16:27:41,597 INFO    SenderThread:1052938 [sender.py:send_request_defer():304] handle sender defer: 2
+2021-08-09 16:27:41,597 INFO    SenderThread:1052938 [sender.py:transition_state():308] send defer: 3
+2021-08-09 16:27:41,598 DEBUG   HandlerThread:1052938 [handler.py:handle_request():124] handle_request: defer
+2021-08-09 16:27:41,598 INFO    HandlerThread:1052938 [handler.py:handle_request_defer():141] handle defer: 3
+2021-08-09 16:27:41,599 DEBUG   SenderThread:1052938 [sender.py:send():179] send: summary
+2021-08-09 16:27:41,603 INFO    SenderThread:1052938 [sender.py:_save_file():841] saving file wandb-summary.json with policy end
+2021-08-09 16:27:41,603 DEBUG   SenderThread:1052938 [sender.py:send_request():193] send_request: defer
+2021-08-09 16:27:41,604 INFO    SenderThread:1052938 [sender.py:send_request_defer():304] handle sender defer: 3
+2021-08-09 16:27:41,604 INFO    SenderThread:1052938 [sender.py:transition_state():308] send defer: 4
+2021-08-09 16:27:41,605 DEBUG   HandlerThread:1052938 [handler.py:handle_request():124] handle_request: defer
+2021-08-09 16:27:41,605 INFO    HandlerThread:1052938 [handler.py:handle_request_defer():141] handle defer: 4
+2021-08-09 16:27:41,606 DEBUG   SenderThread:1052938 [sender.py:send_request():193] send_request: defer
+2021-08-09 16:27:41,606 INFO    SenderThread:1052938 [sender.py:send_request_defer():304] handle sender defer: 4
+2021-08-09 16:27:41,621 DEBUG   HandlerThread:1052938 [handler.py:handle_request():124] handle_request: poll_exit
+2021-08-09 16:27:41,777 INFO    SenderThread:1052938 [sender.py:transition_state():308] send defer: 5
+2021-08-09 16:27:41,778 DEBUG   SenderThread:1052938 [sender.py:send_request():193] send_request: poll_exit
+2021-08-09 16:27:41,778 DEBUG   HandlerThread:1052938 [handler.py:handle_request():124] handle_request: defer
+2021-08-09 16:27:41,779 INFO    HandlerThread:1052938 [handler.py:handle_request_defer():141] handle defer: 5
+2021-08-09 16:27:41,779 DEBUG   SenderThread:1052938 [sender.py:send_request():193] send_request: defer
+2021-08-09 16:27:41,780 INFO    SenderThread:1052938 [sender.py:send_request_defer():304] handle sender defer: 5
+2021-08-09 16:27:41,780 INFO    SenderThread:1052938 [dir_watcher.py:finish():282] shutting down directory watcher
+2021-08-09 16:27:41,880 DEBUG   HandlerThread:1052938 [handler.py:handle_request():124] handle_request: poll_exit
+2021-08-09 16:27:41,931 INFO    SenderThread:1052938 [dir_watcher.py:_on_file_modified():229] file/dir modified: /rds/general/user/jz12018/home/cgan_earth/wandb/run-20210809_162737-34qf6giw/files/wandb-summary.json
+2021-08-09 16:27:41,932 INFO    SenderThread:1052938 [dir_watcher.py:_on_file_modified():229] file/dir modified: /rds/general/user/jz12018/home/cgan_earth/wandb/run-20210809_162737-34qf6giw/files/config.yaml
+2021-08-09 16:27:41,932 INFO    SenderThread:1052938 [dir_watcher.py:_on_file_modified():229] file/dir modified: /rds/general/user/jz12018/home/cgan_earth/wandb/run-20210809_162737-34qf6giw/files/output.log
+2021-08-09 16:27:41,933 INFO    SenderThread:1052938 [dir_watcher.py:finish():312] scan: /rds/general/user/jz12018/home/cgan_earth/wandb/run-20210809_162737-34qf6giw/files
+2021-08-09 16:27:41,933 INFO    SenderThread:1052938 [dir_watcher.py:finish():318] scan save: /rds/general/user/jz12018/home/cgan_earth/wandb/run-20210809_162737-34qf6giw/files/wandb-metadata.json wandb-metadata.json
+2021-08-09 16:27:41,934 INFO    SenderThread:1052938 [dir_watcher.py:finish():318] scan save: /rds/general/user/jz12018/home/cgan_earth/wandb/run-20210809_162737-34qf6giw/files/config.yaml config.yaml
+2021-08-09 16:27:41,934 INFO    SenderThread:1052938 [dir_watcher.py:finish():318] scan save: /rds/general/user/jz12018/home/cgan_earth/wandb/run-20210809_162737-34qf6giw/files/requirements.txt requirements.txt
+2021-08-09 16:27:41,944 INFO    SenderThread:1052938 [dir_watcher.py:finish():318] scan save: /rds/general/user/jz12018/home/cgan_earth/wandb/run-20210809_162737-34qf6giw/files/wandb-summary.json wandb-summary.json
+2021-08-09 16:27:41,955 INFO    SenderThread:1052938 [dir_watcher.py:finish():318] scan save: /rds/general/user/jz12018/home/cgan_earth/wandb/run-20210809_162737-34qf6giw/files/output.log output.log
+2021-08-09 16:27:41,973 INFO    SenderThread:1052938 [dir_watcher.py:finish():318] scan save: /rds/general/user/jz12018/home/cgan_earth/wandb/run-20210809_162737-34qf6giw/files/media/graph/graph_1_summary_46170f09af16dee61f47.graph.json media/graph/graph_1_summary_46170f09af16dee61f47.graph.json
+2021-08-09 16:27:41,973 INFO    SenderThread:1052938 [dir_watcher.py:finish():318] scan save: /rds/general/user/jz12018/home/cgan_earth/wandb/run-20210809_162737-34qf6giw/files/media/graph/graph_0_summary_5a939a60e82d8a80a8e6.graph.json media/graph/graph_0_summary_5a939a60e82d8a80a8e6.graph.json
+2021-08-09 16:27:41,974 INFO    SenderThread:1052938 [sender.py:transition_state():308] send defer: 6
+2021-08-09 16:27:41,974 DEBUG   SenderThread:1052938 [sender.py:send_request():193] send_request: poll_exit
+2021-08-09 16:27:41,975 DEBUG   HandlerThread:1052938 [handler.py:handle_request():124] handle_request: defer
+2021-08-09 16:27:41,976 INFO    HandlerThread:1052938 [handler.py:handle_request_defer():141] handle defer: 6
+2021-08-09 16:27:41,976 DEBUG   SenderThread:1052938 [sender.py:send_request():193] send_request: defer
+2021-08-09 16:27:41,977 INFO    SenderThread:1052938 [sender.py:send_request_defer():304] handle sender defer: 6
+2021-08-09 16:27:41,977 INFO    SenderThread:1052938 [file_pusher.py:finish():177] shutting down file pusher
+2021-08-09 16:27:42,077 DEBUG   HandlerThread:1052938 [handler.py:handle_request():124] handle_request: poll_exit
+2021-08-09 16:27:42,078 DEBUG   SenderThread:1052938 [sender.py:send_request():193] send_request: poll_exit
+2021-08-09 16:27:42,181 DEBUG   HandlerThread:1052938 [handler.py:handle_request():124] handle_request: poll_exit
+2021-08-09 16:27:42,182 DEBUG   SenderThread:1052938 [sender.py:send_request():193] send_request: poll_exit
+2021-08-09 16:27:42,284 DEBUG   HandlerThread:1052938 [handler.py:handle_request():124] handle_request: poll_exit
+2021-08-09 16:27:42,285 DEBUG   SenderThread:1052938 [sender.py:send_request():193] send_request: poll_exit
+2021-08-09 16:27:42,388 DEBUG   HandlerThread:1052938 [handler.py:handle_request():124] handle_request: poll_exit
+2021-08-09 16:27:42,388 DEBUG   SenderThread:1052938 [sender.py:send_request():193] send_request: poll_exit
+2021-08-09 16:27:42,441 INFO    Thread-17 :1052938 [upload_job.py:push():137] Uploaded file /rds/general/user/jz12018/home/cgan_earth/wandb/run-20210809_162737-34qf6giw/files/output.log
+2021-08-09 16:27:42,464 INFO    Thread-15 :1052938 [upload_job.py:push():137] Uploaded file /rds/general/user/jz12018/home/cgan_earth/wandb/run-20210809_162737-34qf6giw/files/requirements.txt
+2021-08-09 16:27:42,491 DEBUG   HandlerThread:1052938 [handler.py:handle_request():124] handle_request: poll_exit
+2021-08-09 16:27:42,491 DEBUG   SenderThread:1052938 [sender.py:send_request():193] send_request: poll_exit
+2021-08-09 16:27:42,515 INFO    Thread-14 :1052938 [upload_job.py:push():137] Uploaded file /rds/general/user/jz12018/home/cgan_earth/wandb/run-20210809_162737-34qf6giw/files/config.yaml
+2021-08-09 16:27:42,534 INFO    Thread-16 :1052938 [upload_job.py:push():137] Uploaded file /rds/general/user/jz12018/home/cgan_earth/wandb/run-20210809_162737-34qf6giw/files/wandb-summary.json
+2021-08-09 16:27:42,594 DEBUG   HandlerThread:1052938 [handler.py:handle_request():124] handle_request: poll_exit
+2021-08-09 16:27:42,595 DEBUG   SenderThread:1052938 [sender.py:send_request():193] send_request: poll_exit
+2021-08-09 16:27:42,698 DEBUG   HandlerThread:1052938 [handler.py:handle_request():124] handle_request: poll_exit
+2021-08-09 16:27:42,699 DEBUG   SenderThread:1052938 [sender.py:send_request():193] send_request: poll_exit
+2021-08-09 16:27:42,735 INFO    Thread-7  :1052938 [sender.py:transition_state():308] send defer: 7
+2021-08-09 16:27:42,736 DEBUG   HandlerThread:1052938 [handler.py:handle_request():124] handle_request: defer
+2021-08-09 16:27:42,737 INFO    HandlerThread:1052938 [handler.py:handle_request_defer():141] handle defer: 7
+2021-08-09 16:27:42,737 DEBUG   SenderThread:1052938 [sender.py:send_request():193] send_request: defer
+2021-08-09 16:27:42,737 INFO    SenderThread:1052938 [sender.py:send_request_defer():304] handle sender defer: 7
+2021-08-09 16:27:42,801 DEBUG   HandlerThread:1052938 [handler.py:handle_request():124] handle_request: poll_exit
+2021-08-09 16:27:43,303 INFO    SenderThread:1052938 [sender.py:transition_state():308] send defer: 8
+2021-08-09 16:27:43,304 DEBUG   SenderThread:1052938 [sender.py:send_request():193] send_request: poll_exit
+2021-08-09 16:27:43,305 DEBUG   HandlerThread:1052938 [handler.py:handle_request():124] handle_request: defer
+2021-08-09 16:27:43,305 INFO    HandlerThread:1052938 [handler.py:handle_request_defer():141] handle defer: 8
+2021-08-09 16:27:43,306 DEBUG   SenderThread:1052938 [sender.py:send_request():193] send_request: defer
+2021-08-09 16:27:43,306 INFO    SenderThread:1052938 [sender.py:send_request_defer():304] handle sender defer: 8
+2021-08-09 16:27:43,307 INFO    SenderThread:1052938 [sender.py:transition_state():308] send defer: 9
+2021-08-09 16:27:43,308 DEBUG   SenderThread:1052938 [sender.py:send():179] send: final
+2021-08-09 16:27:43,308 DEBUG   HandlerThread:1052938 [handler.py:handle_request():124] handle_request: defer
+2021-08-09 16:27:43,308 DEBUG   SenderThread:1052938 [sender.py:send():179] send: footer
+2021-08-09 16:27:43,309 INFO    HandlerThread:1052938 [handler.py:handle_request_defer():141] handle defer: 9
+2021-08-09 16:27:43,310 DEBUG   SenderThread:1052938 [sender.py:send_request():193] send_request: defer
+2021-08-09 16:27:43,310 INFO    SenderThread:1052938 [sender.py:send_request_defer():304] handle sender defer: 9
+2021-08-09 16:27:43,407 DEBUG   HandlerThread:1052938 [handler.py:handle_request():124] handle_request: poll_exit
+2021-08-09 16:27:43,408 DEBUG   SenderThread:1052938 [sender.py:send_request():193] send_request: poll_exit
+2021-08-09 16:27:43,409 INFO    SenderThread:1052938 [file_pusher.py:join():182] waiting for file pusher
+2021-08-09 16:27:43,411 DEBUG   HandlerThread:1052938 [handler.py:handle_request():124] handle_request: get_summary
+2021-08-09 16:27:43,413 DEBUG   HandlerThread:1052938 [handler.py:handle_request():124] handle_request: sampled_history
+2021-08-09 16:27:43,415 DEBUG   HandlerThread:1052938 [handler.py:handle_request():124] handle_request: shutdown
+2021-08-09 16:27:43,415 INFO    HandlerThread:1052938 [handler.py:finish():638] shutting down handler
+2021-08-09 16:27:44,308 INFO    WriterThread:1052938 [datastore.py:close():288] close: /rds/general/user/jz12018/home/cgan_earth/wandb/run-20210809_162737-34qf6giw/run-34qf6giw.wandb
+2021-08-09 16:27:44,409 INFO    SenderThread:1052938 [sender.py:finish():945] shutting down sender
+2021-08-09 16:27:44,410 INFO    SenderThread:1052938 [file_pusher.py:finish():177] shutting down file pusher
+2021-08-09 16:27:44,410 INFO    SenderThread:1052938 [file_pusher.py:join():182] waiting for file pusher
+2021-08-09 16:27:44,414 INFO    MainThread:1052938 [internal.py:handle_exit():78] Internal process exited

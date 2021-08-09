@@ -1,0 +1,15 @@
+# Specify how many CPUs, memory, GPUs, type of GPU and max duration
+
+#PBS -lwalltime=08:00:00
+#PBS -lselect=1:ncpus=4:mem=24gb:ngpus=1:gpu_type=RTX6000
+
+# Load modules
+
+# move to wd
+cd $PBS_O_WORKDIR
+
+source $HOME/venv/bin/activate
+python $HOME/cgan_earth/run_cgan_earth.py
+
+# make output dir
+mkdir $HOME/cgan_earth/outputs/$PBS_JOBID

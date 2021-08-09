@@ -1,0 +1,8 @@
+
+Starting Training Loop...
+Traceback (most recent call last):
+  File "run_cgan_earth.py", line 38, in <module>
+    batch_size, lr, device, wandb_name)
+  File "/rds/general/user/jz12018/home/cgan_earth/code_files/model.py", line 72, in train
+    print(max(fake.detach().numpy()))
+TypeError: can't convert cuda:0 device type tensor to numpy. Use Tensor.cpu() to copy the tensor to host memory first.

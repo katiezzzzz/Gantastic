@@ -1,0 +1,10 @@
+
+Starting Training Loop...
+Traceback (most recent call last):
+  File "run_cgan_earth.py", line 38, in <module>
+    batch_size, lr, device, wandb_name)
+  File "/rds/general/user/jz12018/home/cgan_earth/code_files/model.py", line 32, in train
+    real_data, b_labels = batch(imgs, labels, batch_size, img_length, device)
+  File "/rds/general/user/jz12018/home/cgan_earth/code_files/util.py", line 91, in batch
+    random_img = imgs[random_i]
+IndexError: index 5 is out of bounds for axis 0 with size 5
