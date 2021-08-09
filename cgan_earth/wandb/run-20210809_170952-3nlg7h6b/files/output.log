@@ -1,0 +1,8 @@
+
+Starting Training Loop...
+Traceback (most recent call last):
+  File "run_cgan_earth.py", line 38, in <module>
+    batch_size, lr, device, wandb_name)
+  File "/rds/general/user/jz12018/home/cgan_earth/code_files/model.py", line 58, in train
+    wandb.log({'Gradient penalty': gradient_penalty.item()})
+KeyboardInterrupt

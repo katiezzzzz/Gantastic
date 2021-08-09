@@ -1,0 +1,15 @@
+Starting Training Loop...
+0.5117376
+0.48915038
+Traceback (most recent call last):
+  File "run_cgan_earth.py", line 38, in <module>
+    batch_size, lr, device, wandb_name)
+  File "/rds/general/user/jz12018/home/cgan_earth/code_files/model.py", line 90, in train
+    wandb.log({"fake" : wandb.Image(img)})
+  File "/rds/general/user/jz12018/home/venv/lib64/python3.6/site-packages/wandb/sdk/data_types.py", line 1732, in __init__
+    self._initialize_from_data(data_or_path, mode)
+  File "/rds/general/user/jz12018/home/venv/lib64/python3.6/site-packages/wandb/sdk/data_types.py", line 1840, in _initialize_from_data
+    self.to_uint8(data), mode=mode or self.guess_mode(data)
+  File "/rds/general/user/jz12018/home/venv/lib64/python3.6/site-packages/wandb/sdk/data_types.py", line 1973, in guess_mode
+    "Un-supported shape for image conversion %s" % list(data.shape)
+ValueError: Un-supported shape for image conversion [3, 128, 128]

@@ -1,0 +1,10 @@
+
+Starting Training Loop...
+Traceback (most recent call last):
+  File "run_cgan_earth.py", line 38, in <module>
+    batch_size, lr, device, wandb_name)
+  File "/rds/general/user/jz12018/home/cgan_earth/code_files/model.py", line 36, in train
+    one_hot_labels = gen_labels(b_labels, n_classes)
+  File "/rds/general/user/jz12018/home/cgan_earth/code_files/util.py", line 111, in gen_labels
+    return F.one_hot(labels, num_classes=n_classes)
+TypeError: one_hot(): argument 'input' (position 1) must be Tensor, not numpy.ndarray

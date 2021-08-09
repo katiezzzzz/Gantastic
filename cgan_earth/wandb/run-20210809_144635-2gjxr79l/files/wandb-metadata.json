@@ -1,0 +1,24 @@
+{
+    "os": "Linux-4.18.0-193.6.3.el8_2.x86_64-x86_64-with-centos-8.2.2004-Core",
+    "python": "3.6.8",
+    "heartbeatAt": "2021-08-09T13:46:37.674938",
+    "startedAt": "2021-08-09T13:46:35.643985",
+    "docker": null,
+    "gpu": "Quadro P1000",
+    "gpu_count": 1,
+    "cpu_count": 40,
+    "cuda": null,
+    "args": [],
+    "state": "running",
+    "program": "run_cgan_earth.py",
+    "codePath": "cgan_earth/run_cgan_earth.py",
+    "git": {
+        "remote": null,
+        "commit": "1cdcdb276c5d31326c45542c6fbc15130832bc99"
+    },
+    "email": null,
+    "root": "/rds/general/user/jz12018/home",
+    "host": "cx1-106-17-2.cx1.hpc.ic.ac.uk",
+    "username": "jz12018",
+    "executable": "/rds/general/user/jz12018/home/venv/bin/python"
+}
