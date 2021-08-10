@@ -5,6 +5,7 @@ from torch import autograd
 from torch import nn
 import numpy as np
 import subprocess
+import warnings
 import tifffile
 import torch
 import wandb
@@ -91,12 +92,7 @@ def batch(imgs, labels, batch_size, img_length, device):
     n_excess = batch_size - n_crop*n_img
     # randomly select an image and crop n_excess number of times
     if n_excess > 0:
-        random_i = np.random.randint(0, n_img)
-        random_img = imgs[random_i]
-        for _ in range(n_excess):
-            out = crop(random_img, img_length)
-            data = np.vstack((data, crop(random_img, img_length)))
-            batch_labels = np.append(batch_labels, int(random_i))
+        warnings.warn('batch size is not a multiple of number of classes')
     # shuffle along dim 0
     shuffler = np.random.permutation(batch_size)
     data = data.reshape(batch_size, imgs.shape[1], img_length, img_length)[shuffler]
@@ -142,12 +138,12 @@ def calc_gradient_penalty(netD, real_data, fake_data, batch_size, img_length, de
     gradient_penalty = ((gradients.norm(2, dim=1) - 1) ** 2).mean() * gp_lambda
     return gradient_penalty
 
-def test(pth, labels, netG, z_dim=64, lf=4, device):
+def test(path, labels, netG, n_classes, z_dim=64, lf=4, device='cpu'):
     try:
-        netG.load_state_dict(torch.load(pth + '_Gen.pt'))
+        netG.load_state_dict(torch.load(path + '_Gen.pt'))
     except:
         netG = nn.DataParallel(netG)
-        netG.load_state_dict(torch.load(pth + '_Gen.pt'))
+        netG.load_state_dict(torch.load(path + '_Gen.pt'))
     
     netG.to(device)
     tifs, raws = [], []
@@ -157,10 +153,11 @@ def test(pth, labels, netG, z_dim=64, lf=4, device):
     for tst_lbl in test_labels:
         lbl = tst_lbl.repeat(1, 1, lf, lf).to(device)
         with torch.no_grad():
-            img = torch.multiply(netG(noise, lbl).cuda(), 255)
+            img = netG(noise, lbl).cuda()
+            raws.append(img)
         print('Postprocessing')
-        img = img.cpu().detach().numpy()
-        tifffile.imwrite(pth + str(lbls)+ '.tif', tif)
+        tif = torch.multiply(img, 255).cpu().detach().numpy()
+        tifffile.imwrite(path + str(tst_lbl)+ '.tif', tif)
         tifs.append(tif)
     return tifs, netG    
 

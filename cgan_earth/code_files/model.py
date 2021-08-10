@@ -8,7 +8,7 @@ def train(pth, gen, disc, imgs, labels, img_length, n_classes, num_epochs, z_dim
     beta1 = 0.5
     beta2 = 0.999
     c_lambda = 10
-    crit_iter = 10
+    crit_iter = 5
     log_iter = 200
     n_channels = 3
     iters = 30000 // batch_size
