@@ -3,7 +3,21 @@ import torch.nn as nn
 import pickle
 import torch
 
-def cgan_earth_nets(path):
+def cgan_earth_nets(path, Training, g_dim, d_dim):
+    # g_dim and d_dim are input dimensions into d and g
+
+    hidden_dim = 64
+    if Training == True:
+        layers_g = [g_dim, hidden_dim, hidden_dim*2, hidden_dim*4, hidden_dim*8, hidden_dim*16, 3]
+        kernel_g = [3, 4, 4, 4, 4, 3]
+        stride_g = [2, 1, 1, 1, 1, 1]
+        layers_d = [d_dim, hidden_dim*16, hidden_dim*8, hidden_dim*4, hidden_dim*2, hidden_dim, 1]
+        kernel_d = [4, 4, 4, 4, 4, 4]
+        stride_d = [2, 2, 2, 2, 2, 2]
+        params = [layers_g, kernel_g, stride_g, layers_d, kernel_d, stride_d]
+        with open(path + '_params.data', 'wb') as filehandle:
+            # store the data as binary data stream
+            pickle.dump(params, filehandle)     
 
     class Generator(nn.Module):
         '''
@@ -16,12 +30,14 @@ def cgan_earth_nets(path):
         def __init__(self, g_dim, im_chan=3, hidden_dim=64):
             super(Generator, self).__init__()
             self.g_dim = g_dim
-            self.final_conv = nn.Conv2d(hidden_dim, im_chan, 3, 1, 0)
+            self.final_conv = nn.Conv2d(hidden_dim * 16, im_chan, 3, 1, 0)
             # Build the neural network
             self.gen = nn.Sequential(
-                self.make_gen_block(g_dim, hidden_dim * 4),
-                self.make_gen_block(hidden_dim * 4, hidden_dim * 2, kernel_size=4, stride=1),
-                self.make_gen_block(hidden_dim * 2, hidden_dim),
+                self.make_gen_block(g_dim, hidden_dim),
+                self.make_gen_block(hidden_dim, hidden_dim * 2, kernel_size=4, stride=1),
+                self.make_gen_block(hidden_dim * 2, hidden_dim * 4, kernel_size=4, stride=1),
+                self.make_gen_block(hidden_dim * 4, hidden_dim * 8, kernel_size=4, stride=1),
+                self.make_gen_block(hidden_dim * 8, hidden_dim * 16, kernel_size=4, stride=1),
             )
 
         def make_gen_block(self, input_channels, output_channels, kernel_size=3, stride=2):
@@ -49,6 +65,7 @@ def cgan_earth_nets(path):
             '''
             x = torch.cat((noise.float(), labels.float()), 1)
             x = self.gen(x)
+            # upsample to give output spatial size (img_length, img_length)
             up = nn.Upsample(size = 128+2)
             return torch.sigmoid(self.final_conv(up(x)))
 
@@ -63,8 +80,11 @@ def cgan_earth_nets(path):
         def __init__(self, d_dim, hidden_dim=64):
             super(Critic, self).__init__()
             self.crit = nn.Sequential(
-                self.make_crit_block(d_dim, hidden_dim),
-                self.make_crit_block(hidden_dim, hidden_dim * 2),
+                self.make_crit_block(d_dim, hidden_dim * 16),
+                self.make_crit_block(hidden_dim * 16, hidden_dim * 8),
+                self.make_crit_block(hidden_dim * 8, hidden_dim * 4),
+                self.make_crit_block(hidden_dim * 4, hidden_dim * 2),
+                self.make_crit_block(hidden_dim * 2, hidden_dim),
                 self.make_crit_block(hidden_dim * 2, 1, final_layer=True),
             )
 
