@@ -5,6 +5,7 @@ from torch import autograd
 from torch import nn
 import numpy as np
 import subprocess
+import tifffile
 import torch
 import wandb
 import os
@@ -140,6 +141,28 @@ def calc_gradient_penalty(netD, real_data, fake_data, batch_size, img_length, de
     gradients = gradients.view(gradients.size(0), -1)
     gradient_penalty = ((gradients.norm(2, dim=1) - 1) ** 2).mean() * gp_lambda
     return gradient_penalty
+
+def test(pth, labels, netG, z_dim=64, lf=4, device):
+    try:
+        netG.load_state_dict(torch.load(pth + '_Gen.pt'))
+    except:
+        netG = nn.DataParallel(netG)
+        netG.load_state_dict(torch.load(pth + '_Gen.pt'))
+    
+    netG.to(device)
+    tifs, raws = [], []
+    noise = torch.randn(1, z_dim, lf, lf, device=device)
+    netG.eval()
+    test_labels = gen_labels(labels, n_classes)[:, :, None, None]
+    for tst_lbl in test_labels:
+        lbl = tst_lbl.repeat(1, 1, lf, lf).to(device)
+        with torch.no_grad():
+            img = torch.multiply(netG(noise, lbl).cuda(), 255)
+        print('Postprocessing')
+        img = img.cpu().detach().numpy()
+        tifffile.imwrite(pth + str(lbls)+ '.tif', tif)
+        tifs.append(tif)
+    return tifs, netG    
 
 def wandb_init(name):
     load_dotenv(os.path.join(os.path.dirname(__file__),'.env'))
