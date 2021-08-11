@@ -10,7 +10,11 @@ wandb_name = Project_name
 data_path = []
 labels = []
 
-for img_path, label in zip(['forest1', 'forest2', 'forest3'], [0, 0, 0]):
+for img_path, label in zip(['forest1', 'forest2', 'forest3',
+                            'city1', 'city2', 'city3',
+                            'desert1', 'desert2', 'desert3',
+                            'sea1', 'sea2', 'sea3', 
+                            'snow1', 'snow2', 'snow3'], [0, 0, 0, 1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 4]):
     file = PATH + '/earth_screenshots/{}.jpg'.format(img_path)
     data_path.append(file) # path to training data.
     labels.append(label)
@@ -22,8 +26,8 @@ ngpu = 1
 z_dim = 64
 lr = 0.0001
 Training = 1
-n_classes = 1
-batch_size = 27
+n_classes = 5
+batch_size = 60
 num_epochs = 300
 img_length = 128 # size of training image
 proj_path = mkdr(Project_name, Project_dir, Training)
