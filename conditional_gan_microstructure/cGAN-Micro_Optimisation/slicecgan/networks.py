@@ -90,7 +90,7 @@ def slicecgan_rc_nets(pth, Training, lbls, *args):
             for lay, (conv, bn) in enumerate(zip(self.convs[:-1],self.bns[:-1])):
                 x = F.relu_(bn(conv(x)))
             # why this particular spatial output size from upsampling?
-            up = nn.Upsample(size = x.shape[2]*2-2)
+            up = nn.Upsample(size = 64+2)
             out = torch.softmax(self.rcconv(up(x)), 1)
             return out
 

@@ -150,16 +150,18 @@ def test(path, labels, netG, n_classes, z_dim=64, lf=4, device='cpu'):
     noise = torch.randn(1, z_dim, lf, lf, device=device)
     netG.eval()
     test_labels = gen_labels(labels, n_classes)[:, :, None, None]
-    for tst_lbl in test_labels:
-        lbl = tst_lbl.repeat(1, 1, lf, lf).to(device)
+    for i in range(len(labels)):
+        lbl = test_labels[i].repeat(1, 1, lf, lf).to(device)
         with torch.no_grad():
-            print(noise.shape)
-            print(lbl.shape)
             img = netG(noise, lbl).cuda()
             raws.append(img)
         print('Postprocessing')
         tif = torch.multiply(img, 255).cpu().detach().numpy()
-        tifffile.imwrite(path + str(tst_lbl)+ '.tif', tif)
+        if i == 0:
+            name = 'forest'
+        else:
+            name = 'none'
+        tifffile.imwrite(path + name + '.tif', tif)
         tifs.append(tif)
     return tifs, netG    
 
