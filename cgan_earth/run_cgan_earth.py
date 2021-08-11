@@ -10,7 +10,7 @@ wandb_name = Project_name
 data_path = []
 labels = []
 
-for img_path, label in zip(['forest1', 'forest2', 'forest3'], [0]):
+for img_path, label in zip(['forest1', 'forest2', 'forest3'], [0, 0, 0]):
     file = PATH + '/earth_screenshots/{}.jpg'.format(img_path)
     data_path.append(file) # path to training data.
     labels.append(label)
