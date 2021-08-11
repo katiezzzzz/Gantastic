@@ -2,7 +2,7 @@ from code_files import *
 import numpy as np
 
 PATH = os.path.dirname(os.path.realpath(__file__))
-Project_name = 'earth_cylinder'
+Project_name = 'earth_cylinder_2'
 Project_dir = PATH + '/trained_generators/'
 wandb_name = Project_name
 
@@ -10,11 +10,11 @@ wandb_name = Project_name
 data_path = []
 labels = []
 
-for img_path, label in zip(['forest1', 'forest2', 'forest3',
-                            'city1', 'city2', 'city3',
-                            'desert1', 'desert2', 'desert3',
-                            'sea1', 'sea2', 'sea3', 
-                            'snow1', 'snow2', 'snow3'], [0, 0, 0, 1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 4]):
+for img_path, label in zip(['forest1',
+                            'city1',
+                            'desert1',
+                            'sea1',
+                            'snow1'], [0, 1, 2, 3, 4]):
     file = PATH + '/earth_screenshots/{}.jpg'.format(img_path)
     data_path.append(file) # path to training data.
     labels.append(label)
@@ -27,7 +27,7 @@ z_dim = 64
 lr = 0.0001
 Training = 1
 n_classes = 5
-batch_size = 60
+batch_size = 30
 num_epochs = 300
 img_length = 128 # size of training image
 proj_path = mkdr(Project_name, Project_dir, Training)
@@ -41,4 +41,4 @@ if Training:
     train(proj_path, netG, netD, imgs, labels, img_length, n_classes, num_epochs, z_dim, 
           batch_size, lr, device, wandb_name)
 else:
-    test(proj_path, labels, netG, n_classes, z_dim, lf=16, device=device)
+    test(proj_path, labels, netG(z_dim+n_classes), n_classes, z_dim, lf=20, device=device)
