@@ -153,6 +153,8 @@ def test(path, labels, netG, n_classes, z_dim=64, lf=4, device='cpu'):
     for tst_lbl in test_labels:
         lbl = tst_lbl.repeat(1, 1, lf, lf).to(device)
         with torch.no_grad():
+            print(noise.shape)
+            print(lbl.shape)
             img = netG(noise, lbl).cuda()
             raws.append(img)
         print('Postprocessing')
