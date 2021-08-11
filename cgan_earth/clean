@@ -1,0 +1,8 @@
+# copy output files to new folder
+for file in earth_job.*
+do
+        echo file
+        echo ${file##*.[e|o]}
+        mv $file outputs/${file##*.[e|o]}.pbs
+done
+
