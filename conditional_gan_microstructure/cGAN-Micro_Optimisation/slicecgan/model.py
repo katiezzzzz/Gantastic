@@ -34,7 +34,7 @@ def conditional_trainer(pth, imtype, real_data, labels, Disc, Gen, isotropic, nc
 
     # Create the Genetator network
     netG = Gen().to(device)
-    rt = 1
+    rt = 0
     
     if Training == False:
         rt = 1
