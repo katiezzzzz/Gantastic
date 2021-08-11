@@ -14,8 +14,8 @@ def train(pth, gen, disc, imgs, labels, img_length, n_classes, num_epochs, z_dim
     iters = 30000 // batch_size
     print(device, " will be used.\n")
 
-    netG = gen(z_dim+n_classes).to(device)
-    netD = disc(3+n_classes).to(device)
+    netG = gen(z_dim+n_classes, img_length).to(device)
+    netD = disc(n_channels+n_classes).to(device)
     netG = netG.apply(param_init)
     netD = netD.apply(param_init)
     optG = torch.optim.Adam(netG.parameters(), lr=lr, betas=(beta1, beta2))

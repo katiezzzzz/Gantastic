@@ -29,17 +29,18 @@ def cgan_earth_nets(path, Training, g_dim, d_dim):
             im_chan: the number of channels in the images
             hidden_dim: the inner dimension, a scalar
         '''
-        def __init__(self, g_dim, im_chan=3, hidden_dim=64):
+        def __init__(self, g_dim, img_length, im_chan=3, hidden_dim=64):
             super(Generator, self).__init__()
             self.g_dim = g_dim
-            self.final_conv = nn.Conv2d(hidden_dim * 16, im_chan, 3, 1, 0)
+            self.img_length = img_length
+            self.final_conv = nn.Conv2d(hidden_dim * 8, im_chan, 3, 1, 0)
             # Build the neural network
             self.gen = nn.Sequential(
                 self.make_gen_block(g_dim, hidden_dim),
                 self.make_gen_block(hidden_dim, hidden_dim * 2, kernel_size=4),
                 self.make_gen_block(hidden_dim * 2, hidden_dim * 4, kernel_size=4),
                 self.make_gen_block(hidden_dim * 4, hidden_dim * 8, kernel_size=4),
-                self.make_gen_block(hidden_dim * 8, hidden_dim * 16, kernel_size=4),
+                #self.make_gen_block(hidden_dim * 8, hidden_dim * 16, kernel_size=4),
             )
 
         def make_gen_block(self, input_channels, output_channels, kernel_size=3, stride=2, padding=1):
@@ -68,7 +69,7 @@ def cgan_earth_nets(path, Training, g_dim, d_dim):
             x = torch.cat((noise.float(), labels.float()), 1)
             x = self.gen(x)
             # upsample to give output spatial size (img_length, img_length)
-            up = nn.Upsample(size = 128+2)
+            up = nn.Upsample(size = self.img_length+2)
             return torch.sigmoid(self.final_conv(up(x)))
 
 
@@ -82,8 +83,8 @@ def cgan_earth_nets(path, Training, g_dim, d_dim):
         def __init__(self, d_dim, hidden_dim=64):
             super(Critic, self).__init__()
             self.crit = nn.Sequential(
-                self.make_crit_block(d_dim, hidden_dim * 16),
-                self.make_crit_block(hidden_dim * 16, hidden_dim * 8),
+                self.make_crit_block(d_dim, hidden_dim * 8),
+                #self.make_crit_block(hidden_dim * 16, hidden_dim * 8),
                 self.make_crit_block(hidden_dim * 8, hidden_dim * 4),
                 self.make_crit_block(hidden_dim * 4, hidden_dim * 2),
                 self.make_crit_block(hidden_dim * 2, hidden_dim),

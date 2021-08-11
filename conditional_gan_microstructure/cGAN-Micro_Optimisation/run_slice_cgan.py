@@ -32,14 +32,14 @@ print('Using project name {}'.format(Project_path))
 
 # Network Architectures
 imsize, nz,  channels, sf, lbls = 64, 32, 2, 1, len(labels[0]*2)
-lays = 5
-laysd = 5
+lays = 4
+laysd = 4
 dk, gk = [4]*laysd, [4]*lays                                    # kernal sizes
 # gk[0]=8
 ds, gs = [2]*laysd, [2]*lays                                    # strides
 # gs[0] = 4
-df, gf = [channels, 64, 128, 256, 512, 1], [nz, 512, 256, 128, 64, channels]  # filter sizes for hidden layers
-dp, gp = [1, 1, 1, 1, 0], [2, 2, 2, 2, 3]
+df, gf = [channels, 64, 128, 256, 1], [nz, 256, 128, 64, channels]  # filter sizes for hidden layers
+dp, gp = [1, 1, 1, 0], [2, 2, 2, 3]
 
 ##Create Networks
 netD, netG = slicecgan_rc_nets(Project_path, Training, lbls, dk, ds, df,dp, gk ,gs, gf, gp)
