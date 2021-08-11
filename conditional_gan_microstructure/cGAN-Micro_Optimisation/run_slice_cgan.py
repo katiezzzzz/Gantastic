@@ -8,7 +8,7 @@ import numpy as np
 
 
 PATH = os.path.dirname(os.path.realpath(__file__))
-Project_name = 'cgan_microstructure_27'
+Project_name = 'cgan_microstructure'
 Project_dir = PATH+'/trained_generators/microstructure/'
 
 ## Data Processing
@@ -26,7 +26,7 @@ for r, r_lab in zip(['6', '10'], [0, 1]):
     labels.append([r_lab])
 
 isotropic = True
-Training = 0 # Run with False to show an image during training
+Training = 1 # Run with False to show an image during training
 Project_path = mkdr(Project_name, Project_dir, Training)
 print('Using project name {}'.format(Project_path))
 
