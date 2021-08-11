@@ -82,7 +82,7 @@ def train(pth, gen, disc, imgs, labels, img_length, n_classes, num_epochs, z_dim
                 for tst_lbl in test_labels:
                     lbl = tst_lbl.repeat(1, 1, lz+2, lz+2).to(device)
                     with torch.no_grad():
-                        img = torch.multiply(netG(noise, lbl).cuda(), 255)
+                        img = torch.multiply(netG(noise, lbl), 255)
                     img = img.cpu().detach().numpy()
                     img = np.moveaxis(img, 1, -1)
                     wandb.log({"fake" : wandb.Image(img)})
