@@ -146,6 +146,7 @@ def test(path, labels, netG, n_classes, z_dim=64, lf=4, device='cpu'):
         netG.load_state_dict(torch.load(path + '_Gen.pt'))
     
     netG.to(device)
+    names = ['forest', 'city', 'desert', 'sea', 'snow']
     tifs, raws = [], []
     noise = torch.randn(1, z_dim, lf, lf, device=device)
     netG.eval()
@@ -157,11 +158,11 @@ def test(path, labels, netG, n_classes, z_dim=64, lf=4, device='cpu'):
             raws.append(img)
         print('Postprocessing')
         tif = torch.multiply(img, 255).cpu().detach().numpy()
-        if i == 0:
-            name = 'forest'
-        else:
+        try:
+            name = names[i]
+        except:
             name = 'none'
-        tifffile.imwrite(path + name + '.tif', tif)
+        tifffile.imwrite(path + '_' + name + '.tif', tif)
         tifs.append(tif)
     return tifs, netG    
 

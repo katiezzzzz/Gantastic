@@ -12,7 +12,7 @@ labels = []
 
 for img_path, label in zip(['forest1', 'forest2', 'forest3'], [0, 0, 0]):
     file = PATH + '/training_data/{}.jpg'.format(img_path)
-    data_path.append(file) # path to training data.
+    data_path.append(file) # path to training data
     labels.append(label)
 
 imgs = read_img(data_path)
@@ -38,4 +38,5 @@ if Training:
     train(proj_path, netG, netD, imgs, labels, img_length, n_classes, num_epochs, z_dim, 
           batch_size, lr, device, wandb_name)
 else:
+    labels = [0]
     test(proj_path, labels, netG(z_dim+n_classes, img_length), n_classes, z_dim, lf=20, device=device)
