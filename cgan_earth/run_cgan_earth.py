@@ -10,8 +10,8 @@ wandb_name = Project_name
 data_path = []
 labels = []
 
-for img_path, label in zip(['forest1', 'forest2'], [0, 0]):
-    file = PATH + '/earth_screenshots/{}.jpg'.format(img_path)
+for img_path, label in zip(['forest1', 'forest2', 'forest3'], [0, 0, 0]):
+    file = PATH + '/training_data/{}.jpg'.format(img_path)
     data_path.append(file) # path to training data.
     labels.append(label)
 
@@ -23,14 +23,15 @@ z_dim = 64
 lr = 0.0001
 Training = 1
 n_classes = 1
-batch_size = 16
+batch_size = 18
+im_channels = 3
 num_epochs = 300
 img_length = 256 # size of training image
 proj_path = mkdr(Project_name, Project_dir, Training)
 device = torch.device("cuda:0" if(torch.cuda.is_available() and ngpu > 0) else "cpu")
 
 # create networks
-netG, netD = cgan_earth_nets(proj_path, Training, z_dim+n_classes, 3+n_classes)
+netG, netD = cgan_earth_nets(proj_path, Training, z_dim+n_classes, im_channels+n_classes)
 
 # train
 if Training:
