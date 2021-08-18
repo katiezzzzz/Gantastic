@@ -149,13 +149,13 @@ def test(path, labels, netG, n_classes, z_dim=64, lf=4, device='cpu'):
     names = ['forest', 'city', 'desert', 'sea', 'snow']
     tifs, raws = [], []
     # try to generate rectangular, instead of square images
-    noise = torch.randn(1, z_dim, lf, lf+6, device=device)
+    noise = torch.randn(1, z_dim, lf, lf*2, device=device)
     netG.eval()
     test_labels = gen_labels(labels, n_classes)[:, :, None, None]
     for i in range(len(labels)):
-        lbl = test_labels[i].repeat(1, 1, lf, lf+6).to(device)
+        lbl = test_labels[i].repeat(1, 1, lf, lf*2).to(device)
         with torch.no_grad():
-            img = netG(noise, lbl).cuda()
+            img = netG(noise, lbl, Training=False).cuda()
             raws.append(img)
         print('Postprocessing')
         tif = torch.multiply(img, 255).cpu().detach().numpy()
