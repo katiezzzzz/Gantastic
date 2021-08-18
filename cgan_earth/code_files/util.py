@@ -148,11 +148,11 @@ def test(path, labels, netG, n_classes, z_dim=64, lf=4, device='cpu'):
     netG.to(device)
     names = ['forest', 'city', 'desert', 'sea', 'snow']
     tifs, raws = [], []
-    noise = torch.randn(1, z_dim, lf, lf, device=device)
+    noise = torch.randn(1, z_dim, lf, lf+6, device=device)
     netG.eval()
     test_labels = gen_labels(labels, n_classes)[:, :, None, None]
     for i in range(len(labels)):
-        lbl = test_labels[i].repeat(1, 1, lf, lf).to(device)
+        lbl = test_labels[i].repeat(1, 1, lf, lf+6).to(device)
         with torch.no_grad():
             img = netG(noise, lbl).cuda()
             raws.append(img)

@@ -8,7 +8,7 @@ import numpy as np
 
 
 PATH = os.path.dirname(os.path.realpath(__file__))
-Project_name = 'cgan_microstructure'
+Project_name = 'cgan_microstructure_24'
 Project_dir = PATH+'/trained_generators/microstructure/'
 
 ## Data Processing
@@ -26,20 +26,20 @@ for r, r_lab in zip(['6', '10'], [0, 1]):
     labels.append([r_lab])
 
 isotropic = True
-Training = 1 # Run with False to show an image during training
+Training = 0 # Run with False to show an image during training
 Project_path = mkdr(Project_name, Project_dir, Training)
 print('Using project name {}'.format(Project_path))
 
 # Network Architectures
 imsize, nz,  channels, sf, lbls = 64, 32, 2, 1, len(labels[0]*2)
-lays = 3
-laysd = 3
+lays = 5
+laysd = 5
 dk, gk = [4]*laysd, [4]*lays                                    # kernal sizes
 # gk[0]=8
 ds, gs = [2]*laysd, [2]*lays                                    # strides
 # gs[0] = 4
-df, gf = [channels, 64, 128, 1], [nz, 128, 64, channels]  # filter sizes for hidden layers
-dp, gp = [1, 1, 0], [2, 2, 3]
+df, gf = [channels, 64, 128, 256, 512, 1], [nz, 512, 256, 128, 64, channels]  # filter sizes for hidden layers
+dp, gp = [1, 1, 1, 1, 0], [2, 2, 2, 2, 3]
 
 ##Create Networks
 netD, netG = slicecgan_rc_nets(Project_path, Training, lbls, dk, ds, df,dp, gk ,gs, gf, gp)
