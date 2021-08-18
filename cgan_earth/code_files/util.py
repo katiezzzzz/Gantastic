@@ -148,6 +148,7 @@ def test(path, labels, netG, n_classes, z_dim=64, lf=4, device='cpu'):
     netG.to(device)
     names = ['forest', 'city', 'desert', 'sea', 'snow']
     tifs, raws = [], []
+    # try to generate rectangular, instead of square images
     noise = torch.randn(1, z_dim, lf, lf+6, device=device)
     netG.eval()
     test_labels = gen_labels(labels, n_classes)[:, :, None, None]
