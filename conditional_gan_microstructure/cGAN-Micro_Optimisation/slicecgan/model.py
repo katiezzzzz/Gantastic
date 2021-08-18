@@ -10,7 +10,7 @@ import torch.nn as nn
 
 def conditional_trainer(pth, imtype, real_data, labels, Disc, Gen, isotropic, nc, l, nz, sf, wandb_name):
     print('Loading Dataset...')
-    Training = 1
+    Training = 0
     ## Constants for NNs
     ngpu = 1
     nlabels = len(labels[0])
