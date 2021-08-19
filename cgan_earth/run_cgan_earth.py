@@ -23,10 +23,10 @@ z_dim = 64
 lr = 0.0001
 Training = 1
 n_classes = 5
-batch_size = 40
+batch_size = 20
 im_channels = 3
 num_epochs = 1000
-img_length = 128 # size of training image
+img_length = 256 # size of training image
 proj_path = mkdr(Project_name, Project_dir, Training)
 device = torch.device("cuda:0" if(torch.cuda.is_available() and ngpu > 0) else "cpu")
 
