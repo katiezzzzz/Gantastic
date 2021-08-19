@@ -138,7 +138,7 @@ def calc_gradient_penalty(netD, real_data, fake_data, batch_size, img_length, de
     gradient_penalty = ((gradients.norm(2, dim=1) - 1) ** 2).mean() * gp_lambda
     return gradient_penalty
 
-def test(path, labels, netG, n_classes, z_dim=64, lf=4, device='cpu'):
+def test(path, labels, netG, n_classes, z_dim=64, lf=4, device='cpu', ratio=2):
     try:
         netG.load_state_dict(torch.load(path + '_Gen.pt'))
     except:
@@ -149,13 +149,14 @@ def test(path, labels, netG, n_classes, z_dim=64, lf=4, device='cpu'):
     names = ['forest', 'city', 'desert', 'sea', 'snow']
     tifs, raws = [], []
     # try to generate rectangular, instead of square images
-    noise = torch.randn(1, z_dim, lf, lf*2, device=device)
+    random = torch.randn(1, z_dim, lf, lf, device=device)
+    noise = random.repeat(1, 1, 1, ratio)
     netG.eval()
     test_labels = gen_labels(labels, n_classes)[:, :, None, None]
     for i in range(len(labels)):
-        lbl = test_labels[i].repeat(1, 1, lf, lf*2).to(device)
+        lbl = test_labels[i].repeat(1, 1, lf, lf*ratio).to(device)
         with torch.no_grad():
-            img = netG(noise, lbl, Training=False).cuda()
+            img = netG(noise, lbl, Training=False, ratio=ratio).cuda()
             raws.append(img)
         print('Postprocessing')
         tif = torch.multiply(img, 255).cpu().detach().numpy()
