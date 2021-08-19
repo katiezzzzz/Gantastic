@@ -8,13 +8,13 @@ def cgan_earth_nets(path, Training, g_dim, d_dim):
 
     hidden_dim = 64
     if Training == True:
-        layers_g = [g_dim, hidden_dim, hidden_dim*2, hidden_dim*4, hidden_dim*8, hidden_dim*4, 3]
+        layers_g = [g_dim, hidden_dim, hidden_dim*2, hidden_dim*4, hidden_dim*8, hidden_dim*16, 3]
         kernel_g = [4, 4, 4, 4, 4, 3]
-        stride_g = [2, 2, 2, 1, 1, 1]
-        pad_g = [1, 1, 1, 1, 1, 1]
-        layers_d = [d_dim, hidden_dim*4, hidden_dim*8, hidden_dim*4, hidden_dim*2, hidden_dim, 1]
+        stride_g = [2, 2, 2, 2, 1, 1]
+        pad_g = [1, 1, 1, 1, 1, 0]
+        layers_d = [d_dim, hidden_dim*16, hidden_dim*8, hidden_dim*4, hidden_dim*2, hidden_dim, 1]
         kernel_d = [4, 4, 4, 4, 4, 4]
-        stride_d = [2, 2, 2, 1, 1, 1]
+        stride_d = [2, 2, 2, 2, 1, 1]
         pad_d = [2, 2, 2, 2, 2, 1]
         params = [layers_g, kernel_g, stride_g, pad_g, layers_d, kernel_d, stride_d, pad_d]
         with open(path + '_params.data', 'wb') as filehandle:
@@ -32,14 +32,14 @@ def cgan_earth_nets(path, Training, g_dim, d_dim):
         def __init__(self, g_dim, img_length, im_chan=3, hidden_dim=64):
             super(Generator, self).__init__()
             self.img_length = img_length
-            self.final_conv = nn.Conv2d(hidden_dim * 4, im_chan, 3, 1, 1, padding_mode='circular')
+            self.final_conv = nn.Conv2d(hidden_dim * 16, im_chan, 3, 1, 0)
             # Build the neural network
             self.gen = nn.Sequential(
                 self.make_gen_block(g_dim, hidden_dim, kernel_size=4),
                 self.make_gen_block(hidden_dim, hidden_dim * 2, kernel_size=4),
                 self.make_gen_block(hidden_dim * 2, hidden_dim * 4, kernel_size=4),
-                self.make_gen_block(hidden_dim * 4, hidden_dim * 8, kernel_size=4, padding=1),
-                self.make_gen_block(hidden_dim * 8, hidden_dim * 4, kernel_size=4, padding=1),
+                self.make_gen_block(hidden_dim * 4, hidden_dim * 8, kernel_size=4),
+                self.make_gen_block(hidden_dim * 8, hidden_dim * 16, kernel_size=4, stride=1),
             )
 
         def make_gen_block(self, input_channels, output_channels, kernel_size=3, stride=2, padding=1):
@@ -85,8 +85,8 @@ def cgan_earth_nets(path, Training, g_dim, d_dim):
         def __init__(self, d_dim, hidden_dim=64):
             super(Critic, self).__init__()
             self.crit = nn.Sequential(
-                self.make_crit_block(d_dim, hidden_dim * 4),
-                self.make_crit_block(hidden_dim * 4, hidden_dim * 8),
+                self.make_crit_block(d_dim, hidden_dim * 16),
+                self.make_crit_block(hidden_dim * 16, hidden_dim * 8),
                 self.make_crit_block(hidden_dim * 8, hidden_dim * 4),
                 self.make_crit_block(hidden_dim * 4, hidden_dim * 2, stride=1),
                 self.make_crit_block(hidden_dim * 2, hidden_dim, stride=1),
@@ -113,7 +113,7 @@ def cgan_earth_nets(path, Training, g_dim, d_dim):
                 )
             else:
                 return nn.Sequential(
-                    nn.Conv2d(input_channels, output_channels, kernel_size, stride, padding=1, padding_mode='circular'),
+                    nn.Conv2d(input_channels, output_channels, kernel_size, stride, padding=1),
                 )
 
         def forward(self, image, labels):

@@ -109,7 +109,7 @@ def gen_labels(labels, n_classes):
         tensor of one hot labels, (*, n_classes)
     '''
     # convert labels to tensors
-    labels = torch.from_numpy(np.array(labels).astype(int))
+    labels = torch.from_numpy(np.array(labels).astype(np.int64))
     return F.one_hot(labels, num_classes=n_classes)
 
 def param_init(layer):
@@ -165,7 +165,18 @@ def test(path, labels, netG, n_classes, z_dim=64, lf=4, device='cpu'):
             name = 'none'
         tifffile.imwrite(path + '_' + name + '.tif', tif)
         tifs.append(tif)
-    return tifs, netG    
+    return tifs, netG  
+
+def calc_eta(steps, time, start, i, epoch, num_epochs):
+    elap = time - start
+    progress = epoch * steps + i + 1
+    rem = num_epochs * steps - progress
+    ETA = rem / progress * elap
+    hrs = int(ETA / 3600)
+    mins = int((ETA / 3600 % 1) * 60)
+    print('[%d/%d][%d/%d]\tETA: %d hrs %d mins'
+          % (epoch, num_epochs, i, steps,
+             hrs, mins))
 
 def wandb_init(name):
     load_dotenv(os.path.join(os.path.dirname(__file__),'.env'))
