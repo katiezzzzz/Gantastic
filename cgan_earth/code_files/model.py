@@ -1,6 +1,7 @@
 from code_files.util import *
 import numpy as np
 import torch
+import time
 
 def train(pth, gen, disc, imgs, labels, img_length, n_classes, num_epochs, z_dim, batch_size, lr, device, wandb_name):
 
@@ -27,6 +28,7 @@ def train(pth, gen, disc, imgs, labels, img_length, n_classes, num_epochs, z_dim
         wandb.watch(netG)
     print("Starting Training Loop...")
 
+    start = time.time()
     for epoch in range(num_epochs):
         for i in range(iters):
             real_data, b_labels = batch(imgs, labels, batch_size, img_length, device)
@@ -41,6 +43,7 @@ def train(pth, gen, disc, imgs, labels, img_length, n_classes, num_epochs, z_dim
             noise = torch.randn(batch_size, z_dim, lz, lz, device=device)
             fake_data = netG(noise, G_labels).detach()
             # train discriminator
+            start_disc = time.time()
             netD.zero_grad()
             # real_data.shape (batch_size, 3, img_length, img_length)
             # fake_data.shape (batch_size, 3, img_length, img_length)
@@ -61,6 +64,7 @@ def train(pth, gen, disc, imgs, labels, img_length, n_classes, num_epochs, z_dim
                 wandb.log({'Discriminator fake': disc_fake.item()})
             
             ### Generator
+            start_gen = time.time()
             if (i % crit_iter) == 0:
                 netG.zero_grad()
                 errG = 0
@@ -87,6 +91,7 @@ def train(pth, gen, disc, imgs, labels, img_length, n_classes, num_epochs, z_dim
                     img = np.moveaxis(img, 1, -1)
                     wandb.log({"fake" : wandb.Image(img)})
                 netG.train()
+                calc_eta(iters, time.time(), start, i, epoch, num_epochs)
 
 
 
