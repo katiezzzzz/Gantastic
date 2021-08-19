@@ -2,7 +2,7 @@ from code_files import *
 import numpy as np
 
 PATH = os.path.dirname(os.path.realpath(__file__))
-Project_name = 'earth_cylinder'
+Project_name = 'earth_cylinder_17'
 Project_dir = PATH + '/trained_generators/'
 wandb_name = Project_name
 
@@ -21,9 +21,9 @@ imgs = read_img(data_path)
 ngpu = 1
 z_dim = 64
 lr = 0.0001
-Training = 1
-n_classes = 5
-batch_size = 20
+Training = 0
+n_classes = 1
+batch_size = 40
 im_channels = 3
 num_epochs = 1000
 img_length = 256 # size of training image
@@ -39,4 +39,4 @@ if Training:
           batch_size, lr, device, wandb_name)
 else:
     labels = [0]
-    test(proj_path, labels, netG(z_dim+n_classes, img_length), n_classes, z_dim, lf=24, device=device)
+    test(proj_path, labels, netG(z_dim+n_classes, img_length), n_classes, z_dim, lf=24, device=device, ratio=2)
