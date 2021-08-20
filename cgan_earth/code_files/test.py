@@ -10,7 +10,11 @@ a = torch.tensor([[[1, 2, 3, 4],
                   [41, 51, 61, 71],
                   [51, 61, 71, 81],
                   [81, 91, 101, 111]]])
-p1d = (2,2)
-out = F.pad(a, p1d, "circular")
-print(a)
-print(out)
+print(a[:,:,0])
+print(a.shape)
+b = torch.zeros((2,4,6))
+for idx0 in range(a.shape[0]):
+    for idx1 in range(a.shape[1]):
+        dim1 = a[idx0,idx1]
+        b[idx0,idx1] = torch.cat((dim1, dim1[:2]), -1)
+print(b)
