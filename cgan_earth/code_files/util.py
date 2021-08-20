@@ -149,8 +149,13 @@ def test(path, labels, netG, n_classes, z_dim=64, lf=4, device='cpu', ratio=2):
     names = ['forest', 'city', 'desert', 'sea', 'snow']
     tifs, raws = [], []
     # try to generate rectangular, instead of square images
-    random = torch.randn(1, z_dim, lf, lf, device=device)
-    noise = random.repeat(1, 1, 1, ratio)
+    random = torch.randn(1, z_dim, lf, lf*ratio-2, device=device)
+    noise = torch.zeros((1, z_dim, lf, lf*ratio)).to(device)
+    for idx0 in range(random.shape[0]):
+        for idx1 in range(random.shape[1]):
+            for idx2 in range(random.shape[2]):
+                dim2 = random[idx0, idx1, idx2]
+                noise[idx0, idx1, idx2] = torch.cat((dim2, dim2[:2]), -1)
     netG.eval()
     test_labels = gen_labels(labels, n_classes)[:, :, None, None]
     for i in range(len(labels)):

@@ -32,17 +32,17 @@ def cgan_earth_nets(path, Training, g_dim, d_dim):
         def __init__(self, g_dim, img_length, im_chan=3, hidden_dim=64):
             super(Generator, self).__init__()
             self.img_length = img_length
-            self.final_conv = nn.Conv2d(hidden_dim * 16, im_chan, 3, 1, 0)
+            self.final_conv = nn.Conv2d(hidden_dim * 4, im_chan, 3, 1, 0)
             # Build the neural network
             self.gen = nn.Sequential(
-                self.make_gen_block(g_dim, hidden_dim),
-                self.make_gen_block(hidden_dim, hidden_dim * 2),
-                self.make_gen_block(hidden_dim * 2, hidden_dim * 4),
-                self.make_gen_block(hidden_dim * 4, hidden_dim * 8),
-                self.make_gen_block(hidden_dim * 8, hidden_dim * 16),
+                self.make_gen_block(g_dim, hidden_dim, kernel_size=4),
+                self.make_gen_block(hidden_dim, hidden_dim * 2, kernel_size=4),
+                self.make_gen_block(hidden_dim * 2, hidden_dim * 4, kernel_size=4),
+                self.make_gen_block(hidden_dim * 4, hidden_dim * 8, kernel_size=4, padding=1),
+                self.make_gen_block(hidden_dim * 8, hidden_dim * 4, kernel_size=4, padding=1),
             )
 
-        def make_gen_block(self, input_channels, output_channels, kernel_size=4, stride=2, padding=2):
+        def make_gen_block(self, input_channels, output_channels, kernel_size=3, stride=2, padding=1):
             '''
             Function to return a sequence of operations corresponding to a generator block of DCGAN;
             a transposed convolution, a batchnorm (except in the final layer), and an activation.
@@ -82,15 +82,15 @@ def cgan_earth_nets(path, Training, g_dim, d_dim):
             im_chan: the number of channels in the images, fitted for the dataset used
             hidden_dim: the inner dimension, a scalar
         '''
-        def __init__(self, d_dim, hidden_dim=64, im_chan=3):
+        def __init__(self, d_dim, hidden_dim=64):
             super(Critic, self).__init__()
             self.crit = nn.Sequential(
-                self.make_crit_block(d_dim, hidden_dim * 16),
-                self.make_crit_block(hidden_dim * 16, hidden_dim * 8),
+                self.make_crit_block(d_dim, hidden_dim * 4),
+                self.make_crit_block(hidden_dim * 4, hidden_dim * 8),
                 self.make_crit_block(hidden_dim * 8, hidden_dim * 4),
-                self.make_crit_block(hidden_dim * 4, hidden_dim * 2),
+                self.make_crit_block(hidden_dim * 4, hidden_dim * 2, stride=1),
                 self.make_crit_block(hidden_dim * 2, hidden_dim, stride=1),
-                self.make_crit_block(hidden_dim, im_chan, stride=1, final_layer=True),
+                self.make_crit_block(hidden_dim, 1, stride=1, final_layer=True),
             )
 
         def make_crit_block(self, input_channels, output_channels, kernel_size=4, stride=2, padding=2, final_layer=False):
