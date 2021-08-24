@@ -14,8 +14,8 @@ def cgan_earth_nets(path, Training, g_dim, d_dim):
         pad_g = [2, 2, 2, 2, 2, 0]
         layers_d = [d_dim, hidden_dim*16, hidden_dim*8, hidden_dim*4, hidden_dim*2, hidden_dim, 1]
         kernel_d = [4, 4, 4, 4, 4, 4]
-        stride_d = [2, 2, 2, 2, 1, 1]
-        pad_d = [2, 2, 2, 2, 2, 1]
+        stride_d = [2, 2, 2, 2, 2, 1]
+        pad_d = [2, 2, 2, 2, 1, 0]
         params = [layers_g, kernel_g, stride_g, pad_g, layers_d, kernel_d, stride_d, pad_d]
         with open(path + '_params.data', 'wb') as filehandle:
             # store the data as binary data stream
@@ -39,7 +39,7 @@ def cgan_earth_nets(path, Training, g_dim, d_dim):
                 self.make_gen_block(hidden_dim, hidden_dim * 2),
                 self.make_gen_block(hidden_dim * 2, hidden_dim * 4),
                 self.make_gen_block(hidden_dim * 4, hidden_dim * 8),
-                self.make_gen_block(hidden_dim * 8, hidden_dim * 16),
+                self.make_gen_block(hidden_dim * 8, hidden_dim * 16)
             )
 
         def make_gen_block(self, input_channels, output_channels, kernel_size=4, stride=2, padding=2):
@@ -66,13 +66,14 @@ def cgan_earth_nets(path, Training, g_dim, d_dim):
                 noise: a noise tensor with dimensions (n_samples, z_dim)
             '''
             x = torch.cat((noise.float(), labels.float()), 1)
-            x = self.gen(x)
+            for layer in self.gen:
+                x = layer(x)
             # upsample to give output spatial size (img_length, img_length)
             if Training:
-                up = nn.Upsample(size = (self.img_length+2, self.img_length+2))
+                up = F.interpolate(x, size = (self.img_length+2, self.img_length+2))
             else:
-                up = nn.Upsample(size = (self.img_length+2, ratio*(self.img_length+2)))
-            return torch.sigmoid(self.final_conv(up(x)))
+                up = F.interpolate(x, size = (x.shape[-1]*2, ratio*(x.shape[-1]*2)))
+            return torch.sigmoid(self.final_conv(up))
 
 
     class Critic(nn.Module):
@@ -89,7 +90,7 @@ def cgan_earth_nets(path, Training, g_dim, d_dim):
                 self.make_crit_block(hidden_dim * 16, hidden_dim * 8),
                 self.make_crit_block(hidden_dim * 8, hidden_dim * 4),
                 self.make_crit_block(hidden_dim * 4, hidden_dim * 2),
-                self.make_crit_block(hidden_dim * 2, hidden_dim, stride=1),
+                self.make_crit_block(hidden_dim * 2, hidden_dim, padding=1),
                 self.make_crit_block(hidden_dim, 1, stride=1, final_layer=True),
             )
 
@@ -113,7 +114,7 @@ def cgan_earth_nets(path, Training, g_dim, d_dim):
                 )
             else:
                 return nn.Sequential(
-                    nn.Conv2d(input_channels, output_channels, kernel_size, stride, padding=1),
+                    nn.Conv2d(input_channels, output_channels, kernel_size, stride, padding=0),
                 )
 
         def forward(self, image, labels):
@@ -124,7 +125,8 @@ def cgan_earth_nets(path, Training, g_dim, d_dim):
                 image: a flattened image tensor with dimension (im_chan)
             '''
             x = torch.cat((image.float(), labels.float()), 1)
-            crit_pred = self.crit(x)
-            return crit_pred.view(len(crit_pred), -1)
+            for layer in self.crit:
+                x = layer(x)
+            return x.view(len(x), -1)
 
     return Generator, Critic
