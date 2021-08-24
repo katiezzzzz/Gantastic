@@ -2,7 +2,7 @@ from code_files import *
 import numpy as np
 
 PATH = os.path.dirname(os.path.realpath(__file__))
-Project_name = 'earth_cylinder_r'
+Project_name = 'earth_cylinder_r_0'
 Project_dir = PATH + '/trained_generators/'
 wandb_name = Project_name
 
@@ -39,4 +39,6 @@ if Training:
           batch_size, lr, device, wandb_name)
 else:
     labels = [0]
-    test(proj_path, labels, netG(z_dim+n_classes, img_length), n_classes, z_dim, lf=24, device=device, ratio=2)
+    #test(proj_path, labels, netG(z_dim+n_classes, img_length), n_classes, z_dim, lf=10, device=device, ratio=2)
+    animate(proj_path, labels, netG(z_dim+n_classes, img_length), n_classes, z_dim, lf=8, device=device, ratio=2, n_clips=30, fps=12)
+    
