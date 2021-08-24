@@ -112,6 +112,22 @@ def gen_labels(labels, n_classes):
     labels = torch.from_numpy(np.array(labels).astype(np.int64))
     return F.one_hot(labels, num_classes=n_classes)
 
+def gen_intermediate_labels(label1, label2, val, n_classes, device):
+    '''
+    Generate one-hot label for an intermediate image
+    Params:
+        label1: integer representing the first label class
+        label2: integer representing the second label class
+        val: value of the first label class
+        n_classes: total number of classes
+    Return:
+        tensor of shape (n_classes)
+    '''
+    one_hot = torch.zeros((n_classes)).to(device)
+    one_hot[label1] = val
+    one_hot[label2] = 1 - val
+    return one_hot
+
 def param_init(layer):
     if isinstance(layer, nn.Conv2d) or isinstance(layer, nn.ConvTranspose2d):
         torch.nn.init.normal_(layer.weight, 0.0, 0.02)
@@ -171,7 +187,7 @@ def test(path, labels, netG, n_classes, z_dim=64, lf=4, device='cpu', ratio=2):
             name = 'none'
         tifffile.imwrite(path + '_' + name + '.tif', tif)
         tifs.append(tif)
-    return tifs, netG  
+    return tifs, netG
 
 def calc_eta(steps, time, start, i, epoch, num_epochs):
     elap = time - start
