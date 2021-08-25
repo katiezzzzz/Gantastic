@@ -2,3 +2,4 @@ conditional_gan_microstructure/code_files/data/BigCircles1.pkl
 conditional_gan_microstructure/code_files/data/SmallCircles1.pkl
 cGAN-Micro-Optimisation/
 cgan_earth/music_proc/Crazy-SimplePlan.wav
+cgan_earth/trained_generators/
