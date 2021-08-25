@@ -1,7 +1,9 @@
 import torch.nn.functional as F
 import matplotlib.pyplot as plt
 from dotenv import load_dotenv
+from moviepy.editor import *
 from torch import autograd
+from tqdm import tqdm
 from torch import nn
 import numpy as np
 import subprocess
@@ -85,9 +87,9 @@ def batch(imgs, labels, batch_size, img_length, device):
     for i in range(n_img):
         for _ in range(n_crop):
             if len(data) == 0:
-                data = crop(imgs[i], img_length)
+                data = crop(imgs[i], img_length)[None, :, :, :]
             else:
-                data = np.vstack((data, crop(imgs[i], img_length)))
+                data = np.vstack((data, crop(imgs[i], img_length)[None, :, :, :]))
             batch_labels = np.append(batch_labels, int(labels[i]))
     n_excess = batch_size - n_crop*n_img
     # randomly select an image and crop n_excess number of times
@@ -95,7 +97,7 @@ def batch(imgs, labels, batch_size, img_length, device):
         warnings.warn('batch size is not a multiple of number of classes')
     # shuffle along dim 0
     shuffler = np.random.permutation(batch_size)
-    data = data.reshape(batch_size, imgs.shape[1], img_length, img_length)[shuffler]
+    data = data[shuffler]
     batch_labels = batch_labels[shuffler]
     return torch.from_numpy(data).to(device), batch_labels
 
@@ -154,6 +156,17 @@ def calc_gradient_penalty(netD, real_data, fake_data, batch_size, img_length, de
     gradient_penalty = ((gradients.norm(2, dim=1) - 1) ** 2).mean() * gp_lambda
     return gradient_penalty
 
+def roll_noise(noise, step):
+    '''
+    roll noise from left to right with specified step size
+    Params:
+        noise: tensor of dimension (1, z_dim, lf, lf*ratio)
+        step: integer indicating step size in index between adjacent images
+    Return:
+        new noise of dimension (1, z_dim, lf, lf*ratio)
+    '''
+    return torch.cat((noise[:, :, :, step:], noise[:, :, :, 2:2+step]), -1)
+
 def test(path, labels, netG, n_classes, z_dim=64, lf=4, device='cpu', ratio=2):
     try:
         netG.load_state_dict(torch.load(path + '_Gen.pt'))
@@ -188,6 +201,45 @@ def test(path, labels, netG, n_classes, z_dim=64, lf=4, device='cpu', ratio=2):
         tifffile.imwrite(path + '_' + name + '.tif', tif)
         tifs.append(tif)
     return tifs, netG
+
+def animate(path, labels, netG, n_classes, z_dim=64, lf=4, device='cpu', ratio=2, n_clips=30, fps=12):
+    try:
+        netG.load_state_dict(torch.load(path + '_Gen.pt'))
+    except:
+        netG = nn.DataParallel(netG)
+        netG.load_state_dict(torch.load(path + '_Gen.pt'))
+    
+    netG.to(device)
+    # try to generate rectangular, instead of square images
+    random = torch.randn(1, z_dim, lf, lf*ratio-2, device=device)
+    noise = torch.zeros((1, z_dim, lf, lf*ratio)).to(device)
+    for idx0 in range(random.shape[0]):
+        for idx1 in range(random.shape[1]):
+            for idx2 in range(random.shape[2]):
+                dim2 = random[idx0, idx1, idx2]
+                noise[idx0, idx1, idx2] = torch.cat((dim2, dim2[:2]), -1)
+    netG.eval()
+    test_labels = gen_labels(labels, n_classes)[:, :, None, None]
+    imgs = np.array([])
+    step = lf*ratio // n_clips
+    if step == 0:
+        step = 1
+    for i in range(len(labels)):
+        lbl = test_labels[i].repeat(1, 1, lf, lf*ratio).to(device)
+        for j in tqdm(range(n_clips)):
+            with torch.no_grad():
+                img = netG(noise, lbl, Training=False, ratio=ratio).cuda()
+                img = torch.multiply(img, 255).cpu().detach().numpy()
+                img = np.moveaxis(img, 1, -1)
+                if imgs.shape[0] == 0:
+                    imgs = img
+                else:
+                    imgs = np.vstack((imgs, img))
+                noise = roll_noise(noise, step)
+    clip = ImageSequenceClip(list(imgs),fps=fps)
+    clip.write_gif(path + '_demo.gif')
+    clip.close()
+    return imgs, netG
 
 def calc_eta(steps, time, start, i, epoch, num_epochs):
     elap = time - start

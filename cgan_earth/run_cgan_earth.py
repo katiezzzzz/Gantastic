@@ -39,4 +39,6 @@ if Training:
           batch_size, lr, device, wandb_name)
 else:
     labels = [0]
-    test(proj_path, labels, netG(z_dim+n_classes, img_length), n_classes, z_dim, lf=24, device=device, ratio=2)
+    #test(proj_path, labels, netG(z_dim+n_classes, img_length), n_classes, z_dim, lf=10, device=device, ratio=2)
+    animate(proj_path, labels, netG(z_dim+n_classes, img_length), n_classes, z_dim, lf=28, device=device, ratio=2, n_clips=56, fps=24)
+    
