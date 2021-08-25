@@ -222,6 +222,8 @@ def animate(path, labels, netG, n_classes, z_dim=64, lf=4, device='cpu', ratio=2
     test_labels = gen_labels(labels, n_classes)[:, :, None, None]
     imgs = np.array([])
     step = lf*ratio // n_clips
+    if step == 0:
+        step = 1
     for i in range(len(labels)):
         lbl = test_labels[i].repeat(1, 1, lf, lf*ratio).to(device)
         for j in tqdm(range(n_clips)):
