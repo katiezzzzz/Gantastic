@@ -1,6 +1,7 @@
 import torch.nn.functional as F
 import matplotlib.pyplot as plt
 from dotenv import load_dotenv
+from code_files.video import *
 from moviepy.editor import *
 from torch import autograd
 from tqdm import tqdm
@@ -156,17 +157,6 @@ def calc_gradient_penalty(netD, real_data, fake_data, batch_size, img_length, de
     gradient_penalty = ((gradients.norm(2, dim=1) - 1) ** 2).mean() * gp_lambda
     return gradient_penalty
 
-def roll_noise(noise, step):
-    '''
-    roll noise from left to right with specified step size
-    Params:
-        noise: tensor of dimension (1, z_dim, lf, lf*ratio)
-        step: integer indicating step size in index between adjacent images
-    Return:
-        new noise of dimension (1, z_dim, lf, lf*ratio)
-    '''
-    return torch.cat((noise[:, :, :, step:], noise[:, :, :, 2:2+step]), -1)
-
 def test(path, labels, netG, n_classes, z_dim=64, lf=4, device='cpu', ratio=2):
     try:
         netG.load_state_dict(torch.load(path + '_Gen.pt'))
@@ -202,7 +192,25 @@ def test(path, labels, netG, n_classes, z_dim=64, lf=4, device='cpu', ratio=2):
         tifs.append(tif)
     return tifs, netG
 
-def animate(path, labels, netG, n_classes, z_dim=64, lf=4, device='cpu', ratio=2, n_clips=30, fps=12):
+def roll_video(path, label, netG, n_classes, z_dim=64, lf=4, device='cpu', ratio=2, n_clips=30, step_size=1):
+    '''
+    Given an integer label, generate an array of images that roll through z and can be used to make a video
+    Params:
+        path: string, directory of where the generator is stored
+        label: integer
+        netG: torch.nn.Module generator class
+        n_classes: integer
+        z_dim: integer
+        lf: integer, size of input seed
+        device: string
+        ratio: integer
+        n_clips: integer
+        step_size: float, the size of step through z space
+    Return:
+        imgs: array containing generated images and can be used to make a video
+        original_noise: generated random noise
+        netG: trained generator class
+    '''
     try:
         netG.load_state_dict(torch.load(path + '_Gen.pt'))
     except:
@@ -212,34 +220,75 @@ def animate(path, labels, netG, n_classes, z_dim=64, lf=4, device='cpu', ratio=2
     netG.to(device)
     # try to generate rectangular, instead of square images
     random = torch.randn(1, z_dim, lf, lf*ratio-2, device=device)
-    noise = torch.zeros((1, z_dim, lf, lf*ratio)).to(device)
+    original_noise = torch.zeros((1, z_dim, lf, lf*ratio)).to(device)
     for idx0 in range(random.shape[0]):
         for idx1 in range(random.shape[1]):
             for idx2 in range(random.shape[2]):
                 dim2 = random[idx0, idx1, idx2]
-                noise[idx0, idx1, idx2] = torch.cat((dim2, dim2[:2]), -1)
+                original_noise[idx0, idx1, idx2] = torch.cat((dim2, dim2[:2]), -1)
     netG.eval()
-    test_labels = gen_labels(labels, n_classes)[:, :, None, None]
+    test_label = gen_labels(label, n_classes)[:, :, None, None]
     imgs = np.array([])
-    step = lf*ratio // n_clips
-    if step == 0:
-        step = 1
-    for i in range(len(labels)):
-        lbl = test_labels[i].repeat(1, 1, lf, lf*ratio).to(device)
-        for j in tqdm(range(n_clips)):
-            with torch.no_grad():
-                img = netG(noise, lbl, Training=False, ratio=ratio).cuda()
-                img = torch.multiply(img, 255).cpu().detach().numpy()
-                img = np.moveaxis(img, 1, -1)
-                if imgs.shape[0] == 0:
-                    imgs = img
-                else:
-                    imgs = np.vstack((imgs, img))
-                noise = roll_noise(noise, step)
+    noise = original_noise
+    step = 0
+    lbl = test_label.repeat(1, 1, lf, lf*ratio).to(device)
+    for _ in tqdm(range(n_clips)):
+        with torch.no_grad():
+            img = netG(noise, lbl, Training=False, ratio=ratio).cuda()
+            img = torch.multiply(img, 255).cpu().detach().numpy()
+            img = np.moveaxis(img, 1, -1)
+            if imgs.shape[0] == 0:
+                imgs = img
+            else:
+                imgs = np.vstack((imgs, img))
+            step += step_size
+            # avoid step growing too large
+            if step > lf*ratio:
+                step -= lf*ratio
+            noise = roll_noise(original_noise, step, lf*ratio)
+    return imgs, original_noise, netG
+
+def transit_video(labels, label1, label2, original_noise, netG, lf=4, ratio=2, z_step_size=1, l_step_size=0.1, transit_mode='uniform'):
+    imgs = np.array([])
+    noise = original_noise
+    step = 0
+    prev_label = labels[label1]
+    target_label = labels[label2]
+    lbl = prev_label
+    if transit_mode == 'uniform':
+        n_clips = 1 // l_step_size
+    elif transit_mode == 'scroll':
+        n_clips = (1 // z_step_size) + (1 // l_step_size) + 2
+        l_step = 0
+        z_step = 0
+        l_done_step = 0
+        z_done_step = 0
+    for _ in tqdm(range(n_clips)):
+        with torch.no_grad():
+            img = netG(noise, lbl, Training=False, ratio=ratio).cuda()
+            img = torch.multiply(img, 255).cpu().detach().numpy()
+            img = np.moveaxis(img, 1, -1)
+            if imgs.shape[0] == 0:
+                imgs = img
+            else:
+                imgs = np.vstack((imgs, img))
+            step += z_step_size
+            if transit_mode == 'uniform':
+                lbl = uniform_transit(label1, label2, lbl, l_step_size)
+            # avoid step growing too large
+            elif transit_mode == 'scroll':
+                lbl, l_step, z_step, l_done_step, z_done_step = scroll_transit(label1, label2, lbl, 
+                z_step_size, l_step_size, lf*ratio, l_step, z_step, l_done_step, z_done_step)
+            if step > lf*ratio:
+                step -= lf*ratio
+            noise = roll_noise(original_noise, step, lf*ratio)
+    return imgs, original_noise, netG
+
+def animate(path, imgs, fps=24):
     clip = ImageSequenceClip(list(imgs),fps=fps)
     clip.write_gif(path + '_demo.gif')
     clip.close()
-    return imgs, netG
+    return clip
 
 def calc_eta(steps, time, start, i, epoch, num_epochs):
     elap = time - start

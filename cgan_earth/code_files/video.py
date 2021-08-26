@@ -1,30 +1,45 @@
-import numpy as np
 import torch
-import torch.nn.functional as F
 
-a = torch.tensor([[[1, 2, 3, 4],
-                  [4, 5, 6, 7],
-                  [5, 6, 7, 8],
-                  [8, 9, 10, 11]],
-                 [[11, 21, 31, 41],
-                  [41, 51, 61, 71],
-                  [51, 61, 71, 81],
-                  [81, 91, 101, 111]]])
-l = [[0, 0], [1, 1], [2, 2], [3, 3], [0, 1]]
-l = torch.from_numpy(np.array(l))
-one_hot = torch.zeros((l.shape[0], 4))
-for n in range(l.shape[0]):
-    if l[n, 0] == l[n, 1]:
-        one_hot[n,l[n]] = 1.0
+def roll_noise(original_noise, step):
+    '''
+    roll noise from left to right with specified step size
+    Params:
+        original_noise: tensor of dimension (1, z_dim, lf, lf*ratio)
+        step: float or integer indicating the position in z space compared to original noise
+        max_step: integer of the largest possible position in z (lf*ratio) 
+    Return:
+        new noise of dimension (1, z_dim, lf, lf*ratio)
+    '''
+    int_step = int(step)
+    if int_step == step:
+        out_noise = torch.cat((original_noise[:, :, :, int_step:], original_noise[:, :, :, 2:2+int_step]), -1)
     else:
-        one_hot[n,l[n, 0]] = 0.5
-        one_hot[n,l[n, 1]] = 0.5
+        # do linear interpolation
+        prev_noise = torch.cat((original_noise[:, :, :, int_step:], original_noise[:, :, :, 2:2+int_step]), -1)
+        int_step += 1
+        new_noise = torch.cat((original_noise[:, :, :, int_step:], original_noise[:, :, :, 2:2+int_step]), -1)
+        diff = torch.sub(new_noise, prev_noise)
+        diff = torch.multiply(diff, step-int_step+1)
+        out_noise = torch.add(prev_noise, diff)
+    return out_noise
 
-labels = torch.tensor([0, 1, 2])
-n_classes = 3
-cur_label = F.one_hot(labels, num_classes=n_classes)[:, :, None, None]
-cur_label = cur_label[0].repeat(1, 1, 4, 8)
-
+def uniform_transit(label1_channel, label2_channel, cur_label, l_step_size):
+    '''
+    Compute uniform transition form one label to the other
+    Params:
+        label1_channel: integer, index indicating the original channel
+        label2_channel: integer, index indicating the target channel
+        cur_label: tensor of shape (1, n_classes, lf, lf*ratio)
+        l_step_size: float with value between 0 and 1
+    Return:
+        new label of shape (1, n_classes, lf, lf*ratio)
+    '''
+    new_label = cur_label.float()
+    if cur_label[:, label1_channel, 0, 0] > 0:
+        new_label[:, label1_channel, :, :] = torch.sub(cur_label[:, label1_channel, :, :], l_step_size)
+        new_label[:, label2_channel, :, :] = torch.sub(torch.ones_like(cur_label[:, label1_channel, :, :]), new_label[:, label1_channel, :, :])
+    return new_label
+    
 def scroll_transit(label1_channel, label2_channel, cur_label, z_step_size, l_step_size, z_len, l_step, z_step,
                  l_done_step, z_done_step):
     if z_step_size > z_len:
@@ -33,8 +48,6 @@ def scroll_transit(label1_channel, label2_channel, cur_label, z_step_size, l_ste
     l_done_idx = int(l_done_step + z_len*z_step_size)
     z_done_idx = int(z_done_step + z_len*z_step_size)
     l_stop_step = 1 // l_step_size
-    #print(f'l stop: {l_stop_step}')
-    #print(f'z idx: {step_idx}')
     new_label = cur_label.float()
     if z_done_idx >= z_len or l_done_idx >= z_len:
         new_label[:, label1_channel, :, :] = torch.zeros_like(new_label[:, label1_channel, :, :])
@@ -63,11 +76,5 @@ def scroll_transit(label1_channel, label2_channel, cur_label, z_step_size, l_ste
             z_done_step += int(z_len*z_step_size)
     return new_label, l_step, z_step, l_done_step, z_done_step
 
-z_done_step = 0
-l_done_step = 0
-z_step = 0
-l_step = 0
-new_label = cur_label
-for _ in range(10):
-    new_label, l_step, z_step, l_done_step, z_done_step = scroll_transit(0, 1, new_label, 0.5, 0.5, 8, l_step, z_step, l_done_step, z_done_step)
-    print(new_label)
+
+
