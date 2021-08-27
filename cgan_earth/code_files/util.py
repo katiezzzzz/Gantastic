@@ -197,7 +197,7 @@ def roll_video(path, label, netG, n_classes, z_dim=64, lf=4, device='cpu', ratio
     Given an integer label, generate an array of images that roll through z and can be used to make a video
     Params:
         path: string, directory of where the generator is stored
-        label: integer
+        label: list containing one integer
         netG: torch.nn.Module generator class
         n_classes: integer
         z_dim: integer
@@ -232,8 +232,9 @@ def roll_video(path, label, netG, n_classes, z_dim=64, lf=4, device='cpu', ratio
     test_label = gen_labels(label, n_classes)[:, :, None, None]
     imgs = np.array([])
     noise = original_noise
-    step = 0
+    step = 0.0
     lbl = test_label.repeat(1, 1, lf, lf*ratio).to(device)
+    label = label[0]
     for _ in tqdm(range(n_clips)):
         with torch.no_grad():
             img = netG(noise, lbl, Training=False, ratio=ratio).cuda()
@@ -250,18 +251,19 @@ def roll_video(path, label, netG, n_classes, z_dim=64, lf=4, device='cpu', ratio
             noise = roll_noise(original_noise, step, lf*ratio)
     return imgs, noise, netG
 
-def transit_video(label1, label2, n_classes, original_noise, netG, lf=4, ratio=2, device='cpu', z_step_size=1, l_step_size=0.1, transit_mode='uniform'):
+def transit_video(label1, label2, n_classes, original_noise, netG, lf=4, ratio=2, device='cpu', step_size=1, z_step_size=1, l_step_size=0.1, transit_mode='uniform'):
     '''
     Given all the labels and positions of original and target labels in list of labels, generate an image array for video transition
     Params:
-        label1: integer, original label
-        label2: integer, target label
+        label1: list containing an integer, original label
+        label2: list containing an integer, target label
         n_classes: integer
         original_noise: tensor of dimension (1, z_dim, lf, lf*ratio)
         netG: trained generator class
         lf: size of input seed
         ratio: integer
         device: string
+        step_size: integer with value between 1 and lf*ratio
         z_step_size: float between 0 and 1
         l_step_size: float between 0 and 1
         transit_mode: uniform or scroll or circular
@@ -276,13 +278,15 @@ def transit_video(label1, label2, n_classes, original_noise, netG, lf=4, ratio=2
     prev_label = gen_labels(label1, n_classes)[:, :, None, None]
     lbl = prev_label.repeat(1, 1, lf, lf*ratio).to(device)
     if transit_mode == 'uniform':
-        n_clips = 1 // l_step_size
+        n_clips = int(1 // l_step_size)
     elif transit_mode == 'scroll' or transit_mode == 'circular':
-        n_clips = (1 // z_step_size) + (1 // l_step_size) + 2
+        n_clips = int((1 // z_step_size) + (1 // l_step_size) + 2)
         l_step = 0
         z_step = 0
         l_done_step = 0
         z_done_step = 0
+    label1 = label1[0]
+    label2 = label2[0]
     for _ in tqdm(range(n_clips)):
         with torch.no_grad():
             img = netG(noise, lbl, Training=False, ratio=ratio).cuda()
@@ -292,7 +296,7 @@ def transit_video(label1, label2, n_classes, original_noise, netG, lf=4, ratio=2
                 imgs = img
             else:
                 imgs = np.vstack((imgs, img))
-            step += z_step_size
+            step += step_size
             if transit_mode == 'uniform':
                 lbl = uniform_transit(label1, label2, lbl, l_step_size)
             # avoid step growing too large
@@ -309,7 +313,7 @@ def transit_video(label1, label2, n_classes, original_noise, netG, lf=4, ratio=2
 
 def animate(path, imgs, fps=24):
     clip = ImageSequenceClip(list(imgs),fps=fps)
-    clip.write_gif(path + '_demo.gif')
+    clip.write_gif(path + '_demo1.gif')
     clip.close()
     return clip
 
