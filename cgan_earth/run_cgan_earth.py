@@ -1,5 +1,6 @@
 from code_files import *
 import numpy as np
+import os
 
 PATH = os.path.dirname(os.path.realpath(__file__))
 Project_name = 'earth_cylinder_r'
@@ -38,7 +39,6 @@ if Training:
     train(proj_path, netG, netD, imgs, labels, img_length, n_classes, num_epochs, z_dim, 
           batch_size, lr, device, wandb_name)
 else:
-    labels = [0]
-    #test(proj_path, labels, netG(z_dim+n_classes, img_length), n_classes, z_dim, lf=10, device=device, ratio=2)
-    animate(proj_path, labels, netG(z_dim+n_classes, img_length), n_classes, z_dim, lf=28, device=device, ratio=2, n_clips=56, fps=24)
+    labels = [0, 1, 2, 3, 4]
+    test(proj_path, labels, netG(z_dim+n_classes, img_length), n_classes, z_dim, lf=10, device=device, ratio=2)
     

@@ -192,7 +192,7 @@ def test(path, labels, netG, n_classes, z_dim=64, lf=4, device='cpu', ratio=2):
         tifs.append(tif)
     return tifs, netG
 
-def roll_video(path, label, netG, n_classes, z_dim=64, lf=4, device='cpu', ratio=2, n_clips=30, step_size=1):
+def roll_video(path, label, netG, n_classes, z_dim=64, lf=4, device='cpu', ratio=2, n_clips=30, step_size=1, original_noise=None):
     '''
     Given an integer label, generate an array of images that roll through z and can be used to make a video
     Params:
@@ -205,10 +205,11 @@ def roll_video(path, label, netG, n_classes, z_dim=64, lf=4, device='cpu', ratio
         device: string
         ratio: integer
         n_clips: integer
-        step_size: float, the size of step through z space
+        step_size: float between 0 and lf*ratio, the size of step through z space
+        original_noise: tensor, (1, z_dim, lf, lf*2), random noise vector
     Return:
         imgs: array containing generated images and can be used to make a video
-        original_noise: generated random noise
+        original_noise: tensor, (1, z_dim, lf, lf*2), generated random noise
         netG: trained generator class
     '''
     try:
@@ -220,12 +221,13 @@ def roll_video(path, label, netG, n_classes, z_dim=64, lf=4, device='cpu', ratio
     netG.to(device)
     # try to generate rectangular, instead of square images
     random = torch.randn(1, z_dim, lf, lf*ratio-2, device=device)
-    original_noise = torch.zeros((1, z_dim, lf, lf*ratio)).to(device)
-    for idx0 in range(random.shape[0]):
-        for idx1 in range(random.shape[1]):
-            for idx2 in range(random.shape[2]):
-                dim2 = random[idx0, idx1, idx2]
-                original_noise[idx0, idx1, idx2] = torch.cat((dim2, dim2[:2]), -1)
+    if original_noise == None:
+        original_noise = torch.zeros((1, z_dim, lf, lf*ratio)).to(device)
+        for idx0 in range(random.shape[0]):
+            for idx1 in range(random.shape[1]):
+                for idx2 in range(random.shape[2]):
+                    dim2 = random[idx0, idx1, idx2]
+                    original_noise[idx0, idx1, idx2] = torch.cat((dim2, dim2[:2]), -1)
     netG.eval()
     test_label = gen_labels(label, n_classes)[:, :, None, None]
     imgs = np.array([])
@@ -246,18 +248,36 @@ def roll_video(path, label, netG, n_classes, z_dim=64, lf=4, device='cpu', ratio
             if step > lf*ratio:
                 step -= lf*ratio
             noise = roll_noise(original_noise, step, lf*ratio)
-    return imgs, original_noise, netG
+    return imgs, noise, netG
 
-def transit_video(labels, label1, label2, original_noise, netG, lf=4, ratio=2, z_step_size=1, l_step_size=0.1, transit_mode='uniform'):
+def transit_video(label1, label2, n_classes, original_noise, netG, lf=4, ratio=2, device='cpu', z_step_size=1, l_step_size=0.1, transit_mode='uniform'):
+    '''
+    Given all the labels and positions of original and target labels in list of labels, generate an image array for video transition
+    Params:
+        label1: integer, original label
+        label2: integer, target label
+        n_classes: integer
+        original_noise: tensor of dimension (1, z_dim, lf, lf*ratio)
+        netG: trained generator class
+        lf: size of input seed
+        ratio: integer
+        device: string
+        z_step_size: float between 0 and 1
+        l_step_size: float between 0 and 1
+        transit_mode: uniform or scroll or circular
+    Return:
+        imgs: image array that contains the transition, can be used to make a video
+        original_noise: tensor of dimension (1, z_dim, lf, lf*ratio)
+        netG: trained generator class
+    '''
     imgs = np.array([])
     noise = original_noise
     step = 0
-    prev_label = labels[label1]
-    target_label = labels[label2]
-    lbl = prev_label
+    prev_label = gen_labels(label1, n_classes)[:, :, None, None]
+    lbl = prev_label.repeat(1, 1, lf, lf*ratio).to(device)
     if transit_mode == 'uniform':
         n_clips = 1 // l_step_size
-    elif transit_mode == 'scroll':
+    elif transit_mode == 'scroll' or transit_mode == 'circular':
         n_clips = (1 // z_step_size) + (1 // l_step_size) + 2
         l_step = 0
         z_step = 0
@@ -279,10 +299,13 @@ def transit_video(labels, label1, label2, original_noise, netG, lf=4, ratio=2, z
             elif transit_mode == 'scroll':
                 lbl, l_step, z_step, l_done_step, z_done_step = scroll_transit(label1, label2, lbl, 
                 z_step_size, l_step_size, lf*ratio, l_step, z_step, l_done_step, z_done_step)
+            elif transit_mode == 'circular':
+                lbl, l_step, z_step, l_done_step, z_done_step = circular_transit(label1, label2, lbl,
+                z_step_size, l_step_size, lf, ratio, l_step, z_step, l_done_step, z_done_step)
             if step > lf*ratio:
                 step -= lf*ratio
             noise = roll_noise(original_noise, step, lf*ratio)
-    return imgs, original_noise, netG
+    return imgs, noise, netG
 
 def animate(path, imgs, fps=24):
     clip = ImageSequenceClip(list(imgs),fps=fps)
