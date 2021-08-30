@@ -242,11 +242,8 @@ def roll_video(path, label, netG, n_classes, z_dim=64, lf=4, device='cpu', ratio
             # generate half a z step more data in final dimension
             original_noise = add_noise_dim(random, original_noise, 3)
     else:
-        if step_size >= 1 and original_noise.shape[-1] > lf*ratio:
-            original_noise = original_noise[:, :, :, :-1]
-        elif step_size < 1 and original_noise.shape[-1] == lf*ratio:
-            new_noise = torch.zeros((1, z_dim, lf, max_len)).to(device)
-            original_noise = add_noise_dim(original_noise, new_noise, 3, start_idx=2)
+        max_len = original_noise.shape[-1]
+
     netG.eval()
     test_label = gen_labels(label, n_classes)[:, :, None, None]
     imgs = np.array([])
@@ -258,7 +255,7 @@ def roll_video(path, label, netG, n_classes, z_dim=64, lf=4, device='cpu', ratio
         num_img = 1
     else:
         num_img = int(1/step_size)
-    for _ in range(n_clips):
+    for _ in tqdm(range(n_clips)):
         with torch.no_grad():
             img = netG(noise, lbl, Training=False, ratio=ratio).cuda()
             img = torch.multiply(img, 255).cpu().detach().numpy()
@@ -277,7 +274,7 @@ def roll_video(path, label, netG, n_classes, z_dim=64, lf=4, device='cpu', ratio
                     imgs = np.vstack((imgs, out))
             step += step_size
             # avoid step growing too large
-            if step_size >= 1:
+            if max_len == lf*ratio:
                 max_step = lf*ratio-2
                 IntStep = True
             else:
@@ -309,16 +306,7 @@ def transit_video(label1, label2, n_classes, original_noise, netG, lf=4, ratio=2
         original_noise: tensor of dimension (1, z_dim, lf, lf*ratio)
         netG: trained generator class
     '''
-    if step_size >= 1:
-        max_len = lf*ratio
-    else:
-        max_len = lf*ratio+1
-
-    if step_size >= 1 and original_noise.shape[-1] > lf*ratio:
-        original_noise = original_noise[:, :, :, :-1]
-    elif step_size < 1 and original_noise.shape[-1] == lf*ratio:
-        new_noise = torch.zeros((1, original_noise.shape[1], lf, max_len)).to(device)
-        original_noise = add_noise_dim(original_noise, new_noise, 3, start_idx=2)
+    max_len = original_noise.shape[-1]
 
     imgs = np.array([])
     noise = original_noise
@@ -366,7 +354,7 @@ def transit_video(label1, label2, n_classes, original_noise, netG, lf=4, ratio=2
             elif transit_mode == 'circular':
                 lbl, l_step, z_step, l_done_step, z_done_step = circular_transit(label1, label2, lbl,
                 z_step_size, l_step_size, lf, ratio, max_len, l_step, z_step, l_done_step, z_done_step)
-            if step_size >= 1:
+            if max_len == lf*ratio:
                 max_step = lf*ratio-2
                 IntStep = True
             else:
