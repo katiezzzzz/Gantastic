@@ -246,7 +246,7 @@ def roll_video(path, label, netG, n_classes, z_dim=64, lf=4, device='cpu', ratio
                 imgs = np.vstack((imgs, img))
             step += step_size
             # avoid step growing too large
-            if step > lf*ratio:
+            if step > lf*ratio-2:
                 step -= lf*ratio
             noise = roll_noise(original_noise, step, lf*ratio)
     return imgs, noise, netG
@@ -306,7 +306,7 @@ def transit_video(label1, label2, n_classes, original_noise, netG, lf=4, ratio=2
             elif transit_mode == 'circular':
                 lbl, l_step, z_step, l_done_step, z_done_step = circular_transit(label1, label2, lbl,
                 z_step_size, l_step_size, lf, ratio, l_step, z_step, l_done_step, z_done_step)
-            if step > lf*ratio:
+            if step > lf*ratio-2:
                 step -= lf*ratio
             noise = roll_noise(original_noise, step, lf*ratio)
     return imgs, noise, netG
