@@ -112,13 +112,12 @@ def make_circle(max_len, radius, ratio):
         mask = dist_from_center < max_len + 100
     return mask[None, None, :, :]
 
-def circular_transit(label1_channel, label2_channel, cur_label, z_step_size, l_step_size, lf, ratio, l_step, z_step,
+def circular_transit(label1_channel, label2_channel, cur_label, z_step_size, l_step_size, lf, ratio, max_len, l_step, z_step,
                  l_done_step, z_done_step):
     if z_step_size > 1:
         z_step_size = 1
     z_step_radius = z_step_size / 2
     new_label = cur_label.float()
-    max_len = lf*ratio
     step_radius = z_step + z_step_radius
     l_done_radius = l_done_step + z_step_radius
     z_done_radius = z_done_step + z_step_radius
