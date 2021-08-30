@@ -266,7 +266,6 @@ def roll_video(path, label, netG, n_classes, z_dim=64, lf=4, device='cpu', ratio
                 if step_size < 1:
                     if i == 0:
                         # one z represents 32 pixels in the -1 dimension
-                        print(img.shape[-1])
                         out = img[:, :, :, :img.shape[-1]-64]
                     else:
                         # currently only implemented for step_size 0.5
