@@ -1,7 +1,7 @@
 import numpy as np
 import torch
 
-def roll_noise(original_noise, step, max_len):
+def roll_noise(original_noise, step, max_len, IntStep=True):
     '''
     roll noise from left to right with specified step size
     Params:
@@ -13,24 +13,30 @@ def roll_noise(original_noise, step, max_len):
     '''
     int_step = int(step)
     if int_step == step:
+        repeat_idx = 2
+    else:
+        repeat_idx = 3
+    # get rid of linear interpolation
+    step = int(step)
+    if int_step == step:
         if int_step < max_len-2:
-            out_noise = torch.cat((original_noise[:, :, :, int_step:], original_noise[:, :, :, 2:2+int_step]), -1)
+            out_noise = torch.cat((original_noise[:, :, :, int_step:], original_noise[:, :, :, repeat_idx:repeat_idx+int_step]), -1)
         else:
             out_noise = original_noise
     else:
         # do linear interpolation
         if int_step < max_len-2:
-            prev_noise = torch.cat((original_noise[:, :, :, int_step:], original_noise[:, :, :, 2:2+int_step]), -1)
+            prev_noise = torch.cat((original_noise[:, :, :, int_step:], original_noise[:, :, :, repeat_idx:repeat_idx+int_step]), -1)
         else:
             prev_noise = original_noise
         int_step += 1
-        new_noise = torch.cat((original_noise[:, :, :, int_step:], original_noise[:, :, :, 2:2+int_step]), -1)
+        new_noise = torch.cat((original_noise[:, :, :, int_step:], original_noise[:, :, :, repeat_idx:repeat_idx+int_step]), -1)
         if int_step < max_len-2:
-            new_noise = torch.cat((original_noise[:, :, :, int_step:], original_noise[:, :, :, 2:2+int_step]), -1)
+            new_noise = torch.cat((original_noise[:, :, :, int_step:], original_noise[:, :, :, repeat_idx:repeat_idx+int_step]), -1)
         elif int_step == max_len-2:
             new_noise = original_noise
         else:
-            new_noise = torch.cat((original_noise[:, :, :, 1:], original_noise[:, :, :, 2:3]), -1)
+            new_noise = torch.cat((original_noise[:, :, :, 1:], original_noise[:, :, :, repeat_idx:repeat_idx+1]), -1)
         diff = torch.sub(new_noise, prev_noise)
         diff = torch.multiply(diff, step-int_step+1)
         out_noise = torch.add(prev_noise, diff)

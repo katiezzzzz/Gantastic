@@ -3,7 +3,7 @@ import numpy as np
 import os
 
 PATH = os.path.dirname(os.path.realpath(__file__))
-Project_name = 'earth_cylinder_r_0'
+Project_name = 'earth_cylinder_r_1'
 Project_dir = PATH + '/trained_generators/'
 wandb_name = Project_name
 
@@ -35,8 +35,8 @@ lf = 16
 ratio = 2
 
 # test1: forest, then transit to sea, then roll in sea
-imgs1, noise, netG = roll_video(proj_path, forest_lbl, netG(z_dim+n_classes, img_length), n_classes, z_dim, lf=lf, device=device, ratio=ratio, n_clips=24*3, step_size=1)
-imgs2, noise, netG = transit_video(forest_lbl, sea_lbl, n_classes, noise, netG, lf=lf, ratio=ratio, device=device, z_step_size=0.1, l_step_size=0.01, transit_mode='circular')
+imgs1, noise, netG = roll_video(proj_path, forest_lbl, netG(z_dim+n_classes, img_length), n_classes, z_dim, lf=lf, device=device, ratio=ratio, n_clips=24*3, step_size=0.5)
+imgs2, noise, netG = transit_video(forest_lbl, sea_lbl, n_classes, noise, netG, lf=lf, ratio=ratio, device=device, z_step_size=0.1, l_step_size=0.1, transit_mode='scroll')
 imgs3, noise, netG = roll_video(proj_path, sea_lbl, netG, n_classes, z_dim, lf=lf, device=device, ratio=ratio, n_clips=24*3, step_size=1, original_noise=noise)
 
 # concatenante the imgs together and make video

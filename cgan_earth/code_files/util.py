@@ -1,3 +1,4 @@
+from numpy.core.numeric import outer
 import torch.nn.functional as F
 import matplotlib.pyplot as plt
 from dotenv import load_dotenv
@@ -219,36 +220,63 @@ def roll_video(path, label, netG, n_classes, z_dim=64, lf=4, device='cpu', ratio
         netG.load_state_dict(torch.load(path + '_Gen.pt'))
     
     netG.to(device)
+    if step_size >= 1:
+        max_len = lf*ratio
+    else:
+        max_len = lf*ratio+1
     # try to generate rectangular, instead of square images
     random = torch.randn(1, z_dim, lf, lf*ratio-2, device=device)
     if original_noise == None:
-        original_noise = torch.zeros((1, z_dim, lf, lf*ratio)).to(device)
+        original_noise = torch.zeros((1, z_dim, lf, max_len)).to(device)
         for idx0 in range(random.shape[0]):
             for idx1 in range(random.shape[1]):
                 for idx2 in range(random.shape[2]):
                     dim2 = random[idx0, idx1, idx2]
-                    original_noise[idx0, idx1, idx2] = torch.cat((dim2, dim2[:2]), -1)
+                    if step_size >= 1:
+                        original_noise[idx0, idx1, idx2] = torch.cat((dim2, dim2[:2]), -1)
+                    else:
+                        # generate half a z step more data in final dimension
+                        original_noise[idx0, idx1, idx2] = torch.cat((dim2, dim2[:3]), -1)
     netG.eval()
     test_label = gen_labels(label, n_classes)[:, :, None, None]
     imgs = np.array([])
     noise = original_noise
     step = 0.0
-    lbl = test_label.repeat(1, 1, lf, lf*ratio).to(device)
+    lbl = test_label.repeat(1, 1, lf, max_len).to(device)
     label = label[0]
-    for _ in tqdm(range(n_clips)):
+    if step_size >= 1:
+        num_img = 1
+    else:
+        num_img = int(1/step_size)
+    for _ in range(n_clips):
         with torch.no_grad():
             img = netG(noise, lbl, Training=False, ratio=ratio).cuda()
             img = torch.multiply(img, 255).cpu().detach().numpy()
-            img = np.moveaxis(img, 1, -1)
-            if imgs.shape[0] == 0:
-                imgs = img
-            else:
-                imgs = np.vstack((imgs, img))
+            for i in range(num_img):
+                if step_size < 1:
+                    if i == 0:
+                        # one z represents 32 pixels in the -1 dimension
+                        print(img.shape[-1])
+                        out = img[:, :, :, :img.shape[-1]-64]
+                    else:
+                        # currently only implemented for step_size 0.5
+                        out = img[:, :, :, 32:img.shape[-1]-32]
+                out = np.moveaxis(img, 1, -1)
+                if imgs.shape[0] == 0:
+                    imgs = out
+                else:
+                    imgs = np.vstack((imgs, out))
             step += step_size
             # avoid step growing too large
-            if step > lf*ratio-2:
-                step -= lf*ratio
-            noise = roll_noise(original_noise, step, lf*ratio)
+            if step_size >= 1:
+                max_step = lf*ratio-2
+                IntStep = True
+            else:
+                max_step = lf*ratio-3
+                IntStep = False
+            if step > max_step:
+                step -= max_step
+            noise = roll_noise(original_noise, step, lf*ratio, IntStep)
     return imgs, noise, netG
 
 def transit_video(label1, label2, n_classes, original_noise, netG, lf=4, ratio=2, device='cpu', step_size=1, z_step_size=1, l_step_size=0.1, transit_mode='uniform'):
@@ -307,7 +335,7 @@ def transit_video(label1, label2, n_classes, original_noise, netG, lf=4, ratio=2
                 lbl, l_step, z_step, l_done_step, z_done_step = circular_transit(label1, label2, lbl,
                 z_step_size, l_step_size, lf, ratio, l_step, z_step, l_done_step, z_done_step)
             if step > lf*ratio-2:
-                step -= lf*ratio
+                step -= (lf*ratio-2)
             noise = roll_noise(original_noise, step, lf*ratio)
     return imgs, noise, netG
 
