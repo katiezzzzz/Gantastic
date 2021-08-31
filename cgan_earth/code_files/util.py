@@ -282,7 +282,7 @@ def roll_video(path, label, netG, n_classes, z_dim=64, lf=4, device='cpu', ratio
                 IntStep = False
             if step > max_step:
                 step -= max_step
-            noise = roll_noise(original_noise, step, lf*ratio, IntStep)
+            noise = roll_noise(original_noise, step, max_step, IntStep)
     return imgs, noise, netG
 
 def transit_video(label1, label2, n_classes, original_noise, netG, lf=4, ratio=2, device='cpu', step_size=1, z_step_size=1, l_step_size=0.1, transit_mode='uniform'):
@@ -362,7 +362,7 @@ def transit_video(label1, label2, n_classes, original_noise, netG, lf=4, ratio=2
                 IntStep = False
             if step > max_step:
                 step -= max_step
-            noise = roll_noise(original_noise, step, lf*ratio, IntStep)
+            noise = roll_noise(original_noise, step, max_step, IntStep)
     return imgs, noise, netG
 
 def animate(path, imgs, fps=24):
