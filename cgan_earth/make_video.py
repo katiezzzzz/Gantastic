@@ -31,7 +31,7 @@ city_lbl = [1]
 desert_lbl = [2]
 sea_lbl = [3]
 snow_lbl = [4]
-lf = 16
+lf = 6
 ratio = 2
 
 # test1: forest, then transit to sea, then roll in sea

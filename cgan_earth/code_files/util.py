@@ -234,6 +234,7 @@ def roll_video(path, label, netG, n_classes, z_dim=64, lf=4, device='cpu', ratio
         max_len = lf*ratio+1
     # try to generate rectangular, instead of square images
     random = torch.randn(1, z_dim, lf, lf*ratio-2, device=device)
+    random[0][0] = torch.arange(lf*(lf*ratio-2)).view(lf, lf*ratio-2)
     if original_noise == None:
         original_noise = torch.zeros((1, z_dim, lf, max_len)).to(device)
         if step_size >= 1:
@@ -255,8 +256,9 @@ def roll_video(path, label, netG, n_classes, z_dim=64, lf=4, device='cpu', ratio
         num_img = 1
     else:
         num_img = int(1/step_size)
-    for _ in tqdm(range(n_clips)):
+    for _ in range(n_clips):
         with torch.no_grad():
+            print(noise[0][0])
             img = netG(noise, lbl, Training=False, ratio=ratio).cuda()
             img = torch.multiply(img, 255).cpu().detach().numpy()
             for i in range(num_img):
@@ -274,11 +276,10 @@ def roll_video(path, label, netG, n_classes, z_dim=64, lf=4, device='cpu', ratio
                     imgs = np.vstack((imgs, out))
             step += step_size
             # avoid step growing too large
+            max_step = lf*ratio-2
             if max_len == lf*ratio:
-                max_step = lf*ratio-2
                 IntStep = True
             else:
-                max_step = lf*ratio-3
                 IntStep = False
             if step > max_step:
                 step -= max_step

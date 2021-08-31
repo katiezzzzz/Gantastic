@@ -12,34 +12,15 @@ def roll_noise(original_noise, step, max_step, IntStep=True):
         new noise of dimension (1, z_dim, lf, lf*ratio)
     '''
     int_step = int(step)
-    if int_step == step:
+    if IntStep == True:
         repeat_idx = 2
     else:
         repeat_idx = 3
     # get rid of linear interpolation
-    step = int(step)
-    if int_step == step:
-        if int_step < max_step:
-            out_noise = torch.cat((original_noise[:, :, :, int_step:], original_noise[:, :, :, repeat_idx:repeat_idx+int_step]), -1)
-        else:
-            out_noise = original_noise
+    if int_step < max_step:
+        out_noise = torch.cat((original_noise[:, :, :, int_step:], original_noise[:, :, :, repeat_idx:repeat_idx+int_step]), -1)
     else:
-        # do linear interpolation
-        if int_step < max_step:
-            prev_noise = torch.cat((original_noise[:, :, :, int_step:], original_noise[:, :, :, repeat_idx:repeat_idx+int_step]), -1)
-        else:
-            prev_noise = original_noise
-        int_step += 1
-        new_noise = torch.cat((original_noise[:, :, :, int_step:], original_noise[:, :, :, repeat_idx:repeat_idx+int_step]), -1)
-        if int_step < max_step:
-            new_noise = torch.cat((original_noise[:, :, :, int_step:], original_noise[:, :, :, repeat_idx:repeat_idx+int_step]), -1)
-        elif int_step == max_step:
-            new_noise = original_noise
-        else:
-            new_noise = torch.cat((original_noise[:, :, :, 1:], original_noise[:, :, :, repeat_idx:repeat_idx+1]), -1)
-        diff = torch.sub(new_noise, prev_noise)
-        diff = torch.multiply(diff, step-int_step+1)
-        out_noise = torch.add(prev_noise, diff)
+        out_noise = original_noise
     return out_noise
 
 def uniform_transit(label1_channel, label2_channel, cur_label, l_step_size):
