@@ -31,13 +31,13 @@ city_lbl = [1]
 desert_lbl = [2]
 sea_lbl = [3]
 snow_lbl = [4]
-lf = 6
+lf = 16
 ratio = 2
 
 # test1: forest, then transit to sea, then roll in sea
 # the speed currently must start with the lowest possible speed to make sure the noise has right dimension
-imgs1, noise, netG = roll_video(proj_path, forest_lbl, netG(z_dim+n_classes, img_length), n_classes, z_dim, lf=lf, device=device, ratio=ratio, n_clips=24*3, step_size=1)
-imgs2, noise, netG = transit_video(forest_lbl, sea_lbl, n_classes, noise, netG, lf=lf, ratio=ratio, device=device, step_size=1, z_step_size=0.1, l_step_size=0.1, transit_mode='scroll')
+imgs1, noise, netG = roll_video(proj_path, forest_lbl, netG(z_dim+n_classes, img_length), n_classes, z_dim, lf=lf, device=device, ratio=ratio, n_clips=24*3, step_size=0.5)
+imgs2, noise, netG = transit_video(forest_lbl, sea_lbl, n_classes, noise, netG, lf=lf, ratio=ratio, device=device, step_size=0.5, z_step_size=0.1, l_step_size=0.1, transit_mode='scroll')
 imgs3, noise, netG = roll_video(proj_path, sea_lbl, netG, n_classes, z_dim, lf=lf, device=device, ratio=ratio, n_clips=24*3, step_size=1, original_noise=noise)
 
 # concatenante the imgs together and make video

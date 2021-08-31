@@ -1,0 +1,236 @@
+2021-08-31 17:29:20,863 INFO    MainThread:47476 [internal.py:wandb_internal():86] W&B internal server running at pid: 47476, started at: 2021-08-31 17:29:20.844814
+2021-08-31 17:29:20,863 INFO    WriterThread:47476 [datastore.py:open_for_write():77] open: C:\Users\jz12018\Desktop\Test\Gantastic\cgan_earth\wandb\run-20210831_172918-rkzlr1bo\run-rkzlr1bo.wandb
+2021-08-31 17:29:20,863 DEBUG   HandlerThread:47476 [handler.py:handle_request():128] handle_request: check_version
+2021-08-31 17:29:20,873 DEBUG   SenderThread:47476 [sender.py:send():182] send: header
+2021-08-31 17:29:20,875 DEBUG   SenderThread:47476 [sender.py:send_request():196] send_request: check_version
+2021-08-31 17:29:20,953 DEBUG   SenderThread:47476 [sender.py:send():182] send: run
+2021-08-31 17:29:21,536 DEBUG   HandlerThread:47476 [handler.py:handle_request():128] handle_request: run_start
+2021-08-31 17:29:21,536 INFO    SenderThread:47476 [dir_watcher.py:__init__():168] watching files in: C:\Users\jz12018\Desktop\Test\Gantastic\cgan_earth\wandb\run-20210831_172918-rkzlr1bo\files
+2021-08-31 17:29:21,536 INFO    SenderThread:47476 [sender.py:_start_run_threads():740] run started: rkzlr1bo with start time 1630427358
+2021-08-31 17:29:21,537 DEBUG   SenderThread:47476 [sender.py:send():182] send: summary
+2021-08-31 17:29:21,538 INFO    SenderThread:47476 [sender.py:_save_file():873] saving file wandb-summary.json with policy end
+2021-08-31 17:29:21,566 DEBUG   HandlerThread:47476 [meta.py:__init__():39] meta init
+2021-08-31 17:29:21,566 DEBUG   HandlerThread:47476 [meta.py:__init__():53] meta init done
+2021-08-31 17:29:21,566 DEBUG   HandlerThread:47476 [meta.py:probe():210] probe
+2021-08-31 17:29:21,576 DEBUG   HandlerThread:47476 [meta.py:_setup_git():200] setup git
+2021-08-31 17:29:22,016 DEBUG   HandlerThread:47476 [meta.py:_setup_git():207] setup git done
+2021-08-31 17:29:22,016 DEBUG   HandlerThread:47476 [meta.py:_save_pip():57] save pip
+2021-08-31 17:29:22,016 DEBUG   HandlerThread:47476 [meta.py:_save_pip():71] save pip done
+2021-08-31 17:29:22,016 DEBUG   HandlerThread:47476 [meta.py:_save_conda():78] save conda
+2021-08-31 17:29:22,550 INFO    Thread-12 :47476 [dir_watcher.py:_on_file_created():216] file/dir created: C:\Users\jz12018\Desktop\Test\Gantastic\cgan_earth\wandb\run-20210831_172918-rkzlr1bo\files\conda-environment.yaml
+2021-08-31 17:29:22,552 INFO    Thread-12 :47476 [dir_watcher.py:_on_file_created():216] file/dir created: C:\Users\jz12018\Desktop\Test\Gantastic\cgan_earth\wandb\run-20210831_172918-rkzlr1bo\files\wandb-summary.json
+2021-08-31 17:29:22,552 INFO    Thread-12 :47476 [dir_watcher.py:_on_file_created():216] file/dir created: C:\Users\jz12018\Desktop\Test\Gantastic\cgan_earth\wandb\run-20210831_172918-rkzlr1bo\files\requirements.txt
+2021-08-31 17:29:25,425 DEBUG   HandlerThread:47476 [meta.py:_save_conda():86] save conda done
+2021-08-31 17:29:25,425 DEBUG   HandlerThread:47476 [meta.py:probe():252] probe done
+2021-08-31 17:29:25,446 DEBUG   SenderThread:47476 [sender.py:send():182] send: files
+2021-08-31 17:29:25,446 INFO    SenderThread:47476 [sender.py:_save_file():873] saving file wandb-metadata.json with policy now
+2021-08-31 17:29:25,472 DEBUG   HandlerThread:47476 [handler.py:handle_request():128] handle_request: stop_status
+2021-08-31 17:29:25,473 DEBUG   SenderThread:47476 [sender.py:send_request():196] send_request: stop_status
+2021-08-31 17:29:25,579 INFO    Thread-12 :47476 [dir_watcher.py:_on_file_modified():229] file/dir modified: C:\Users\jz12018\Desktop\Test\Gantastic\cgan_earth\wandb\run-20210831_172918-rkzlr1bo\files\conda-environment.yaml
+2021-08-31 17:29:25,579 INFO    Thread-12 :47476 [dir_watcher.py:_on_file_created():216] file/dir created: C:\Users\jz12018\Desktop\Test\Gantastic\cgan_earth\wandb\run-20210831_172918-rkzlr1bo\files\output.log
+2021-08-31 17:29:25,579 INFO    Thread-12 :47476 [dir_watcher.py:_on_file_created():216] file/dir created: C:\Users\jz12018\Desktop\Test\Gantastic\cgan_earth\wandb\run-20210831_172918-rkzlr1bo\files\wandb-metadata.json
+2021-08-31 17:29:25,630 DEBUG   SenderThread:47476 [sender.py:send():182] send: config
+2021-08-31 17:29:25,630 DEBUG   SenderThread:47476 [sender.py:send():182] send: config
+2021-08-31 17:29:25,630 DEBUG   SenderThread:47476 [sender.py:send():182] send: config
+2021-08-31 17:29:25,959 INFO    Thread-17 :47476 [upload_job.py:push():137] Uploaded file C:\Users\jz12018\AppData\Local\Temp\tmpsbgvijd5wandb\1s2xatr4-wandb-metadata.json
+2021-08-31 17:29:27,604 INFO    Thread-12 :47476 [dir_watcher.py:_on_file_modified():229] file/dir modified: C:\Users\jz12018\Desktop\Test\Gantastic\cgan_earth\wandb\run-20210831_172918-rkzlr1bo\files\output.log
+2021-08-31 17:29:31,643 INFO    Thread-12 :47476 [dir_watcher.py:_on_file_modified():229] file/dir modified: C:\Users\jz12018\Desktop\Test\Gantastic\cgan_earth\wandb\run-20210831_172918-rkzlr1bo\files\output.log
+2021-08-31 17:29:31,892 DEBUG   SenderThread:47476 [sender.py:send():182] send: history
+2021-08-31 17:29:31,897 DEBUG   SenderThread:47476 [sender.py:send():182] send: summary
+2021-08-31 17:29:31,901 INFO    SenderThread:47476 [sender.py:_save_file():873] saving file wandb-summary.json with policy end
+2021-08-31 17:29:31,902 DEBUG   SenderThread:47476 [sender.py:send():182] send: history
+2021-08-31 17:29:31,903 DEBUG   SenderThread:47476 [sender.py:send():182] send: summary
+2021-08-31 17:29:31,905 INFO    SenderThread:47476 [sender.py:_save_file():873] saving file wandb-summary.json with policy end
+2021-08-31 17:29:31,906 DEBUG   SenderThread:47476 [sender.py:send():182] send: history
+2021-08-31 17:29:31,906 DEBUG   SenderThread:47476 [sender.py:send():182] send: summary
+2021-08-31 17:29:31,909 INFO    SenderThread:47476 [sender.py:_save_file():873] saving file wandb-summary.json with policy end
+2021-08-31 17:29:31,910 DEBUG   SenderThread:47476 [sender.py:send():182] send: history
+2021-08-31 17:29:31,910 DEBUG   SenderThread:47476 [sender.py:send():182] send: summary
+2021-08-31 17:29:31,912 INFO    SenderThread:47476 [sender.py:_save_file():873] saving file wandb-summary.json with policy end
+2021-08-31 17:29:32,658 INFO    Thread-12 :47476 [dir_watcher.py:_on_file_modified():229] file/dir modified: C:\Users\jz12018\Desktop\Test\Gantastic\cgan_earth\wandb\run-20210831_172918-rkzlr1bo\files\wandb-summary.json
+2021-08-31 17:29:32,787 DEBUG   SenderThread:47476 [sender.py:send():182] send: files
+2021-08-31 17:29:32,788 INFO    SenderThread:47476 [sender.py:_save_file():873] saving file media\images\fake_4_5ca8ea2aa96aa8de2203.png with policy now
+2021-08-31 17:29:32,792 DEBUG   SenderThread:47476 [sender.py:send():182] send: history
+2021-08-31 17:29:32,792 DEBUG   SenderThread:47476 [sender.py:send():182] send: summary
+2021-08-31 17:29:32,819 INFO    SenderThread:47476 [sender.py:_save_file():873] saving file wandb-summary.json with policy end
+2021-08-31 17:29:32,900 DEBUG   SenderThread:47476 [sender.py:send():182] send: files
+2021-08-31 17:29:32,900 INFO    SenderThread:47476 [sender.py:_save_file():873] saving file media\images\fake_5_5ca8ea2aa96aa8de2203.png with policy now
+2021-08-31 17:29:32,900 DEBUG   SenderThread:47476 [sender.py:send():182] send: history
+2021-08-31 17:29:32,900 DEBUG   SenderThread:47476 [sender.py:send():182] send: summary
+2021-08-31 17:29:32,908 INFO    SenderThread:47476 [sender.py:_save_file():873] saving file wandb-summary.json with policy end
+2021-08-31 17:29:33,021 DEBUG   SenderThread:47476 [sender.py:send():182] send: files
+2021-08-31 17:29:33,021 INFO    SenderThread:47476 [sender.py:_save_file():873] saving file media\images\fake_6_5ca8ea2aa96aa8de2203.png with policy now
+2021-08-31 17:29:33,023 DEBUG   SenderThread:47476 [sender.py:send():182] send: history
+2021-08-31 17:29:33,023 DEBUG   SenderThread:47476 [sender.py:send():182] send: summary
+2021-08-31 17:29:33,025 INFO    SenderThread:47476 [sender.py:_save_file():873] saving file wandb-summary.json with policy end
+2021-08-31 17:29:33,137 DEBUG   SenderThread:47476 [sender.py:send():182] send: files
+2021-08-31 17:29:33,138 INFO    SenderThread:47476 [sender.py:_save_file():873] saving file media\images\fake_7_5ca8ea2aa96aa8de2203.png with policy now
+2021-08-31 17:29:33,142 DEBUG   SenderThread:47476 [sender.py:send():182] send: history
+2021-08-31 17:29:33,142 DEBUG   SenderThread:47476 [sender.py:send():182] send: summary
+2021-08-31 17:29:33,145 INFO    SenderThread:47476 [sender.py:_save_file():873] saving file wandb-summary.json with policy end
+2021-08-31 17:29:33,218 DEBUG   SenderThread:47476 [sender.py:send():182] send: files
+2021-08-31 17:29:33,220 INFO    SenderThread:47476 [sender.py:_save_file():873] saving file media\images\fake_8_5ca8ea2aa96aa8de2203.png with policy now
+2021-08-31 17:29:33,230 DEBUG   SenderThread:47476 [sender.py:send():182] send: history
+2021-08-31 17:29:33,230 DEBUG   SenderThread:47476 [sender.py:send():182] send: summary
+2021-08-31 17:29:33,236 INFO    SenderThread:47476 [sender.py:_save_file():873] saving file wandb-summary.json with policy end
+2021-08-31 17:29:33,375 INFO    Thread-18 :47476 [upload_job.py:push():137] Uploaded file C:\Users\jz12018\AppData\Local\Temp\tmpsbgvijd5wandb\scml1trt-media/images/fake_4_5ca8ea2aa96aa8de2203.png
+2021-08-31 17:29:33,406 INFO    Thread-19 :47476 [upload_job.py:push():137] Uploaded file C:\Users\jz12018\AppData\Local\Temp\tmpsbgvijd5wandb\qpok4mj3-media/images/fake_5_5ca8ea2aa96aa8de2203.png
+2021-08-31 17:29:33,599 INFO    Thread-20 :47476 [upload_job.py:push():137] Uploaded file C:\Users\jz12018\AppData\Local\Temp\tmpsbgvijd5wandb\1u9iq4s6-media/images/fake_6_5ca8ea2aa96aa8de2203.png
+2021-08-31 17:29:33,666 INFO    Thread-12 :47476 [dir_watcher.py:_on_file_modified():229] file/dir modified: C:\Users\jz12018\Desktop\Test\Gantastic\cgan_earth\wandb\run-20210831_172918-rkzlr1bo\files\wandb-summary.json
+2021-08-31 17:29:33,669 INFO    Thread-12 :47476 [dir_watcher.py:_on_file_modified():229] file/dir modified: C:\Users\jz12018\Desktop\Test\Gantastic\cgan_earth\wandb\run-20210831_172918-rkzlr1bo\files\output.log
+2021-08-31 17:29:33,669 INFO    Thread-12 :47476 [dir_watcher.py:_on_file_created():216] file/dir created: C:\Users\jz12018\Desktop\Test\Gantastic\cgan_earth\wandb\run-20210831_172918-rkzlr1bo\files\media\images\fake_5_5ca8ea2aa96aa8de2203.png
+2021-08-31 17:29:33,669 INFO    Thread-12 :47476 [dir_watcher.py:_on_file_created():216] file/dir created: C:\Users\jz12018\Desktop\Test\Gantastic\cgan_earth\wandb\run-20210831_172918-rkzlr1bo\files\media\images\fake_8_5ca8ea2aa96aa8de2203.png
+2021-08-31 17:29:33,669 INFO    Thread-12 :47476 [dir_watcher.py:_on_file_created():216] file/dir created: C:\Users\jz12018\Desktop\Test\Gantastic\cgan_earth\wandb\run-20210831_172918-rkzlr1bo\files\media\images\fake_7_5ca8ea2aa96aa8de2203.png
+2021-08-31 17:29:33,671 INFO    Thread-12 :47476 [dir_watcher.py:_on_file_created():216] file/dir created: C:\Users\jz12018\Desktop\Test\Gantastic\cgan_earth\wandb\run-20210831_172918-rkzlr1bo\files\media\images\fake_6_5ca8ea2aa96aa8de2203.png
+2021-08-31 17:29:33,671 INFO    Thread-12 :47476 [dir_watcher.py:_on_file_created():216] file/dir created: C:\Users\jz12018\Desktop\Test\Gantastic\cgan_earth\wandb\run-20210831_172918-rkzlr1bo\files\media\images\fake_4_5ca8ea2aa96aa8de2203.png
+2021-08-31 17:29:33,671 INFO    Thread-12 :47476 [dir_watcher.py:_on_file_created():216] file/dir created: C:\Users\jz12018\Desktop\Test\Gantastic\cgan_earth\wandb\run-20210831_172918-rkzlr1bo\files\media\images
+2021-08-31 17:29:33,671 INFO    Thread-12 :47476 [dir_watcher.py:_on_file_created():216] file/dir created: C:\Users\jz12018\Desktop\Test\Gantastic\cgan_earth\wandb\run-20210831_172918-rkzlr1bo\files\media
+2021-08-31 17:29:33,752 INFO    Thread-21 :47476 [upload_job.py:push():137] Uploaded file C:\Users\jz12018\AppData\Local\Temp\tmpsbgvijd5wandb\d82cifcr-media/images/fake_7_5ca8ea2aa96aa8de2203.png
+2021-08-31 17:29:33,795 INFO    Thread-22 :47476 [upload_job.py:push():137] Uploaded file C:\Users\jz12018\AppData\Local\Temp\tmpsbgvijd5wandb\fpyvrw8p-media/images/fake_8_5ca8ea2aa96aa8de2203.png
+2021-08-31 17:29:34,229 DEBUG   SenderThread:47476 [sender.py:send():182] send: history
+2021-08-31 17:29:34,229 DEBUG   SenderThread:47476 [sender.py:send():182] send: summary
+2021-08-31 17:29:34,239 INFO    SenderThread:47476 [sender.py:_save_file():873] saving file wandb-summary.json with policy end
+2021-08-31 17:29:34,239 DEBUG   SenderThread:47476 [sender.py:send():182] send: history
+2021-08-31 17:29:34,239 DEBUG   SenderThread:47476 [sender.py:send():182] send: summary
+2021-08-31 17:29:34,245 INFO    SenderThread:47476 [sender.py:_save_file():873] saving file wandb-summary.json with policy end
+2021-08-31 17:29:34,246 DEBUG   SenderThread:47476 [sender.py:send():182] send: history
+2021-08-31 17:29:34,246 DEBUG   SenderThread:47476 [sender.py:send():182] send: summary
+2021-08-31 17:29:34,249 INFO    SenderThread:47476 [sender.py:_save_file():873] saving file wandb-summary.json with policy end
+2021-08-31 17:29:34,250 DEBUG   SenderThread:47476 [sender.py:send():182] send: history
+2021-08-31 17:29:34,250 DEBUG   SenderThread:47476 [sender.py:send():182] send: summary
+2021-08-31 17:29:34,253 INFO    SenderThread:47476 [sender.py:_save_file():873] saving file wandb-summary.json with policy end
+2021-08-31 17:29:34,679 INFO    Thread-12 :47476 [dir_watcher.py:_on_file_modified():229] file/dir modified: C:\Users\jz12018\Desktop\Test\Gantastic\cgan_earth\wandb\run-20210831_172918-rkzlr1bo\files\wandb-summary.json
+2021-08-31 17:29:35,292 DEBUG   SenderThread:47476 [sender.py:send():182] send: history
+2021-08-31 17:29:35,293 DEBUG   SenderThread:47476 [sender.py:send():182] send: summary
+2021-08-31 17:29:35,298 INFO    SenderThread:47476 [sender.py:_save_file():873] saving file wandb-summary.json with policy end
+2021-08-31 17:29:35,299 DEBUG   SenderThread:47476 [sender.py:send():182] send: history
+2021-08-31 17:29:35,300 DEBUG   SenderThread:47476 [sender.py:send():182] send: summary
+2021-08-31 17:29:35,302 INFO    SenderThread:47476 [sender.py:_save_file():873] saving file wandb-summary.json with policy end
+2021-08-31 17:29:35,303 DEBUG   SenderThread:47476 [sender.py:send():182] send: history
+2021-08-31 17:29:35,304 DEBUG   SenderThread:47476 [sender.py:send():182] send: summary
+2021-08-31 17:29:35,306 INFO    SenderThread:47476 [sender.py:_save_file():873] saving file wandb-summary.json with policy end
+2021-08-31 17:29:35,307 DEBUG   SenderThread:47476 [sender.py:send():182] send: history
+2021-08-31 17:29:35,307 DEBUG   SenderThread:47476 [sender.py:send():182] send: summary
+2021-08-31 17:29:35,310 INFO    SenderThread:47476 [sender.py:_save_file():873] saving file wandb-summary.json with policy end
+2021-08-31 17:29:35,702 INFO    Thread-12 :47476 [dir_watcher.py:_on_file_modified():229] file/dir modified: C:\Users\jz12018\Desktop\Test\Gantastic\cgan_earth\wandb\run-20210831_172918-rkzlr1bo\files\wandb-summary.json
+2021-08-31 17:29:35,703 INFO    Thread-12 :47476 [dir_watcher.py:_on_file_modified():229] file/dir modified: C:\Users\jz12018\Desktop\Test\Gantastic\cgan_earth\wandb\run-20210831_172918-rkzlr1bo\files\output.log
+2021-08-31 17:29:36,149 WARNING MainThread:47476 [internal.py:wandb_internal():145] Internal process interrupt: 1
+2021-08-31 17:29:36,705 INFO    Thread-12 :47476 [dir_watcher.py:_on_file_modified():229] file/dir modified: C:\Users\jz12018\Desktop\Test\Gantastic\cgan_earth\wandb\run-20210831_172918-rkzlr1bo\files\output.log
+2021-08-31 17:29:36,752 DEBUG   SenderThread:47476 [sender.py:send():182] send: telemetry
+2021-08-31 17:29:36,753 DEBUG   SenderThread:47476 [sender.py:send():182] send: exit
+2021-08-31 17:29:36,753 DEBUG   HandlerThread:47476 [handler.py:handle_request():128] handle_request: poll_exit
+2021-08-31 17:29:36,753 INFO    SenderThread:47476 [sender.py:send_exit():291] handling exit code: 255
+2021-08-31 17:29:36,754 INFO    SenderThread:47476 [sender.py:send_exit():293] handling runtime: 15
+2021-08-31 17:29:36,756 INFO    SenderThread:47476 [sender.py:_save_file():873] saving file wandb-summary.json with policy end
+2021-08-31 17:29:36,757 INFO    SenderThread:47476 [sender.py:send_exit():303] send defer
+2021-08-31 17:29:36,758 DEBUG   SenderThread:47476 [sender.py:send_request():196] send_request: poll_exit
+2021-08-31 17:29:36,759 DEBUG   HandlerThread:47476 [handler.py:handle_request():128] handle_request: defer
+2021-08-31 17:29:36,759 INFO    HandlerThread:47476 [handler.py:handle_request_defer():145] handle defer: 0
+2021-08-31 17:29:36,760 DEBUG   SenderThread:47476 [sender.py:send_request():196] send_request: defer
+2021-08-31 17:29:36,760 INFO    SenderThread:47476 [sender.py:send_request_defer():312] handle sender defer: 0
+2021-08-31 17:29:36,760 INFO    SenderThread:47476 [sender.py:transition_state():316] send defer: 1
+2021-08-31 17:29:36,761 DEBUG   HandlerThread:47476 [handler.py:handle_request():128] handle_request: defer
+2021-08-31 17:29:36,761 INFO    HandlerThread:47476 [handler.py:handle_request_defer():145] handle defer: 1
+2021-08-31 17:29:36,860 DEBUG   HandlerThread:47476 [handler.py:handle_request():128] handle_request: poll_exit
+2021-08-31 17:29:36,861 DEBUG   SenderThread:47476 [sender.py:send_request():196] send_request: defer
+2021-08-31 17:29:36,861 INFO    SenderThread:47476 [sender.py:send_request_defer():312] handle sender defer: 1
+2021-08-31 17:29:36,862 INFO    SenderThread:47476 [sender.py:transition_state():316] send defer: 2
+2021-08-31 17:29:36,862 DEBUG   SenderThread:47476 [sender.py:send_request():196] send_request: poll_exit
+2021-08-31 17:29:36,863 DEBUG   SenderThread:47476 [sender.py:send():182] send: stats
+2021-08-31 17:29:36,863 DEBUG   HandlerThread:47476 [handler.py:handle_request():128] handle_request: defer
+2021-08-31 17:29:36,865 INFO    HandlerThread:47476 [handler.py:handle_request_defer():145] handle defer: 2
+2021-08-31 17:29:36,865 DEBUG   SenderThread:47476 [sender.py:send_request():196] send_request: defer
+2021-08-31 17:29:36,865 INFO    SenderThread:47476 [sender.py:send_request_defer():312] handle sender defer: 2
+2021-08-31 17:29:36,865 INFO    SenderThread:47476 [sender.py:transition_state():316] send defer: 3
+2021-08-31 17:29:36,866 DEBUG   HandlerThread:47476 [handler.py:handle_request():128] handle_request: defer
+2021-08-31 17:29:36,866 INFO    HandlerThread:47476 [handler.py:handle_request_defer():145] handle defer: 3
+2021-08-31 17:29:36,867 DEBUG   SenderThread:47476 [sender.py:send():182] send: summary
+2021-08-31 17:29:36,870 INFO    SenderThread:47476 [sender.py:_save_file():873] saving file wandb-summary.json with policy end
+2021-08-31 17:29:36,871 DEBUG   SenderThread:47476 [sender.py:send_request():196] send_request: defer
+2021-08-31 17:29:36,871 INFO    SenderThread:47476 [sender.py:send_request_defer():312] handle sender defer: 3
+2021-08-31 17:29:36,871 INFO    SenderThread:47476 [sender.py:transition_state():316] send defer: 4
+2021-08-31 17:29:36,872 DEBUG   HandlerThread:47476 [handler.py:handle_request():128] handle_request: defer
+2021-08-31 17:29:36,872 INFO    HandlerThread:47476 [handler.py:handle_request_defer():145] handle defer: 4
+2021-08-31 17:29:36,872 DEBUG   SenderThread:47476 [sender.py:send_request():196] send_request: defer
+2021-08-31 17:29:36,873 INFO    SenderThread:47476 [sender.py:send_request_defer():312] handle sender defer: 4
+2021-08-31 17:29:36,977 DEBUG   HandlerThread:47476 [handler.py:handle_request():128] handle_request: poll_exit
+2021-08-31 17:29:37,071 INFO    SenderThread:47476 [sender.py:transition_state():316] send defer: 5
+2021-08-31 17:29:37,071 DEBUG   SenderThread:47476 [sender.py:send_request():196] send_request: poll_exit
+2021-08-31 17:29:37,071 DEBUG   HandlerThread:47476 [handler.py:handle_request():128] handle_request: defer
+2021-08-31 17:29:37,071 INFO    HandlerThread:47476 [handler.py:handle_request_defer():145] handle defer: 5
+2021-08-31 17:29:37,071 DEBUG   SenderThread:47476 [sender.py:send_request():196] send_request: defer
+2021-08-31 17:29:37,071 INFO    SenderThread:47476 [sender.py:send_request_defer():312] handle sender defer: 5
+2021-08-31 17:29:37,071 INFO    SenderThread:47476 [dir_watcher.py:finish():282] shutting down directory watcher
+2021-08-31 17:29:37,189 DEBUG   HandlerThread:47476 [handler.py:handle_request():128] handle_request: poll_exit
+2021-08-31 17:29:37,720 INFO    SenderThread:47476 [dir_watcher.py:_on_file_modified():229] file/dir modified: C:\Users\jz12018\Desktop\Test\Gantastic\cgan_earth\wandb\run-20210831_172918-rkzlr1bo\files\config.yaml
+2021-08-31 17:29:37,720 INFO    SenderThread:47476 [dir_watcher.py:_on_file_modified():229] file/dir modified: C:\Users\jz12018\Desktop\Test\Gantastic\cgan_earth\wandb\run-20210831_172918-rkzlr1bo\files\wandb-summary.json
+2021-08-31 17:29:37,720 INFO    SenderThread:47476 [dir_watcher.py:_on_file_modified():229] file/dir modified: C:\Users\jz12018\Desktop\Test\Gantastic\cgan_earth\wandb\run-20210831_172918-rkzlr1bo\files\output.log
+2021-08-31 17:29:37,720 INFO    SenderThread:47476 [dir_watcher.py:finish():312] scan: C:\Users\jz12018\Desktop\Test\Gantastic\cgan_earth\wandb\run-20210831_172918-rkzlr1bo\files
+2021-08-31 17:29:37,727 INFO    SenderThread:47476 [dir_watcher.py:finish():318] scan save: C:\Users\jz12018\Desktop\Test\Gantastic\cgan_earth\wandb\run-20210831_172918-rkzlr1bo\files\conda-environment.yaml conda-environment.yaml
+2021-08-31 17:29:37,727 INFO    SenderThread:47476 [dir_watcher.py:finish():318] scan save: C:\Users\jz12018\Desktop\Test\Gantastic\cgan_earth\wandb\run-20210831_172918-rkzlr1bo\files\config.yaml config.yaml
+2021-08-31 17:29:37,729 INFO    SenderThread:47476 [dir_watcher.py:finish():318] scan save: C:\Users\jz12018\Desktop\Test\Gantastic\cgan_earth\wandb\run-20210831_172918-rkzlr1bo\files\output.log output.log
+2021-08-31 17:29:37,739 INFO    SenderThread:47476 [dir_watcher.py:finish():318] scan save: C:\Users\jz12018\Desktop\Test\Gantastic\cgan_earth\wandb\run-20210831_172918-rkzlr1bo\files\requirements.txt requirements.txt
+2021-08-31 17:29:37,751 INFO    SenderThread:47476 [dir_watcher.py:finish():318] scan save: C:\Users\jz12018\Desktop\Test\Gantastic\cgan_earth\wandb\run-20210831_172918-rkzlr1bo\files\wandb-metadata.json wandb-metadata.json
+2021-08-31 17:29:37,758 INFO    SenderThread:47476 [dir_watcher.py:finish():318] scan save: C:\Users\jz12018\Desktop\Test\Gantastic\cgan_earth\wandb\run-20210831_172918-rkzlr1bo\files\wandb-summary.json wandb-summary.json
+2021-08-31 17:29:37,782 INFO    SenderThread:47476 [dir_watcher.py:finish():318] scan save: C:\Users\jz12018\Desktop\Test\Gantastic\cgan_earth\wandb\run-20210831_172918-rkzlr1bo\files\media\images\fake_4_5ca8ea2aa96aa8de2203.png media\images\fake_4_5ca8ea2aa96aa8de2203.png
+2021-08-31 17:29:37,782 INFO    SenderThread:47476 [dir_watcher.py:finish():318] scan save: C:\Users\jz12018\Desktop\Test\Gantastic\cgan_earth\wandb\run-20210831_172918-rkzlr1bo\files\media\images\fake_5_5ca8ea2aa96aa8de2203.png media\images\fake_5_5ca8ea2aa96aa8de2203.png
+2021-08-31 17:29:37,782 INFO    SenderThread:47476 [dir_watcher.py:finish():318] scan save: C:\Users\jz12018\Desktop\Test\Gantastic\cgan_earth\wandb\run-20210831_172918-rkzlr1bo\files\media\images\fake_6_5ca8ea2aa96aa8de2203.png media\images\fake_6_5ca8ea2aa96aa8de2203.png
+2021-08-31 17:29:37,789 INFO    SenderThread:47476 [dir_watcher.py:finish():318] scan save: C:\Users\jz12018\Desktop\Test\Gantastic\cgan_earth\wandb\run-20210831_172918-rkzlr1bo\files\media\images\fake_7_5ca8ea2aa96aa8de2203.png media\images\fake_7_5ca8ea2aa96aa8de2203.png
+2021-08-31 17:29:37,789 INFO    SenderThread:47476 [dir_watcher.py:finish():318] scan save: C:\Users\jz12018\Desktop\Test\Gantastic\cgan_earth\wandb\run-20210831_172918-rkzlr1bo\files\media\images\fake_8_5ca8ea2aa96aa8de2203.png media\images\fake_8_5ca8ea2aa96aa8de2203.png
+2021-08-31 17:29:37,789 INFO    SenderThread:47476 [sender.py:transition_state():316] send defer: 6
+2021-08-31 17:29:37,791 DEBUG   SenderThread:47476 [sender.py:send_request():196] send_request: poll_exit
+2021-08-31 17:29:37,791 DEBUG   HandlerThread:47476 [handler.py:handle_request():128] handle_request: defer
+2021-08-31 17:29:37,791 INFO    HandlerThread:47476 [handler.py:handle_request_defer():145] handle defer: 6
+2021-08-31 17:29:37,791 DEBUG   SenderThread:47476 [sender.py:send_request():196] send_request: defer
+2021-08-31 17:29:37,791 INFO    SenderThread:47476 [sender.py:send_request_defer():312] handle sender defer: 6
+2021-08-31 17:29:37,791 INFO    SenderThread:47476 [file_pusher.py:finish():177] shutting down file pusher
+2021-08-31 17:29:37,907 DEBUG   HandlerThread:47476 [handler.py:handle_request():128] handle_request: poll_exit
+2021-08-31 17:29:37,907 DEBUG   SenderThread:47476 [sender.py:send_request():196] send_request: poll_exit
+2021-08-31 17:29:38,015 DEBUG   HandlerThread:47476 [handler.py:handle_request():128] handle_request: poll_exit
+2021-08-31 17:29:38,017 DEBUG   SenderThread:47476 [sender.py:send_request():196] send_request: poll_exit
+2021-08-31 17:29:38,134 DEBUG   HandlerThread:47476 [handler.py:handle_request():128] handle_request: poll_exit
+2021-08-31 17:29:38,135 DEBUG   SenderThread:47476 [sender.py:send_request():196] send_request: poll_exit
+2021-08-31 17:29:38,251 DEBUG   HandlerThread:47476 [handler.py:handle_request():128] handle_request: poll_exit
+2021-08-31 17:29:38,252 DEBUG   SenderThread:47476 [sender.py:send_request():196] send_request: poll_exit
+2021-08-31 17:29:38,269 INFO    Thread-23 :47476 [upload_job.py:push():137] Uploaded file C:\Users\jz12018\Desktop\Test\Gantastic\cgan_earth\wandb\run-20210831_172918-rkzlr1bo\files\conda-environment.yaml
+2021-08-31 17:29:38,358 INFO    Thread-25 :47476 [upload_job.py:push():137] Uploaded file C:\Users\jz12018\Desktop\Test\Gantastic\cgan_earth\wandb\run-20210831_172918-rkzlr1bo\files\output.log
+2021-08-31 17:29:38,362 DEBUG   HandlerThread:47476 [handler.py:handle_request():128] handle_request: poll_exit
+2021-08-31 17:29:38,362 DEBUG   SenderThread:47476 [sender.py:send_request():196] send_request: poll_exit
+2021-08-31 17:29:38,370 INFO    Thread-27 :47476 [upload_job.py:push():137] Uploaded file C:\Users\jz12018\Desktop\Test\Gantastic\cgan_earth\wandb\run-20210831_172918-rkzlr1bo\files\wandb-summary.json
+2021-08-31 17:29:38,392 INFO    Thread-26 :47476 [upload_job.py:push():137] Uploaded file C:\Users\jz12018\Desktop\Test\Gantastic\cgan_earth\wandb\run-20210831_172918-rkzlr1bo\files\requirements.txt
+2021-08-31 17:29:38,410 INFO    Thread-24 :47476 [upload_job.py:push():137] Uploaded file C:\Users\jz12018\Desktop\Test\Gantastic\cgan_earth\wandb\run-20210831_172918-rkzlr1bo\files\config.yaml
+2021-08-31 17:29:38,470 DEBUG   HandlerThread:47476 [handler.py:handle_request():128] handle_request: poll_exit
+2021-08-31 17:29:38,471 DEBUG   SenderThread:47476 [sender.py:send_request():196] send_request: poll_exit
+2021-08-31 17:29:38,578 DEBUG   HandlerThread:47476 [handler.py:handle_request():128] handle_request: poll_exit
+2021-08-31 17:29:38,579 DEBUG   SenderThread:47476 [sender.py:send_request():196] send_request: poll_exit
+2021-08-31 17:29:38,625 INFO    Thread-11 :47476 [sender.py:transition_state():316] send defer: 7
+2021-08-31 17:29:38,626 DEBUG   HandlerThread:47476 [handler.py:handle_request():128] handle_request: defer
+2021-08-31 17:29:38,626 INFO    HandlerThread:47476 [handler.py:handle_request_defer():145] handle defer: 7
+2021-08-31 17:29:38,626 DEBUG   SenderThread:47476 [sender.py:send_request():196] send_request: defer
+2021-08-31 17:29:38,627 INFO    SenderThread:47476 [sender.py:send_request_defer():312] handle sender defer: 7
+2021-08-31 17:29:38,697 DEBUG   HandlerThread:47476 [handler.py:handle_request():128] handle_request: poll_exit
+2021-08-31 17:29:38,761 INFO    SenderThread:47476 [sender.py:transition_state():316] send defer: 8
+2021-08-31 17:29:38,762 DEBUG   SenderThread:47476 [sender.py:send_request():196] send_request: poll_exit
+2021-08-31 17:29:38,763 DEBUG   HandlerThread:47476 [handler.py:handle_request():128] handle_request: defer
+2021-08-31 17:29:38,763 INFO    HandlerThread:47476 [handler.py:handle_request_defer():145] handle defer: 8
+2021-08-31 17:29:38,764 DEBUG   SenderThread:47476 [sender.py:send_request():196] send_request: defer
+2021-08-31 17:29:38,764 INFO    SenderThread:47476 [sender.py:send_request_defer():312] handle sender defer: 8
+2021-08-31 17:29:38,764 INFO    SenderThread:47476 [sender.py:transition_state():316] send defer: 9
+2021-08-31 17:29:38,765 DEBUG   SenderThread:47476 [sender.py:send():182] send: final
+2021-08-31 17:29:38,766 DEBUG   SenderThread:47476 [sender.py:send():182] send: footer
+2021-08-31 17:29:38,766 DEBUG   HandlerThread:47476 [handler.py:handle_request():128] handle_request: defer
+2021-08-31 17:29:38,767 INFO    HandlerThread:47476 [handler.py:handle_request_defer():145] handle defer: 9
+2021-08-31 17:29:38,767 DEBUG   SenderThread:47476 [sender.py:send_request():196] send_request: defer
+2021-08-31 17:29:38,767 INFO    SenderThread:47476 [sender.py:send_request_defer():312] handle sender defer: 9
+2021-08-31 17:29:38,880 DEBUG   HandlerThread:47476 [handler.py:handle_request():128] handle_request: poll_exit
+2021-08-31 17:29:38,881 DEBUG   SenderThread:47476 [sender.py:send_request():196] send_request: poll_exit
+2021-08-31 17:29:38,881 INFO    SenderThread:47476 [file_pusher.py:join():182] waiting for file pusher
+2021-08-31 17:29:38,887 DEBUG   HandlerThread:47476 [handler.py:handle_request():128] handle_request: get_summary
+2021-08-31 17:29:38,890 DEBUG   HandlerThread:47476 [handler.py:handle_request():128] handle_request: sampled_history
+2021-08-31 17:29:38,892 DEBUG   HandlerThread:47476 [handler.py:handle_request():128] handle_request: shutdown
+2021-08-31 17:29:38,892 INFO    HandlerThread:47476 [handler.py:finish():677] shutting down handler
+2021-08-31 17:29:39,772 INFO    WriterThread:47476 [datastore.py:close():281] close: C:\Users\jz12018\Desktop\Test\Gantastic\cgan_earth\wandb\run-20210831_172918-rkzlr1bo\run-rkzlr1bo.wandb
+2021-08-31 17:29:39,889 INFO    SenderThread:47476 [sender.py:finish():979] shutting down sender
+2021-08-31 17:29:39,889 INFO    SenderThread:47476 [file_pusher.py:finish():177] shutting down file pusher
+2021-08-31 17:29:39,889 INFO    SenderThread:47476 [file_pusher.py:join():182] waiting for file pusher
+2021-08-31 17:29:39,900 INFO    MainThread:47476 [internal.py:handle_exit():76] Internal process exited

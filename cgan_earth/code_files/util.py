@@ -261,21 +261,22 @@ def roll_video(path, label, netG, n_classes, z_dim=64, lf=4, device='cpu', ratio
             #print(noise[0][0])
             img = netG(noise, lbl, Training=False, ratio=ratio).cuda()
             img = torch.multiply(img, 255).cpu().detach().numpy()
-            print(img.shape)
             for i in range(num_img):
                 if step_size < 1:
                     if i == 0:
                         # one z represents 32 pixels in the -1 dimension
-                        out = img[:, :, :, :img.shape[-1]-64]
+                        out = img[:, :, :, :img.shape[-1]-32]
                     else:
                         # currently only implemented for step_size 0.5
-                        out = img[:, :, :, 32:img.shape[-1]-32]
-                out = np.moveaxis(img, 1, -1)
+                        out = img[:, :, :, 16:img.shape[-1]-16]
+                else:
+                    out = img[:, :, :, :img.shape[-1]-32]
+                out = np.moveaxis(out, 1, -1)
                 if imgs.shape[0] == 0:
                     imgs = out
                 else:
                     imgs = np.vstack((imgs, out))
-            step += step_size
+                step += step_size
             # avoid step growing too large
             max_step = lf*ratio-2
             if max_len == lf*ratio:
@@ -337,16 +338,18 @@ def transit_video(label1, label2, n_classes, original_noise, netG, lf=4, ratio=2
                 if step_size < 1:
                     if i == 0:
                         # one z represents 32 pixels in the -1 dimension
-                        out = img[:, :, :, :img.shape[-1]-64]
+                        out = img[:, :, :, :img.shape[-1]-32]
                     else:
                         # currently only implemented for step_size 0.5
-                        out = img[:, :, :, 32:img.shape[-1]-32]
-                out = np.moveaxis(img, 1, -1)
+                        out = img[:, :, :, 16:img.shape[-1]-16]
+                else:
+                    out = img[:, :, :, :img.shape[-1]-32]
+                out = np.moveaxis(out, 1, -1)
                 if imgs.shape[0] == 0:
                     imgs = out
                 else:
                     imgs = np.vstack((imgs, out))
-            step += step_size
+                step += step_size
             if transit_mode == 'uniform':
                 lbl = uniform_transit(label1, label2, lbl, l_step_size)
             # avoid step growing too large
