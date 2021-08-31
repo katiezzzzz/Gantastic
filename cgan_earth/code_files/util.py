@@ -234,7 +234,7 @@ def roll_video(path, label, netG, n_classes, z_dim=64, lf=4, device='cpu', ratio
         max_len = lf*ratio+1
     # try to generate rectangular, instead of square images
     random = torch.randn(1, z_dim, lf, lf*ratio-2, device=device)
-    random[0][0] = torch.arange(lf*(lf*ratio-2)).view(lf, lf*ratio-2)
+    #random[0][0] = torch.arange(lf*(lf*ratio-2)).view(lf, lf*ratio-2)
     if original_noise == None:
         original_noise = torch.zeros((1, z_dim, lf, max_len)).to(device)
         if step_size >= 1:
@@ -256,11 +256,12 @@ def roll_video(path, label, netG, n_classes, z_dim=64, lf=4, device='cpu', ratio
         num_img = 1
     else:
         num_img = int(1/step_size)
-    for _ in range(n_clips):
+    for _ in tqdm(range(n_clips)):
         with torch.no_grad():
-            print(noise[0][0])
+            #print(noise[0][0])
             img = netG(noise, lbl, Training=False, ratio=ratio).cuda()
             img = torch.multiply(img, 255).cpu().detach().numpy()
+            print(img.shape)
             for i in range(num_img):
                 if step_size < 1:
                     if i == 0:
@@ -355,11 +356,10 @@ def transit_video(label1, label2, n_classes, original_noise, netG, lf=4, ratio=2
             elif transit_mode == 'circular':
                 lbl, l_step, z_step, l_done_step, z_done_step = circular_transit(label1, label2, lbl,
                 z_step_size, l_step_size, lf, ratio, max_len, l_step, z_step, l_done_step, z_done_step)
+            max_step = lf*ratio-2
             if max_len == lf*ratio:
-                max_step = lf*ratio-2
                 IntStep = True
             else:
-                max_step = lf*ratio-3
                 IntStep = False
             if step > max_step:
                 step -= max_step
