@@ -283,7 +283,7 @@ def roll_video(path, label, netG, n_classes, z_dim=64, lf=4, device='cpu', ratio
                 IntStep = False
             if step > max_step:
                 step -= max_step
-            img = roll_pixels(img, int(step*32), int(max_step*32))
+            img = roll_pixels(img, int(step_size*32), int(max_step*32), IntStep)
             noise = roll_noise(original_noise, step, max_step, IntStep)
     return imgs, noise, netG
 
