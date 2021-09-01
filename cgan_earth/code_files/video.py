@@ -1,6 +1,18 @@
 import numpy as np
 import torch
 
+def roll_pixels(original_img, n_pixels, max_pixels, IntStep=True):
+    if IntStep == True:
+        repeat_idx = 2
+    else:
+        repeat_idx = 3
+
+    if n_pixels < max_pixels:
+        out_img = torch.cat((original_img[:, :, :, n_pixels:], original_img[:, :, :, repeat_idx*32:repeat_idx*32+n_pixels]), -1)
+    else:
+        out_img = original_img
+    return out_img
+
 def roll_noise(original_noise, step, max_step, IntStep=True):
     '''
     roll noise from left to right with specified step size
@@ -16,7 +28,7 @@ def roll_noise(original_noise, step, max_step, IntStep=True):
         repeat_idx = 2
     else:
         repeat_idx = 3
-    # get rid of linear interpolation
+
     if int_step < max_step:
         out_noise = torch.cat((original_noise[:, :, :, int_step:], original_noise[:, :, :, repeat_idx:repeat_idx+int_step]), -1)
     else:
