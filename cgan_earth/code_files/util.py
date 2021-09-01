@@ -257,34 +257,33 @@ def roll_video(path, label, netG, n_classes, z_dim=64, lf=4, device='cpu', ratio
     else:
         num_img = int(1/step_size)
 
-    with torch.no_grad():
-        #print(noise[0][0])
-        img = netG(noise, lbl, Training=False, ratio=ratio).cuda()
-        img = torch.multiply(img, 255).cpu().detach().numpy()
-        
     for _ in tqdm(range(n_clips)):
-        for i in range(num_img):
-            if step_size < 1:
-                # one z represents 32 pixels in the -1 dimension
-                step_idx = int(i * step_size * 32)
-                out = img[:, :, :, step_idx:img.shape[-1]-(32-step_idx)]
+        with torch.no_grad():
+            #print(noise[0][0])
+            img = netG(noise, lbl, Training=False, ratio=ratio).cuda()
+            img = torch.multiply(img, 255).cpu().detach().numpy()
+            for i in range(num_img):
+                if step_size < 1:
+                    # one z represents 32 pixels in the -1 dimension
+                    step_idx = int(i * step_size * 32)
+                    out = img[:, :, :, step_idx:img.shape[-1]-(32-step_idx)]
+                else:
+                    out = img[:, :, :, :img.shape[-1]-32]
+                out = np.moveaxis(out, 1, -1)
+                if imgs.shape[0] == 0:
+                    imgs = out
+                else:
+                    imgs = np.vstack((imgs, out))
+                step += step_size
+                # avoid step growing too large
+            max_step = lf*ratio-2
+            if max_len == lf*ratio:
+                IntStep = True
             else:
-                out = img[:, :, :, :img.shape[-1]-32]
-            out = np.moveaxis(out, 1, -1)
-            if imgs.shape[0] == 0:
-                imgs = out
-            else:
-                imgs = np.vstack((imgs, out))
-            step += step_size
-        max_step = lf*ratio-2
-        if max_len == lf*ratio:
-            IntStep = True
-        else:
-            IntStep = False
-        if step > max_step:
-            step -= max_step
-        img = roll_pixels(img, step*32, max_step*32, IntStep)
-        noise = roll_noise(original_noise, step, max_step, IntStep)
+                IntStep = False
+            if step > max_step:
+                step -= max_step
+            noise = roll_noise(original_noise, step, max_step, IntStep)
     return imgs, noise, netG
 
 def transit_video(label1, label2, n_classes, original_noise, netG, lf=4, ratio=2, device='cpu', step_size=1, z_step_size=1, l_step_size=0.1, transit_mode='uniform'):
