@@ -257,11 +257,11 @@ def roll_video(path, label, netG, n_classes, z_dim=64, lf=4, device='cpu', ratio
     else:
         num_img = int(1/step_size)
 
-    for _ in tqdm(range(n_clips)):
-        with torch.no_grad():
-            #print(noise[0][0])
-            img = netG(noise, lbl, Training=False, ratio=ratio).cuda()
-            img = torch.multiply(img, 255).cpu().detach().numpy()
+    with torch.no_grad():
+        #print(noise[0][0])
+        img = netG(noise, lbl, Training=False, ratio=ratio).cuda()
+        img = torch.multiply(img, 255).cpu().detach().numpy()
+        for _ in tqdm(range(n_clips)):
             for i in range(num_img):
                 if step_size < 1:
                     # one z represents 32 pixels in the -1 dimension
@@ -283,6 +283,7 @@ def roll_video(path, label, netG, n_classes, z_dim=64, lf=4, device='cpu', ratio
                 IntStep = False
             if step > max_step:
                 step -= max_step
+            img = roll_pixels(img, int(step*32), int(max_step*32))
             noise = roll_noise(original_noise, step, max_step, IntStep)
     return imgs, noise, netG
 

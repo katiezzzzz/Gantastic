@@ -1,14 +1,9 @@
 import numpy as np
 import torch
 
-def roll_pixels(original_img, n_pixels, max_pixels, IntStep=True):
-    if IntStep == True:
-        repeat_idx = 2
-    else:
-        repeat_idx = 3
-
+def roll_pixels(original_img, n_pixels, max_pixels):
     if n_pixels < max_pixels:
-        out_img = torch.cat((original_img[:, :, :, n_pixels:], original_img[:, :, :, repeat_idx*32:repeat_idx*32+n_pixels]), -1)
+        out_img = np.concatenate((original_img[:, :, :, max_pixels-n_pixels:], original_img[:, :, :, :max_pixels-n_pixels]), -1)
     else:
         out_img = original_img
     return out_img
