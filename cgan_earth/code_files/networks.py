@@ -53,7 +53,7 @@ def cgan_earth_nets(path, Training, g_dim, d_dim):
                 stride: the stride of the convolution
             '''
             return nn.Sequential(
-                nn.Conv2d(input_channels, output_channels, kernel_size, stride, padding),
+                nn.ConvTranspose2d(input_channels, output_channels, kernel_size, stride, padding),
                 nn.BatchNorm2d(output_channels),
                 nn.ReLU(inplace=True)
             )
@@ -67,14 +67,15 @@ def cgan_earth_nets(path, Training, g_dim, d_dim):
             '''
             x = torch.cat((noise.float(), labels.float()), 1)
             for layer in self.gen:
-                x = F.interpolate(x, size = (int(x.shape[-2]*3.6), int(x.shape[-1]*3.6)))
                 x = layer(x)
             # upsample to give output spatial size (img_length, img_length)
+            '''
             if Training:
-                up = F.interpolate(x, size = (x.shape[-2]+9, x.shape[-1]+9))
+                up = F.interpolate(x, size = (self.img_length+2, self.img_length+2))
             else:
-                up = x
-            return torch.sigmoid(self.final_conv(up))
+                up = F.interpolate(x, size = (x.shape[-2], x.shape[-1]))
+            '''
+            return torch.sigmoid(self.final_conv(x))
 
 
     class Critic(nn.Module):
@@ -128,6 +129,7 @@ def cgan_earth_nets(path, Training, g_dim, d_dim):
             x = torch.cat((image.float(), labels.float()), 1)
             for layer in self.crit:
                 x = layer(x)
+                print(x.shape)
             return x.view(len(x), -1)
 
     return Generator, Critic
