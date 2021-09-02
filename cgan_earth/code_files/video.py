@@ -32,6 +32,17 @@ def roll_noise(original_noise, step, max_step, IntStep=True):
         out_noise = original_noise
     return out_noise
 
+def replace_noise(original_noise, z_dim, lf, ratio, device):
+    new_noise = torch.zeros_like(original_noise)
+    # keep z0, z1
+    new_noise[:, :, :, :2] = original_noise[:, :, :, :2]
+    new_noise[:, :, :, -3:-1] = original_noise [:, :, :, -3:-1]
+    # slot in new random noise
+    new_noise[:, :, :, 2:-3] = torch.randn(1, z_dim, lf, lf*ratio-4, device=device)
+    # repeat z2
+    new_noise[:, :, :, -1] = new_noise[:, :, :, 2]
+    return new_noise
+
 def uniform_transit(label1_channel, label2_channel, cur_label, l_step_size):
     '''
     Compute uniform transition form one label to the other

@@ -201,7 +201,7 @@ def test(path, labels, netG, n_classes, z_dim=64, lf=4, device='cpu', ratio=2):
         tifs.append(tif)
     return tifs, netG
 
-def roll_video(path, label, netG, n_classes, z_dim=64, lf=4, device='cpu', ratio=2, n_clips=30, step_size=1, original_noise=None):
+def roll_video(path, label, netG, n_classes, z_dim=64, lf=4, device='cpu', ratio=2, n_clips=30, step_size=1, original_noise=None, replace=False):
     '''
     Given an integer label, generate an array of images that roll through z and can be used to make a video
     Params:
@@ -244,7 +244,9 @@ def roll_video(path, label, netG, n_classes, z_dim=64, lf=4, device='cpu', ratio
             original_noise = add_noise_dim(random, original_noise, 3)
     else:
         max_len = original_noise.shape[-1]
-
+    if replace == True:
+        original_noise = replace_noise(original_noise, z_dim, lf, ratio, device)
+        
     netG.eval()
     test_label = gen_labels(label, n_classes)[:, :, None, None]
     imgs = np.array([])
