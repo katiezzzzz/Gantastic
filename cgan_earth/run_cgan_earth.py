@@ -3,7 +3,7 @@ import numpy as np
 import os
 
 PATH = os.path.dirname(os.path.realpath(__file__))
-Project_name = 'earth_cylinder_r'
+Project_name = 'earth_cylinder'
 Project_dir = PATH + '/trained_generators/'
 wandb_name = Project_name
 
