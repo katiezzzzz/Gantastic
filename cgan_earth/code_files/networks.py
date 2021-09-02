@@ -75,17 +75,14 @@ def cgan_earth_nets(path, Training, g_dim, d_dim):
             x = torch.cat((noise.float(), labels.float()), 1)
             for n, layer in enumerate(self.gen):
                 if n == 1 or n == 3:
-                    x = F.interpolate(x, size = (int(x.shape[-2]*3), int(x.shape[-1]*3)))
+                    x = F.interpolate(x, size = (int(x.shape[-2]*3.6), int(x.shape[-1]*3.6)))
                 x = layer(x)
-                print(x.shape)
             # upsample to give output spatial size (img_length, img_length)
-            '''
             if Training:
-                up = F.interpolate(x, size = (self.img_length+2, self.img_length+2))
+                up = F.interpolate(x, size = (x.shape[-2]+2, x.shape[-1]+2))
             else:
-                up = F.interpolate(x, size = (x.shape[-2], x.shape[-1]))
-            '''
-            return torch.sigmoid(self.final_conv(x))
+                up = x
+            return torch.sigmoid(self.final_conv(up))
 
 
     class Critic(nn.Module):
