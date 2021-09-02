@@ -96,8 +96,18 @@ for i in range(15):
                                                                         l_done_step, z_done_step)
 
 
-layer = ['a', 'b', 'c']
-for n,layer in enumerate(layer):
-    print(n)
-    print(layer)
-
+a = torch.randn((1, 3, 6, 13))
+print(a)
+#a[:, :, torch.randint(a.shape[-2], (int(a.shape[-2]/2),))][torch.randint(a.shape[-1], (int(a.shape[-1]/2),))] = 0 
+b = torch.zeros_like(a)
+for idx0 in range(a.shape[0]):
+    for idx1 in range(a.shape[1]):
+        old = a[idx0][idx1].clone().flatten()
+        old[torch.randint(len(old), (int(len(old)/2),))] = 0
+        b[idx0][idx1] = old.reshape(a.shape[-2], a.shape[-1])
+boolean = torch.eq(a, b)
+print(b)
+print(b[boolean])
+print(b[~boolean])
+b[boolean] = 0
+print(b)
