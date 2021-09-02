@@ -36,13 +36,13 @@ def cgan_earth_nets(path, Training, g_dim, d_dim):
             # Build the neural network
             self.gen = nn.Sequential(
                 self.make_gen_block(g_dim, hidden_dim * 8),
-                self.make_gen_block(hidden_dim * 8, hidden_dim * 8, Trans=False),
                 self.make_gen_block(hidden_dim * 8, hidden_dim * 8),
-                self.make_gen_block(hidden_dim * 8, hidden_dim * 8, Trans=False),
+                self.make_gen_block(hidden_dim * 8, hidden_dim * 8),
+                self.make_gen_block(hidden_dim * 8, hidden_dim * 8),
                 self.make_gen_block(hidden_dim * 8, hidden_dim * 8)
             )
 
-        def make_gen_block(self, input_channels, output_channels, kernel_size=4, stride=2, padding=2, Trans=True):
+        def make_gen_block(self, input_channels, output_channels, kernel_size=4, stride=2, padding=2):
             '''
             Function to return a sequence of operations corresponding to a generator block of DCGAN;
             a transposed convolution, a batchnorm (except in the final layer), and an activation.
@@ -52,18 +52,11 @@ def cgan_earth_nets(path, Training, g_dim, d_dim):
                 kernel_size: the size of each convolutional filter, equivalent to (kernel_size, kernel_size)
                 stride: the stride of the convolution
             '''
-            if Trans:
-                return nn.Sequential(
-                    nn.ConvTranspose2d(input_channels, output_channels, kernel_size, stride, padding),
-                    nn.BatchNorm2d(output_channels),
-                    nn.ReLU(inplace=True)
-                )
-            else:
-                return nn.Sequential(
-                    nn.Conv2d(input_channels, output_channels, kernel_size, stride, padding),
-                    nn.BatchNorm2d(output_channels),
-                    nn.ReLU(inplace=True)
-                )
+            return nn.Sequential(
+                nn.ConvTranspose2d(input_channels, output_channels, kernel_size, stride, padding),
+                nn.BatchNorm2d(output_channels),
+                nn.ReLU(inplace=True)
+            )
 
         def forward(self, noise, labels, Training=True, ratio=2):
             '''
@@ -73,16 +66,10 @@ def cgan_earth_nets(path, Training, g_dim, d_dim):
                 noise: a noise tensor with dimensions (n_samples, z_dim)
             '''
             x = torch.cat((noise.float(), labels.float()), 1)
-            for n, layer in enumerate(self.gen):
-                if n == 1 or n == 3:
-                    x = F.interpolate(x, size = (int(x.shape[-2]*3.6), int(x.shape[-1]*3.6)))
+            for layer in self.gen:
                 x = layer(x)
             # upsample to give output spatial size (img_length, img_length)
-            if Training:
-                up = F.interpolate(x, size = (x.shape[-2]+2, x.shape[-1]+2))
-            else:
-                up = x
-            return torch.sigmoid(self.final_conv(up))
+            return torch.sigmoid(self.final_conv(x))
 
 
     class Critic(nn.Module):
@@ -135,7 +122,10 @@ def cgan_earth_nets(path, Training, g_dim, d_dim):
             '''
             x = torch.cat((image.float(), labels.float()), 1)
             for layer in self.crit:
+                print(x.shape)
                 x = layer(x)
+            print(x.shape)
+            print('all convs done')
             return x.view(len(x), -1)
 
     return Generator, Critic
