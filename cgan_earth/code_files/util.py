@@ -174,7 +174,7 @@ def test(path, labels, netG, n_classes, z_dim=64, lf=4, device='cpu', ratio=2):
         netG.load_state_dict(torch.load(path + '_Gen.pt'))
     
     netG.to(device)
-    names = ['forest', 'city', 'desert', 'sea', 'snow']
+    names = ['forest', 'city', 'desert', 'sea', 'snow', 'star']
     tifs, raws = [], []
     # try to generate rectangular, instead of square images
     random = torch.randn(1, z_dim, lf, lf*ratio-2, device=device)

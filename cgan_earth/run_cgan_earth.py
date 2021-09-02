@@ -11,7 +11,7 @@ wandb_name = Project_name
 data_path = []
 labels = []
 
-for img_path, label in zip(['forest1', 'city1', 'desert1', 'sea1', 'snow1'], [0, 1, 2, 3, 4]):
+for img_path, label in zip(['forest1', 'city1', 'desert1', 'sea1', 'snow1', 'star1'], [0, 1, 2, 3, 4, 5]):
     file = PATH + '/earth_screenshots/{}.jpg'.format(img_path)
     data_path.append(file) # path to training data
     labels.append(label)
@@ -23,8 +23,8 @@ ngpu = 1
 z_dim = 64
 lr = 0.0001
 Training = 1
-n_classes = 5
-batch_size = 10
+n_classes = 6
+batch_size = 12
 im_channels = 3
 num_epochs = 600
 img_length = 128 # size of training image
@@ -39,6 +39,6 @@ if Training:
     train(proj_path, netG, netD, imgs, labels, img_length, n_classes, num_epochs, z_dim, 
           batch_size, lr, device, wandb_name)
 else:
-    labels = [0, 1, 2, 3, 4]
+    labels = [0, 1, 2, 3, 4, 5]
     test(proj_path, labels, netG(z_dim+n_classes, img_length), n_classes, z_dim, lf=10, device=device, ratio=2)
     
