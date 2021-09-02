@@ -122,10 +122,7 @@ def cgan_earth_nets(path, Training, g_dim, d_dim):
             '''
             x = torch.cat((image.float(), labels.float()), 1)
             for layer in self.crit:
-                print(x.shape)
                 x = layer(x)
-            print(x.shape)
-            print('all convs done')
             return x.view(len(x), -1)
 
     return Generator, Critic

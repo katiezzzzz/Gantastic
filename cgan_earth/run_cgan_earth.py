@@ -3,7 +3,7 @@ import numpy as np
 import os
 
 PATH = os.path.dirname(os.path.realpath(__file__))
-Project_name = 'earth_cylinder'
+Project_name = 'earth_cylinder_t'
 Project_dir = PATH + '/trained_generators/'
 wandb_name = Project_name
 
@@ -11,7 +11,7 @@ wandb_name = Project_name
 data_path = []
 labels = []
 
-for img_path, label in zip(['forest1', 'city1', 'desert1', 'sea1', 'snow1', 'star1'], [0, 1, 2, 3, 4, 5]):
+for img_path, label in zip(['forest1'], [0]):
     file = PATH + '/earth_screenshots/{}.jpg'.format(img_path)
     data_path.append(file) # path to training data
     labels.append(label)
@@ -23,8 +23,8 @@ ngpu = 1
 z_dim = 64
 lr = 0.0001
 Training = 1
-n_classes = 6
-batch_size = 12
+n_classes = 1
+batch_size = 2
 im_channels = 3
 num_epochs = 600
 img_length = 128 # size of training image
