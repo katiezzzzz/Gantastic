@@ -83,7 +83,7 @@ def scroll_transit(label1_channel, label2_channel, cur_label, z_step_size, l_ste
             z_done_step += int(z_len*z_step_size)
     return new_label, l_step, z_step, l_done_step, z_done_step
 
-def make_circle(max_len, radius, ratio):
+def make_circle(max_len, radius, lf):
     '''
     Create a single circle around the image centre
     Parameters:
@@ -93,9 +93,8 @@ def make_circle(max_len, radius, ratio):
     Return:
         mask: an array of dimension (max_len/ratio, max_len) filled with boolean
     '''
-    height = max_len / ratio
-    Y, X = np.ogrid[:height, :max_len]
-    dist_from_center = np.sqrt((X - (max_len//2))**2 + (Y-(height//2))**2)
+    Y, X = np.ogrid[:lf, :max_len]
+    dist_from_center = np.sqrt((X - (max_len//2))**2 + (Y-(lf//2))**2)
     if radius != None:
         mask = dist_from_center < max_len*radius
     else:
@@ -119,13 +118,13 @@ def circular_transit(label1_channel, label2_channel, cur_label, z_step_size, l_s
         if step_radius > 0.5:
             step_radius = None
         if l_step < l_stop_step:
-            mask = make_circle(max_len, step_radius, ratio)
+            mask = make_circle(max_len, step_radius, lf)
             l_step += 1
             z_step += z_step_radius
         elif l_step == l_stop_step and z_step < 0.5:
             # prevent label from getting larger than 1
-            mask_s = make_circle(max_len, l_done_radius, ratio)
-            mask_b = make_circle(max_len, step_radius, ratio)
+            mask_s = make_circle(max_len, l_done_radius, lf)
+            mask_b = make_circle(max_len, step_radius, lf)
             mask = np.invert(np.invert(mask_b) + mask_s)
             l_done_step += z_step_radius
             z_step += z_step_radius
@@ -133,8 +132,8 @@ def circular_transit(label1_channel, label2_channel, cur_label, z_step_size, l_s
             if l_done_radius != 0:
                 z_done_radius = l_done_radius
                 l_done_step += z_step_radius
-            mask_s = make_circle(max_len, z_done_radius, ratio)
-            mask_b = make_circle(max_len, step_radius, ratio)
+            mask_s = make_circle(max_len, z_done_radius, lf)
+            mask_b = make_circle(max_len, step_radius, lf)
             mask = np.invert(np.invert(mask_b) + mask_s)
             z_done_step += z_step_radius 
         new_label[:, label1_channel, :, :][mask] = torch.sub(new_label[:, label1_channel, :, :][mask], l_step_size)

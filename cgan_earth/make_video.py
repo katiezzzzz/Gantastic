@@ -36,11 +36,11 @@ ratio = 2
 
 # test1: forest, then transit to sea, then roll in sea
 # the speed currently must start with the lowest possible speed to make sure the noise has right dimension
-imgs1, noise, netG = roll_video(proj_path, forest_lbl, netG(z_dim+n_classes, img_length), n_classes, z_dim, lf=lf, device=device, ratio=ratio, n_clips=24*3, step_size=1)
-imgs2, noise, netG = transit_video(forest_lbl, sea_lbl, n_classes, noise, netG, lf=lf, ratio=ratio, device=device, step_size=0.5, z_step_size=0.1, l_step_size=0.1, transit_mode='scroll')
-imgs3, noise, netG = roll_video(proj_path, sea_lbl, netG, n_classes, z_dim, lf=lf, device=device, ratio=ratio, n_clips=24*3, step_size=2, original_noise=noise)
+imgs1, noise, netG = roll_video(proj_path, snow_lbl, netG(z_dim+n_classes, img_length), n_classes, z_dim, lf=lf, device=device, ratio=ratio, n_clips=24*3, step_size=0.5)
+imgs2, noise, netG = transit_video(snow_lbl, city_lbl, n_classes, noise, netG, lf=lf, ratio=ratio, device=device, step_size=0.25, z_step_size=0.1, l_step_size=0.1, transit_mode='uniform')
+imgs3, noise, netG = roll_video(proj_path, city_lbl, netG, n_classes, z_dim, lf=lf, device=device, ratio=ratio, n_clips=24*3, step_size=0.5, original_noise=noise)
 
 # concatenante the imgs together and make video
 imgs = np.vstack((imgs1, imgs2))
 imgs = np.vstack((imgs, imgs3))
-animate(proj_path, imgs, fps=20)
+animate(proj_path, imgs, fps=24)
