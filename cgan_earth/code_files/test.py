@@ -95,5 +95,9 @@ for i in range(15):
     new_label, l_step, z_step, l_done_step, z_done_step = circular_transit(0, 1, new_label, 0.3, 0.5, 4, 2, l_step, z_step,
                                                                         l_done_step, z_done_step)
 
-    print(new_label)
+
+layer = ['a', 'b', 'c']
+for n,layer in enumerate(layer):
+    print(n)
+    print(layer)
 
