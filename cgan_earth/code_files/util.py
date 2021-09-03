@@ -372,7 +372,10 @@ def change_noise(label, original_noise, netG, n_classes, z_dim=64, lf=4, device=
 
     lbl = test_label.repeat(1, 1, lf, max_len).to(device)
     imgs = np.array([])
-    noise = original_noise
+    if method == 'combined':
+        noise, bool_tensor = vary_noise(original_noise, value/3, ratio=0.5)
+    else:
+        noise = original_noise
     step = 0.0
     if step_size >= 1:
         num_img = 1
@@ -412,7 +415,7 @@ def change_noise(label, original_noise, netG, n_classes, z_dim=64, lf=4, device=
             elif method == 'sub':
                 noise = torch.add(noise, value)
             elif method == 'combined':
-                noise = vary_noise(noise, value/2, ratio=0.5)
+                noise, bool_tensor = vary_noise(noise, value/2, ratio=0.5, boolean=bool_tensor)
     return imgs, noise, netG
 
 def animate(path, imgs, fps=24):

@@ -40,16 +40,20 @@ def replace_noise(original_noise, z_dim, lf, ratio, device):
     new_noise[:, :, :, -1] = torch.randn(1, z_dim, lf, device=device)
     return new_noise
 
-def vary_noise(original_noise, value, ratio):
+def vary_noise(original_noise, value, ratio, boolean=None):
     new_noise = torch.zeros_like(original_noise)
-    for idx0 in range(original_noise.shape[0]):
-        for idx1 in range(original_noise.shape[1]):
-            old = original_noise[idx0][idx1].clone().flatten()
-            old[torch.randint(len(old), (int(len(old)*ratio),))] = torch.add(old[torch.randint(len(old), (int(len(old)*ratio),))], value)
-            new_noise[idx0][idx1] = old.reshape(original_noise.shape[-2], original_noise.shape[-1])
-    boolean = torch.eq(original_noise, new_noise)
-    new_noise[boolean] = torch.sub(new_noise[boolean], value)
-    return new_noise
+    if boolean == None:
+        for idx0 in range(original_noise.shape[0]):
+            for idx1 in range(original_noise.shape[1]):
+                old = original_noise[idx0][idx1].clone().flatten()
+                old[torch.randint(len(old), (int(len(old)*ratio),))] = torch.add(old[torch.randint(len(old), (int(len(old)*ratio),))], value)
+                new_noise[idx0][idx1] = old.reshape(original_noise.shape[-2], original_noise.shape[-1])
+        boolean = torch.eq(original_noise, new_noise)
+        new_noise[boolean] = torch.sub(new_noise[boolean], value)
+    else:
+        new_noise[~boolean] = torch.add(original_noise[~boolean], value)
+        new_noise[boolean] = torch.sub(original_noise[boolean], value)
+    return new_noise, boolean
 
 def uniform_transit(label1_channel, label2_channel, cur_label, l_step_size):
     '''
