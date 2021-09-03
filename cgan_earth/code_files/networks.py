@@ -69,6 +69,7 @@ def cgan_earth_nets(path, Training, g_dim, d_dim):
             for layer in self.gen:
                 x = layer(x)
             # upsample to give output spatial size (img_length, img_length)
+            print(torch.sigmoid(self.final_conv(x)).shape)
             return torch.sigmoid(self.final_conv(x))
 
 
