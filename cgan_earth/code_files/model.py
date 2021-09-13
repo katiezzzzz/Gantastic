@@ -1,10 +1,12 @@
 from code_files.util import *
+from torch import nn
 import numpy as np
 import torch
 import time
 
 def train(pth, gen, disc, imgs, labels, img_length, n_classes, num_epochs, z_dim, batch_size, lr, device, wandb_name):
 
+    rt = 1
     lz = 6
     beta1 = 0.5
     beta2 = 0.999
@@ -17,8 +19,14 @@ def train(pth, gen, disc, imgs, labels, img_length, n_classes, num_epochs, z_dim
 
     netG = gen(z_dim+n_classes, img_length).to(device)
     netD = disc(n_channels+n_classes).to(device)
-    netG = netG.apply(param_init)
-    netD = netD.apply(param_init)
+
+    if rt:
+        netG.load_state_dict(torch.load('cgan_earth/trained_generators/earth_cylinder_r_3/earth_cylinder_r_3_Gen.pt'))
+        netD.load_state_dict(torch.load('cgan_earth/trained_generators/earth_cylinder_r_3/earth_cylinder_r_3_Disc.pt'))
+    else:
+        netG = netG.apply(param_init)
+        netD = netD.apply(param_init)
+
     optG = torch.optim.Adam(netG.parameters(), lr=lr, betas=(beta1, beta2))
     optD = torch.optim.Adam(netD.parameters(), lr=lr, betas=(beta1, beta2))
 
