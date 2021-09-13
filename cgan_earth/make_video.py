@@ -32,15 +32,17 @@ desert_lbl = [2]
 sea_lbl = [3]
 snow_lbl = [4]
 lf = 16
-ratio = 2
+ratio = 4
 
 # test1: forest, then transit to sea, then roll in sea
 # the speed currently must start with the lowest possible speed to make sure the noise has right dimension
-imgs1, noise, netG = roll_video(proj_path, snow_lbl, netG(z_dim+n_classes, img_length), n_classes, z_dim, lf=lf, device=device, ratio=ratio, n_clips=24*3, step_size=0.5)
-imgs2, noise, netG = transit_video(snow_lbl, city_lbl, n_classes, noise, netG, lf=lf, ratio=ratio, device=device, step_size=0.25, z_step_size=0.1, l_step_size=0.1, transit_mode='uniform')
-imgs3, noise, netG = roll_video(proj_path, city_lbl, netG, n_classes, z_dim, lf=lf, device=device, ratio=ratio, n_clips=24*3, step_size=0.5, original_noise=noise)
+imgs1, noise, netG = roll_video(proj_path, sea_lbl, netG(z_dim+n_classes, img_length), n_classes, z_dim, lf=lf, device=device, ratio=ratio, n_clips=5, step_size=0.25)
+imgs2, noise, netG = transit_video(sea_lbl, forest_lbl, n_classes, noise, netG, lf=lf, ratio=ratio, device=device, step_size=0.25, z_step_size=0.1, l_step_size=0.2, transit_mode='uniform')
+imgs3, noise, netG = roll_video(proj_path, forest_lbl, netG, n_classes, z_dim, lf=lf, device=device, ratio=ratio, n_clips=15, step_size=0.25, original_noise=noise)
+imgs4, noise, netG = change_noise(forest_lbl, noise, netG, n_classes, z_dim, lf=lf, device=device, ratio=ratio, n_clips=30, step_size=0.25, value=0.00001, method='combined')
 
 # concatenante the imgs together and make video
 imgs = np.vstack((imgs1, imgs2))
 imgs = np.vstack((imgs, imgs3))
+imgs = np.vstack((imgs, imgs4))
 animate(proj_path, imgs, fps=24)

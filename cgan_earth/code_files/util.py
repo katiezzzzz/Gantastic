@@ -244,7 +244,7 @@ def roll_video(path, label, netG, n_classes, z_dim=64, lf=4, device='cpu', ratio
             original_noise = add_noise_dim(random, original_noise, 3)
     else:
         max_len = original_noise.shape[-1]
-
+        
     netG.eval()
     test_label = gen_labels(label, n_classes)[:, :, None, None]
     imgs = np.array([])
@@ -335,12 +335,9 @@ def transit_video(label1, label2, n_classes, original_noise, netG, lf=4, ratio=2
             img = torch.multiply(img, 255).cpu().detach().numpy()
             for i in range(num_img):
                 if step_size < 1:
-                    if i == 0:
-                        # one z represents 32 pixels in the -1 dimension
-                        out = img[:, :, :, :img.shape[-1]-32]
-                    else:
-                        # currently only implemented for step_size 0.5
-                        out = img[:, :, :, 16:img.shape[-1]-16]
+                    # one z represents 32 pixels in the -1 dimension
+                    step_idx = int(i * step_size * 32)
+                    out = img[:, :, :, step_idx:img.shape[-1]-(32-step_idx)]
                 else:
                     out = img[:, :, :, :img.shape[-1]-32]
                 out = np.moveaxis(out, 1, -1)
@@ -366,6 +363,59 @@ def transit_video(label1, label2, n_classes, original_noise, netG, lf=4, ratio=2
             if step > max_step:
                 step -= max_step
             noise = roll_noise(original_noise, step, max_step, IntStep)
+    return imgs, noise, netG
+
+def change_noise(label, original_noise, netG, n_classes, z_dim=64, lf=4, device='cpu', ratio=2, n_clips=30, step_size=1, value=0.01, method='add'):
+    max_len = original_noise.shape[-1]
+
+    test_label = gen_labels(label, n_classes)[:, :, None, None]
+
+    lbl = test_label.repeat(1, 1, lf, max_len).to(device)
+    imgs = np.array([])
+    if method == 'combined':
+        noise, bool_tensor = vary_noise(original_noise, value/3, ratio=0.5)
+    else:
+        noise = original_noise
+    step = 0.0
+    if step_size >= 1:
+        num_img = 1
+    else:
+        num_img = int(1/step_size)
+    for _ in tqdm(range(n_clips)):
+        with torch.no_grad():
+            img = netG(noise, lbl, Training=False, ratio=ratio).cuda()
+            img = torch.multiply(img, 255).cpu().detach().numpy()
+            for i in range(num_img):
+                if step_size < 1:
+                    # one z represents 32 pixels in the -1 dimension
+                    step_idx = int(i * step_size * 32)
+                    out = img[:, :, :, step_idx:img.shape[-1]-(32-step_idx)]
+                else:
+                    out = img[:, :, :, :img.shape[-1]-32]
+                out = np.moveaxis(out, 1, -1)
+                if imgs.shape[0] == 0:
+                    imgs = out
+                else:
+                    imgs = np.vstack((imgs, out))
+                step += step_size
+            max_step = lf*ratio-2
+            if max_len == lf*ratio:
+                IntStep = True
+            else:
+                IntStep = False
+            if step_size < 1:
+                step_idx = 1
+            else:
+                step_idx = step_size
+            if step > max_step:
+                step -= max_step
+            noise = roll_noise(noise, step_idx, max_step, IntStep)
+            if method == 'add':
+                noise = torch.sub(noise, value)
+            elif method == 'sub':
+                noise = torch.add(noise, value)
+            elif method == 'combined':
+                noise, bool_tensor = vary_noise(noise, value/2, ratio=0.5, boolean=bool_tensor)
     return imgs, noise, netG
 
 def animate(path, imgs, fps=24):
