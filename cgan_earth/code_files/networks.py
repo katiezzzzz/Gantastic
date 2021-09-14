@@ -8,14 +8,14 @@ def cgan_earth_nets(path, Training, g_dim, d_dim):
 
     hidden_dim = 64
     if Training == True:
-        layers_g = [g_dim, hidden_dim*8, hidden_dim*8, hidden_dim*8, hidden_dim*8, hidden_dim*8, 3]
+        layers_g = [g_dim, hidden_dim*32, hidden_dim*16, hidden_dim*8, hidden_dim*8, hidden_dim*8, 3]
         kernel_g = [4, 4, 4, 4, 4, 3]
         stride_g = [2, 2, 2, 2, 2, 1]
         pad_g = [2, 2, 2, 2, 2, 0]
-        layers_d = [d_dim, hidden_dim*8, hidden_dim*8, hidden_dim*8, hidden_dim*8, hidden_dim*8, 1]
+        layers_d = [d_dim, hidden_dim*8, hidden_dim*8, hidden_dim*8, hidden_dim*16, hidden_dim*32, 1]
         kernel_d = [4, 4, 4, 4, 4, 4]
         stride_d = [2, 2, 2, 2, 2, 1]
-        pad_d = [2, 2, 2, 2, 1, 0]
+        pad_d = [1, 1, 1, 1, 1, 0]
         params = [layers_g, kernel_g, stride_g, pad_g, layers_d, kernel_d, stride_d, pad_d]
         with open(path + '_params.data', 'wb') as filehandle:
             # store the data as binary data stream
@@ -35,9 +35,9 @@ def cgan_earth_nets(path, Training, g_dim, d_dim):
             self.final_conv = nn.Conv2d(hidden_dim * 8, im_chan, 3, 1, 0)
             # Build the neural network
             self.gen = nn.Sequential(
-                self.make_gen_block(g_dim, hidden_dim * 8),
-                self.make_gen_block(hidden_dim * 8, hidden_dim * 8),
-                self.make_gen_block(hidden_dim * 8, hidden_dim * 8),
+                self.make_gen_block(g_dim, hidden_dim * 32),
+                self.make_gen_block(hidden_dim * 32, hidden_dim * 16),
+                self.make_gen_block(hidden_dim * 16, hidden_dim * 8),
                 self.make_gen_block(hidden_dim * 8, hidden_dim * 8),
                 self.make_gen_block(hidden_dim * 8, hidden_dim * 8)
             )
@@ -85,12 +85,12 @@ def cgan_earth_nets(path, Training, g_dim, d_dim):
                 self.make_crit_block(d_dim, hidden_dim * 8),
                 self.make_crit_block(hidden_dim * 8, hidden_dim * 8),
                 self.make_crit_block(hidden_dim * 8, hidden_dim * 8),
-                self.make_crit_block(hidden_dim * 8, hidden_dim * 8),
-                self.make_crit_block(hidden_dim * 8, hidden_dim * 8, padding=1),
-                self.make_crit_block(hidden_dim * 8, 1, stride=1, final_layer=True),
+                self.make_crit_block(hidden_dim * 8, hidden_dim * 16),
+                self.make_crit_block(hidden_dim * 16, hidden_dim * 32),
+                self.make_crit_block(hidden_dim * 32, 1, stride=1, final_layer=True),
             )
 
-        def make_crit_block(self, input_channels, output_channels, kernel_size=4, stride=2, padding=2, final_layer=False):
+        def make_crit_block(self, input_channels, output_channels, kernel_size=4, stride=2, padding=1, final_layer=False):
             '''
             Function to return a sequence of operations corresponding to a critic block of DCGAN;
             a convolution, a batchnorm (except in the final layer), and an activation (except in the final layer).

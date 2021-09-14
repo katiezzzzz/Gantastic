@@ -6,7 +6,7 @@ import time
 
 def train(pth, gen, disc, imgs, labels, img_length, n_classes, num_epochs, z_dim, batch_size, lr, device, wandb_name):
 
-    rt = 1
+    rt = 0
     lz = 6
     beta1 = 0.5
     beta2 = 0.999
