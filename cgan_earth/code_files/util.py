@@ -354,7 +354,7 @@ def transit_video(label1, label2, n_classes, original_noise, netG, lf=4, ratio=2
                 z_step_size, l_step_size, max_len, l_step, z_step, l_done_step, z_done_step)
             elif transit_mode == 'circular':
                 lbl, l_step, z_step, l_done_step, z_done_step = circular_transit(label1, label2, lbl,
-                z_step_size, l_step_size, lf, ratio, max_len, l_step, z_step, l_done_step, z_done_step)
+                z_step_size, l_step_size, lf, max_len, l_step, z_step, l_done_step, z_done_step)
             max_step = lf*ratio-2
             if max_len == lf*ratio:
                 IntStep = True
@@ -372,10 +372,7 @@ def change_noise(label, original_noise, netG, n_classes, z_dim=64, lf=4, device=
 
     lbl = test_label.repeat(1, 1, lf, max_len).to(device)
     imgs = np.array([])
-    if method == 'combined':
-        noise, bool_tensor = vary_noise(original_noise, value/3, ratio=0.5)
-    else:
-        noise = original_noise
+    noise = original_noise
     step = 0.0
     if step_size >= 1:
         num_img = 1
@@ -414,8 +411,6 @@ def change_noise(label, original_noise, netG, n_classes, z_dim=64, lf=4, device=
                 noise = torch.sub(noise, value)
             elif method == 'sub':
                 noise = torch.add(noise, value)
-            elif method == 'combined':
-                noise, bool_tensor = vary_noise(noise, value/2, ratio=0.5, boolean=bool_tensor)
     return imgs, noise, netG
 
 def animate(path, imgs, fps=24):

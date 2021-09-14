@@ -3,11 +3,11 @@ import numpy as np
 import os
 
 PATH = os.path.dirname(os.path.realpath(__file__))
-Project_name = 'earth_cylinder_r_1'
+Project_name = 'earth_cylinder_r_3'
 Project_dir = PATH + '/trained_generators/'
 wandb_name = Project_name
 
-labels = [0, 1, 2, 3, 4]
+labels = [0, 1, 2, 3, 4, 5]
 
 # define hyperparameters and architecture
 ngpu = 1
@@ -31,6 +31,7 @@ city_lbl = [1]
 desert_lbl = [2]
 sea_lbl = [3]
 snow_lbl = [4]
+star_lbl = [5]
 lf = 16
 ratio = 4
 
@@ -39,7 +40,7 @@ ratio = 4
 imgs1, noise, netG = roll_video(proj_path, sea_lbl, netG(z_dim+n_classes, img_length), n_classes, z_dim, lf=lf, device=device, ratio=ratio, n_clips=5, step_size=0.25)
 imgs2, noise, netG = transit_video(sea_lbl, forest_lbl, n_classes, noise, netG, lf=lf, ratio=ratio, device=device, step_size=0.25, z_step_size=0.1, l_step_size=0.2, transit_mode='uniform')
 imgs3, noise, netG = roll_video(proj_path, forest_lbl, netG, n_classes, z_dim, lf=lf, device=device, ratio=ratio, n_clips=15, step_size=0.25, original_noise=noise)
-imgs4, noise, netG = change_noise(forest_lbl, noise, netG, n_classes, z_dim, lf=lf, device=device, ratio=ratio, n_clips=30, step_size=0.25, value=0.00001, method='combined')
+imgs4, noise, netG = change_noise(forest_lbl, noise, netG, n_classes, z_dim, lf=lf, device=device, ratio=ratio, n_clips=30, step_size=0.25, value=0.00001, method='add')
 
 # concatenante the imgs together and make video
 imgs = np.vstack((imgs1, imgs2))
