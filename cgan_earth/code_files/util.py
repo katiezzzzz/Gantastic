@@ -317,7 +317,7 @@ def transit_video(label1, label2, n_classes, original_noise, netG, lf=4, ratio=2
     lbl = prev_label.repeat(1, 1, lf, max_len).to(device)
     if transit_mode == 'uniform':
         n_clips = int(1 // l_step_size)
-    elif transit_mode == 'scroll' or transit_mode == 'circular':
+    else:
         n_clips = int((1 // z_step_size) + (1 // l_step_size) + 2)
         l_step = 0
         z_step = 0
@@ -354,6 +354,9 @@ def transit_video(label1, label2, n_classes, original_noise, netG, lf=4, ratio=2
                 z_step_size, l_step_size, max_len, l_step, z_step, l_done_step, z_done_step)
             elif transit_mode == 'circular':
                 lbl, l_step, z_step, l_done_step, z_done_step = circular_transit(label1, label2, lbl,
+                z_step_size, l_step_size, lf, max_len, l_step, z_step, l_done_step, z_done_step)
+            elif transit_mode == 'circular_effects':
+                lbl, l_step, z_step, l_done_step, z_done_step = circular_effects(label1, label2, lbl,
                 z_step_size, l_step_size, lf, max_len, l_step, z_step, l_done_step, z_done_step)
             max_step = lf*ratio-2
             if max_len == lf*ratio:

@@ -146,14 +146,14 @@ def generate_centres(n_circles, img_width, img_len, radius):
         else:
             new_centre = np.array([np.random.randint(radius, img_width-radius, 1), np.random.randint(radius, img_len-radius, 1)])
             if centres.ndim == 1:
-                while check_centre_distance(centres, new_centre) == False:
+                while check_centre_distance(centres, new_centre, radius) == False:
                     new_centre = np.array([np.random.randint(radius, img_width-radius, 1), np.random.randint(radius, img_len-radius, 1)])
             else:
                 overlap = True
                 count = 0
                 while overlap == True:
                     for old_centre in centres:
-                        if check_centre_distance(old_centre, new_centre) == False:
+                        if check_centre_distance(old_centre, new_centre, radius) == False:
                             count += 1
                     if count > 0:
                         new_centre = np.array([np.random.randint(radius, img_width-radius, 1), np.random.randint(radius, img_len-radius, 1)])
@@ -213,7 +213,7 @@ def circular_transit(label1_channel, label2_channel, cur_label, z_step_size, l_s
     return new_label, l_step, z_step, l_done_step, z_done_step
 
 def circular_effects(label1_channel, label2_channel, cur_label, z_step_size, l_step_size, lf, max_len, l_step, z_step,
-                 l_done_step, z_done_step):
+                 l_done_step, z_done_step, n_circles=6):
     # make multiple circles
     if z_step_size > 1:
         z_step_size = 1
@@ -230,13 +230,13 @@ def circular_effects(label1_channel, label2_channel, cur_label, z_step_size, l_s
         if step_radius > 0.5:
             step_radius = None
         if l_step < l_stop_step:
-            mask = make_circle(max_len, step_radius, lf)
+            mask = make_multiple_circles(z_step_radius, lf, max_len, n_circles)
             l_step += 1
             z_step += z_step_radius
         elif l_step == l_stop_step and z_step < 0.5:
             # prevent label from getting larger than 1
-            mask_s = make_circle(max_len, l_done_radius, lf)
-            mask_b = make_circle(max_len, step_radius, lf)
+            mask_s = make_multiple_circles(l_done_radius, lf, max_len, n_circles)
+            mask_b = make_multiple_circles(step_radius, lf, max_len, n_circles)
             mask = np.invert(np.invert(mask_b) + mask_s)
             l_done_step += z_step_radius
             z_step += z_step_radius
@@ -244,8 +244,8 @@ def circular_effects(label1_channel, label2_channel, cur_label, z_step_size, l_s
             if l_done_radius != 0:
                 z_done_radius = l_done_radius
                 l_done_step += z_step_radius
-            mask_s = make_circle(max_len, z_done_radius, lf)
-            mask_b = make_circle(max_len, step_radius, lf)
+            mask_s = make_multiple_circles(z_done_radius, lf, max_len, n_circles)
+            mask_b = make_multiple_circles(step_radius, lf, max_len, n_circles)
             mask = np.invert(np.invert(mask_b) + mask_s)
             z_done_step += z_step_radius 
         new_label[:, label1_channel, :, :][mask] = torch.sub(new_label[:, label1_channel, :, :][mask], l_step_size)
