@@ -3,19 +3,19 @@ import numpy as np
 import os
 
 PATH = os.path.dirname(os.path.realpath(__file__))
-Project_name = 'earth_cylinder_r_3'
+Project_name = 'earth_cylinder_t_11'
 Project_dir = PATH + '/trained_generators/'
 wandb_name = Project_name
 
-labels = [0, 1, 2, 3, 4, 5]
+labels = [0, 1, 2, 3]
 
 # define hyperparameters and architecture
 ngpu = 1
 z_dim = 64
 lr = 0.0001
 Training = 0
-n_classes = 6
-batch_size = 12
+n_classes = 4
+batch_size = 8
 im_channels = 3
 num_epochs = 600
 img_length = 128 # size of training image
@@ -27,20 +27,19 @@ netG, netD = cgan_earth_nets(proj_path, Training, z_dim+n_classes, im_channels+n
 
 # animate
 forest_lbl = [0]
-city_lbl = [1]
-desert_lbl = [2]
-sea_lbl = [3]
-snow_lbl = [4]
-star_lbl = [5]
-lf = 16
-ratio = 4
+desert_lbl = [1]
+sea_lbl = [2]
+star_lbl = [3]
+lf = 20
+ratio = 2
 
 # test1: forest, then transit to sea, then roll in sea
 # the speed currently must start with the lowest possible speed to make sure the noise has right dimension
-imgs1, noise, netG = roll_video(proj_path, sea_lbl, netG(z_dim+n_classes, img_length), n_classes, z_dim, lf=lf, device=device, ratio=ratio, n_clips=5, step_size=0.25)
-imgs2, noise, netG = transit_video(sea_lbl, forest_lbl, n_classes, noise, netG, lf=lf, ratio=ratio, device=device, step_size=0.25, z_step_size=0.1, l_step_size=0.2, transit_mode='circular')
-imgs3, noise, netG = roll_video(proj_path, forest_lbl, netG, n_classes, z_dim, lf=lf, device=device, ratio=ratio, n_clips=15, step_size=0.25, original_noise=noise)
-imgs4, noise, netG = transit_video(forest_lbl, sea_lbl, n_classes, noise, netG, lf=lf, ratio=ratio, device=device, step_size=0.25, z_step_size=0.01, l_step_size=0.2, transit_mode='circular_effects')
+imgs1, noise, netG = roll_video(proj_path, desert_lbl, netG(z_dim+n_classes, img_length), n_classes, z_dim, lf=lf, device=device, ratio=ratio, n_clips=5, step_size=0.25)
+imgs2, noise, netG = transit_video(desert_lbl, star_lbl, n_classes, noise, netG, lf=lf, ratio=ratio, device=device, step_size=0.25, z_step_size=0.1, l_step_size=0.1, transit_mode='scroll')
+imgs3, noise, netG = roll_video(proj_path, star_lbl, netG, n_classes, z_dim, lf=lf, device=device, ratio=ratio, n_clips=2, step_size=0.25, original_noise=noise)
+imgs4, noise, netG = transit_video(desert_lbl, star_lbl, n_classes, noise, netG, lf=lf, ratio=ratio, device=device, step_size=0.25, z_step_size=0.1, l_step_size=0.1, transit_mode='circular_effects')
+#imgs4, noise, netG = change_noise(star_lbl, noise, netG, n_classes, z_dim, lf=lf, device=device, ratio=ratio, n_clips=15, step_size=0.25, value=0.003, method='add')
 
 # concatenante the imgs together and make video
 imgs = np.vstack((imgs1, imgs2))
