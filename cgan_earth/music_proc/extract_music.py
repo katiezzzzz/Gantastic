@@ -19,4 +19,4 @@ plt.plot(peak_indices[0], sample[peak_indices[0]], linestyle='', marker='x')
 plt.plot(sample)
 plt.show()
 
-np.savetxt('test_extract', peak_indices[0], delimiter=',')
+np.savetxt('test_extract', peak_indices[0]/48000, delimiter=',')
