@@ -6,13 +6,13 @@ import os
 
 PATH = os.path.dirname(os.path.realpath(__file__))
 # extract volume
-data, samplerate = sf.read(PATH+'/test.wav')
+data, samplerate = sf.read(PATH+'/midlight/midlight_s1.wav')
 print(data.shape)
 
 sample = data[:,0]
 mask = sample < 0.1
 sample[mask] = 0
-peak_indices = argrelextrema(sample,np.greater,order=500)
+peak_indices = argrelextrema(sample,np.greater,order=800)
 print(peak_indices[0])
 print(len(data[:,0]))
 plt.plot(peak_indices[0], sample[peak_indices[0]], linestyle='', marker='x')
