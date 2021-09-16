@@ -102,7 +102,7 @@ def make_circle(max_len, radius, lf, centre=None):
         mask: an array of dimension (max_len/ratio, max_len) filled with boolean
     '''
     Y, X = np.ogrid[:lf, :max_len]
-    if centre == None:
+    if np.any(centre) == None:
         dist_from_center = np.sqrt((X - (max_len//2))**2 + (Y - (lf//2))**2)
     else:
         dist_from_center = np.sqrt((X - centre[1])**2 + (Y - centre[0])**2)
@@ -142,12 +142,12 @@ def generate_centres(n_circles, img_width, img_len, radius):
     centres = np.array([])
     for n in range(n_circles):
         if len(centres) == 0:
-            centres = np.array([np.random.randint(radius, img_width-radius, 1), np.random.randint(radius, img_len-radius, 1)])
+            centres = np.array([np.random.randint(radius, img_width-radius, 1)[0], np.random.randint(radius, img_len-radius, 1)[0]])[None, :]
         else:
-            new_centre = np.array([np.random.randint(radius, img_width-radius, 1), np.random.randint(radius, img_len-radius, 1)])
+            new_centre = np.array([np.random.randint(radius, img_width-radius, 1)[0], np.random.randint(radius, img_len-radius, 1)[0]])
             if centres.ndim == 1:
                 while check_centre_distance(centres, new_centre, radius) == False:
-                    new_centre = np.array([np.random.randint(radius, img_width-radius, 1), np.random.randint(radius, img_len-radius, 1)])
+                    new_centre = np.array([np.random.randint(radius, img_width-radius, 1)[0], np.random.randint(radius, img_len-radius, 1)[0]])
             else:
                 overlap = True
                 count = 0
@@ -156,21 +156,20 @@ def generate_centres(n_circles, img_width, img_len, radius):
                         if check_centre_distance(old_centre, new_centre, radius) == False:
                             count += 1
                     if count > 0:
-                        new_centre = np.array([np.random.randint(radius, img_width-radius, 1), np.random.randint(radius, img_len-radius, 1)])
+                        new_centre = np.array([np.random.randint(radius, img_width-radius, 1)[0], np.random.randint(radius, img_len-radius, 1)[0]])
                         count = 0
                     else:
                         overlap = False
             centres = np.vstack((centres,new_centre))
     return centres
 
-def make_multiple_circles(radius, lf, max_len, n_circles):
-    centres = generate_centres(n_circles, lf, max_len, radius)
+def make_multiple_circles(radius, lf, max_len, centres):
     mask = np.array([])
     for centre in centres:
         if len(mask) == 0:
-            mask = make_circle(max_len, radius, lf, centre=centre)
+            mask = make_circle(max_len, radius/max_len, lf, centre=centre)
         else:
-            mask += make_circle(max_len, radius, lf, centre=centre)
+            mask += make_circle(max_len, radius/max_len, lf, centre=centre)
     return mask
 
 def circular_transit(label1_channel, label2_channel, cur_label, z_step_size, l_step_size, lf, max_len, l_step, z_step,
@@ -212,31 +211,39 @@ def circular_transit(label1_channel, label2_channel, cur_label, z_step_size, l_s
         new_label[:, label2_channel, :, :] = torch.sub(torch.ones_like(cur_label[:, label1_channel, :, :]), new_label[:, label1_channel, :, :])
     return new_label, l_step, z_step, l_done_step, z_done_step
 
-def circular_effects(label1_channel, label2_channel, cur_label, z_step_size, l_step_size, lf, max_len, l_step, z_step,
-                 l_done_step, z_done_step, n_circles=6):
+def circular_effects(label1_channel, label2_channel, cur_label, z_step_num, l_step_size, lf, max_len, l_step, z_step,
+                 l_done_step, z_done_step, z_max_num, centres):
+    # make sure the numbers are in the right range
+    if z_step_num < 2:
+        z_step_num = 2
+    if z_max_num < z_step_num + 2:
+        z_max_num = z_step_num + 2
+
     # make multiple circles
-    if z_step_size > 1:
-        z_step_size = 1
-    z_step_radius = z_step_size / 2
+    # first generate centres
+    z_step_radius = z_step_num // 2
+    z_max_radius = z_max_num // 2
+
     new_label = cur_label.float()
     step_radius = z_step + z_step_radius
     l_done_radius = l_done_step + z_step_radius
     z_done_radius = z_done_step + z_step_radius
     l_stop_step = 1 // l_step_size
-    if z_done_radius >= 0.5 or l_done_radius >= 0.5:
+    # the size of circles cannot be larger than z_max_radius
+    if z_done_radius >= z_max_radius or l_done_radius >= z_max_radius:
         new_label[:, label1_channel, :, :] = torch.ones_like(new_label[:, label1_channel, :, :])
         new_label[:, label2_channel, :, :] = torch.zeros_like(new_label[:, label2_channel, :, :])
     else:
-        if step_radius > 0.5:
-            step_radius = None
-        if l_step < l_stop_step:
-            mask = make_multiple_circles(z_step_radius, lf, max_len, n_circles)
+        if step_radius > z_max_radius:
+            step_radius = z_max_radius
+        if l_step <= l_stop_step:
+            mask = make_multiple_circles(step_radius, lf, max_len, centres)
             l_step += 1
             z_step += z_step_radius
-        elif l_step == l_stop_step and z_step < 0.5:
+        elif l_step == l_stop_step and z_step < z_max_radius:
             # prevent label from getting larger than 1
-            mask_s = make_multiple_circles(l_done_radius, lf, max_len, n_circles)
-            mask_b = make_multiple_circles(step_radius, lf, max_len, n_circles)
+            mask_s = make_multiple_circles(l_done_radius, lf, max_len, centres)
+            mask_b = make_multiple_circles(step_radius, lf, max_len, centres)
             mask = np.invert(np.invert(mask_b) + mask_s)
             l_done_step += z_step_radius
             z_step += z_step_radius
@@ -244,8 +251,8 @@ def circular_effects(label1_channel, label2_channel, cur_label, z_step_size, l_s
             if l_done_radius != 0:
                 z_done_radius = l_done_radius
                 l_done_step += z_step_radius
-            mask_s = make_multiple_circles(z_done_radius, lf, max_len, n_circles)
-            mask_b = make_multiple_circles(step_radius, lf, max_len, n_circles)
+            mask_s = make_multiple_circles(z_done_radius, lf, max_len, centres)
+            mask_b = make_multiple_circles(step_radius, lf, max_len, centres)
             mask = np.invert(np.invert(mask_b) + mask_s)
             z_done_step += z_step_radius 
         new_label[:, label1_channel, :, :][mask] = torch.sub(new_label[:, label1_channel, :, :][mask], l_step_size)

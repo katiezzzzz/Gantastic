@@ -355,9 +355,79 @@ def transit_video(label1, label2, n_classes, original_noise, netG, lf=4, ratio=2
             elif transit_mode == 'circular':
                 lbl, l_step, z_step, l_done_step, z_done_step = circular_transit(label1, label2, lbl,
                 z_step_size, l_step_size, lf, max_len, l_step, z_step, l_done_step, z_done_step)
-            elif transit_mode == 'circular_effects':
-                lbl, l_step, z_step, l_done_step, z_done_step = circular_effects(label1, label2, lbl,
-                z_step_size, l_step_size, lf, max_len, l_step, z_step, l_done_step, z_done_step)
+            max_step = lf*ratio-2
+            if max_len == lf*ratio:
+                IntStep = True
+            else:
+                IntStep = False
+            if step > max_step:
+                step -= max_step
+            noise = roll_noise(original_noise, step, max_step, IntStep)
+    return imgs, noise, netG
+
+def effects(label1, label2, n_classes, original_noise, netG, lf=4, ratio=2, device='cpu', step_size=1, z_step_num=3, l_step_size=0.1, z_max_num=5, effect='circles', n_circles=3):
+    '''
+    Given all the labels and positions of original and target labels in list of labels, generate an image array for video transition
+    Params:
+        label1: list containing an integer, original label
+        label2: list containing an integer, target label
+        n_classes: integer
+        original_noise: tensor of dimension (1, z_dim, lf, lf*ratio)
+        netG: trained generator class
+        lf: size of input seed
+        ratio: integer
+        device: string
+        step_size: integer with value between 1 and lf*ratio
+        z_step_num: integer between 1 and z_max_num
+        l_step_size: float between 0 and 1
+        z_max_num: integer between 2+z_step_num and lf
+        effect: type of effects, only 'circles' at the moment
+    Return:
+        imgs: image array that contains the transition, can be used to make a video
+        original_noise: tensor of dimension (1, z_dim, lf, lf*ratio)
+        netG: trained generator class
+    '''
+    max_width = original_noise.shape[-2]
+    max_len = original_noise.shape[-1]
+
+    imgs = np.array([])
+    noise = original_noise
+    step = 0
+    prev_label = gen_labels(label1, n_classes)[:, :, None, None]
+    lbl = prev_label.repeat(1, 1, lf, max_len).to(device)
+    if effect == 'circles':
+        n_clips = int((max_len // z_step_num) + (1 // l_step_size) + 2)
+        l_step = 0
+        z_step = 0
+        l_done_step = 0
+        z_done_step = 0
+        centres = generate_centres(n_circles, max_width, max_len, z_max_num//2)
+    label1 = label1[0]
+    label2 = label2[0]
+    if step_size >= 1:
+        num_img = 1
+    else:
+        num_img = int(1/step_size)
+    for _ in tqdm(range(n_clips)):
+        with torch.no_grad():
+            img = netG(noise, lbl, Training=False, ratio=ratio).cuda()
+            img = torch.multiply(img, 255).cpu().detach().numpy()
+            for i in range(num_img):
+                if step_size < 1:
+                    # one z represents 32 pixels in the -1 dimension
+                    step_idx = int(i * step_size * 32)
+                    out = img[:, :, :, step_idx:img.shape[-1]-(32-step_idx)]
+                else:
+                    out = img[:, :, :, :img.shape[-1]-32]
+                out = np.moveaxis(out, 1, -1)
+                if imgs.shape[0] == 0:
+                    imgs = out
+                else:
+                    imgs = np.vstack((imgs, out))
+                step += step_size
+            if effect == 'circles':
+                lbl, l_step, z_step, l_done_step, z_done_step = circular_effects(label1, label2, lbl, z_step_num, 
+                l_step_size, lf, max_len, l_step, z_step, l_done_step, z_done_step, z_max_num, centres)
             max_step = lf*ratio-2
             if max_len == lf*ratio:
                 IntStep = True
