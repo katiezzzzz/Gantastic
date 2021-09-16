@@ -6,7 +6,7 @@ import os
 
 PATH = os.path.dirname(os.path.realpath(__file__))
 # extract volume
-data, samplerate = sf.read(PATH+'/midlight/midlight_s3.wav')
+data, samplerate = sf.read(PATH+'/midlight/midlight_s5.wav')
 print(data.shape)
 
 sample = data[:,0]
