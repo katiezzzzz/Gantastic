@@ -142,12 +142,12 @@ def generate_centres(n_circles, img_width, img_len, radius):
     centres = np.array([])
     for n in range(n_circles):
         if len(centres) == 0:
-            centres = np.array([np.random.randint(radius, img_width-radius, 1)[0], np.random.randint(radius, img_len-radius, 1)[0]])[None, :]
+            centres = np.array([np.random.randint(radius, img_width-radius, 1)[0], np.random.randint(radius, img_len-radius-2, 1)[0]])[None, :]
         else:
-            new_centre = np.array([np.random.randint(radius, img_width-radius, 1)[0], np.random.randint(radius, img_len-radius, 1)[0]])
+            new_centre = np.array([np.random.randint(radius, img_width-radius, 1)[0], np.random.randint(radius, img_len-radius-2, 1)[0]])
             if centres.ndim == 1:
                 while check_centre_distance(centres, new_centre, radius) == False:
-                    new_centre = np.array([np.random.randint(radius, img_width-radius, 1)[0], np.random.randint(radius, img_len-radius, 1)[0]])
+                    new_centre = np.array([np.random.randint(radius, img_width-radius, 1)[0], np.random.randint(radius, img_len-radius-2, 1)[0]])
             else:
                 overlap = True
                 count = 0
@@ -156,7 +156,7 @@ def generate_centres(n_circles, img_width, img_len, radius):
                         if check_centre_distance(old_centre, new_centre, radius) == False:
                             count += 1
                     if count > 0:
-                        new_centre = np.array([np.random.randint(radius, img_width-radius, 1)[0], np.random.randint(radius, img_len-radius, 1)[0]])
+                        new_centre = np.array([np.random.randint(radius, img_width-radius, 1)[0], np.random.randint(radius, img_len-radius-2, 1)[0]])
                         count = 0
                     else:
                         overlap = False

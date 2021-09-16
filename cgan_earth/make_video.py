@@ -35,10 +35,10 @@ ratio = 2
 
 # test1: forest, then transit to sea, then roll in sea
 # the speed currently must start with the lowest possible speed to make sure the noise has right dimension
-imgs1, noise, netG = roll_video(proj_path, desert_lbl, netG(z_dim+n_classes, img_length), n_classes, z_dim, lf=lf, device=device, ratio=ratio, n_clips=5, step_size=0.25)
-imgs2, noise, netG = transit_video(desert_lbl, star_lbl, n_classes, noise, netG, lf=lf, ratio=ratio, device=device, step_size=0.25, z_step_size=0.1, l_step_size=0.1, transit_mode='scroll')
-imgs3, noise, netG = roll_video(proj_path, star_lbl, netG, n_classes, z_dim, lf=lf, device=device, ratio=ratio, n_clips=2, step_size=0.25, original_noise=noise)
-imgs4, noise, netG = transit_video(desert_lbl, star_lbl, n_classes, noise, netG, lf=lf, ratio=ratio, device=device, step_size=0.25, z_step_size=0.1, l_step_size=0.1, transit_mode='circular_effects')
+imgs1, noise, netG = roll_video(proj_path, desert_lbl, netG(z_dim+n_classes, img_length), n_classes, z_dim, lf, device, ratio, n_clips=5, step_size=0.25)
+imgs2, noise, netG = transit_video(desert_lbl, forest_lbl, n_classes, noise, netG, lf, ratio, device, step_size=0.25, z_step_size=0.1, l_step_size=0.1, transit_mode='scroll')
+imgs3, noise, netG = roll_video(proj_path, forest_lbl, netG, n_classes, z_dim, lf, device, ratio, n_clips=2, step_size=0.25, original_noise=noise)
+imgs4, noise, netG = effects(forest_lbl, star_lbl, n_classes, noise, netG, lf, ratio, device, step_size=0.25, z_step_num=2, l_step_size=0.25, z_max_num=4, effect='circles', n_circles=3)
 #imgs4, noise, netG = change_noise(star_lbl, noise, netG, n_classes, z_dim, lf=lf, device=device, ratio=ratio, n_clips=15, step_size=0.25, value=0.003, method='add')
 
 # concatenante the imgs together and make video
