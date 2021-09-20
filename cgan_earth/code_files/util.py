@@ -396,7 +396,7 @@ def effects(label1, label2, n_classes, original_noise, netG, lf=4, ratio=2, devi
     prev_label = gen_labels(label1, n_classes)[:, :, None, None]
     lbl = prev_label.repeat(1, 1, lf, max_len).to(device)
     if effect == 'circles':
-        n_clips = int((max_len // z_step_num) + (1 // l_step_size) + 2)
+        n_clips = int((z_max_num // z_step_num) + (1 // l_step_size) + 2)
         l_step = 0
         z_step = 0
         l_done_step = 0
@@ -480,9 +480,9 @@ def change_noise(label, original_noise, netG, n_classes, z_dim=64, lf=4, device=
             if step > max_step:
                 step -= max_step
             noise = roll_noise(noise, step_idx, max_step, IntStep)
-            if method == 'add':
+            if method == 'sub':
                 noise = torch.sub(noise, value)
-            elif method == 'sub':
+            elif method == 'add':
                 noise = torch.add(noise, value)
     return imgs, noise, netG
 
