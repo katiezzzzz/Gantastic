@@ -39,6 +39,7 @@ with open(proj_path + '_noise.data', 'rb') as filehandle:
 
 # test1: forest, then transit to sea, then roll in sea
 # the speed currently must start with the lowest possible speed to make sure the noise has right dimension
+'''
 # section s5_3
 imgs1, noise, netG = roll_video(proj_path, desert_lbl, netG(z_dim+n_classes, img_length), n_classes, z_dim, lf, device, ratio, n_clips=int(8/(1/0.25)), step_size=0.25, original_noise=noise)
 print(imgs1.shape)
@@ -46,24 +47,25 @@ imgs2, noise, netG = transit_video(desert_lbl, sea_lbl, n_classes, noise, netG, 
 print(imgs2.shape)
 imgs3, noise, netG = roll_video(proj_path, sea_lbl, netG, n_classes, z_dim, lf, device, ratio, n_clips=int(72/(1/0.25)), step_size=0.25, original_noise=noise)
 print(imgs3.shape)
-imgs4, noise, netG = change_noise(sea_lbl, noise, netG, n_classes, z_dim, lf, device, ratio, n_clips=int(72/(1/0.25)), step_size=0.25, value=0.015, method='sub')
+imgs4, noise, netG = change_noise(sea_lbl, noise, netG, n_classes, z_dim, lf, device, ratio, n_clips=int(72/(1/0.25)), step_size=0.25, value=0.025, method='sub')
 print(imgs4.shape)
-imgs5, noise, netG = change_noise(sea_lbl, noise, netG, n_classes, z_dim, lf, device, ratio, n_clips=int(72/(1/0.25)), step_size=0.25, value=0.015, method='add')
+imgs5, noise, netG = change_noise(sea_lbl, noise, netG, n_classes, z_dim, lf, device, ratio, n_clips=int(72/(1/0.25)), step_size=0.25, value=0.025, method='add')
 print(imgs5.shape)
-imgs6, noise, netG = change_noise(sea_lbl, noise, netG, n_classes, z_dim, lf, device, ratio, n_clips=int(72/(1/0.25)), step_size=0.25, value=0.015, method='sub')
+imgs6, noise, netG = change_noise(sea_lbl, noise, netG, n_classes, z_dim, lf, device, ratio, n_clips=int(72/(1/0.25)), step_size=0.25, value=0.025, method='sub')
 print(imgs6.shape)
-imgs7, noise, netG = change_noise(sea_lbl, noise, netG, n_classes, z_dim, lf, device, ratio, n_clips=int(72/(1/0.25)), step_size=0.25, value=0.015, method='add')
+imgs7, noise, netG = change_noise(sea_lbl, noise, netG, n_classes, z_dim, lf, device, ratio, n_clips=int(72/(1/0.25)), step_size=0.25, value=0.025, method='add')
 print(imgs7.shape)
-imgs8, noise, netG = change_noise(sea_lbl, noise, netG, n_classes, z_dim, lf, device, ratio, n_clips=int(72/(1/0.25)), step_size=0.25, value=0.015, method='sub')
+imgs8, noise, netG = change_noise(sea_lbl, noise, netG, n_classes, z_dim, lf, device, ratio, n_clips=int(72/(1/0.25)), step_size=0.25, value=0.025, method='sub')
 print(imgs8.shape)
-imgs9, noise, netG = change_noise(sea_lbl, noise, netG, n_classes, z_dim, lf, device, ratio, n_clips=int(72/(1/0.25)), step_size=0.25, value=0.015, method='add')
+imgs9, noise, netG = change_noise(sea_lbl, noise, netG, n_classes, z_dim, lf, device, ratio, n_clips=int(72/(1/0.25)), step_size=0.25, value=0.025, method='add')
 print(imgs9.shape)
-imgs10, noise, netG = change_noise(sea_lbl, noise, netG, n_classes, z_dim, lf, device, ratio, n_clips=int(72/(1/0.25)), step_size=0.25, value=0.015, method='sub')
+imgs10, noise, netG = change_noise(sea_lbl, noise, netG, n_classes, z_dim, lf, device, ratio, n_clips=int(72/(1/0.25)), step_size=0.25, value=0.025, method='sub')
 print(imgs10.shape)
-imgs11, noise, netG = change_noise(sea_lbl, noise, netG, n_classes, z_dim, lf, device, ratio, n_clips=int(72/(1/0.25)), step_size=0.25, value=0.015, method='add')
+imgs11, noise, netG = change_noise(sea_lbl, noise, netG, n_classes, z_dim, lf, device, ratio, n_clips=int(72/(1/0.25)), step_size=0.25, value=0.025, method='add')
 print(imgs11.shape)
 imgs12, noise, netG = roll_video(proj_path, sea_lbl, netG, n_classes, z_dim, lf, device, ratio, n_clips=int(16/(1/0.25)), step_size=0.25, original_noise=noise)
 print(imgs12.shape)
+'''
 
 '''
 # section s5_2
@@ -73,9 +75,9 @@ imgs2, noise, netG = transit_video(forest_lbl, desert_lbl, n_classes, noise, net
 print(imgs2.shape)
 imgs3, noise, netG = roll_video(proj_path, desert_lbl, netG, n_classes, z_dim, lf, device, ratio, n_clips=int(36/(1/0.25)), step_size=0.25, original_noise=noise)
 print(imgs3.shape)
-imgs4, noise, netG = change_noise(desert_lbl, noise, netG, n_classes, z_dim, lf, device, ratio, n_clips=int(36/(1/0.25)), step_size=0.25, value=0.015, method='sub')
+imgs4, noise, netG = change_noise(desert_lbl, noise, netG, n_classes, z_dim, lf, device, ratio, n_clips=int(36/(1/0.25)), step_size=0.25, value=0.025, method='sub')
 print(imgs4.shape)
-imgs5, noise, netG = change_noise(desert_lbl, noise, netG, n_classes, z_dim, lf, device, ratio, n_clips=int(36/(1/0.25)), step_size=0.25, value=0.015, method='add')
+imgs5, noise, netG = change_noise(desert_lbl, noise, netG, n_classes, z_dim, lf, device, ratio, n_clips=int(36/(1/0.25)), step_size=0.25, value=0.025, method='add')
 print(imgs5.shape)
 '''
 
@@ -87,25 +89,25 @@ imgs2, noise, netG = transit_video(star_lbl, forest_lbl, n_classes, noise, netG,
 print(imgs2.shape)
 imgs3, noise, netG = roll_video(proj_path, forest_lbl, netG, n_classes, z_dim, lf, device, ratio, n_clips=int(104/(1/0.25)), step_size=0.25, original_noise=noise)
 print(imgs3.shape)
-imgs4, noise, netG = change_noise(forest_lbl, noise, netG, n_classes, z_dim, lf, device, ratio, n_clips=int(104/(1/0.25)), step_size=0.25, value=0.01, method='sub')
+imgs4, noise, netG = change_noise(forest_lbl, noise, netG, n_classes, z_dim, lf, device, ratio, n_clips=int(104/(1/0.25)), step_size=0.25, value=0.02, method='sub')
 print(imgs4.shape)
-imgs5, noise, netG = change_noise(forest_lbl, noise, netG, n_classes, z_dim, lf, device, ratio, n_clips=int(104/(1/0.25)), step_size=0.25, value=0.01, method='add')
+imgs5, noise, netG = change_noise(forest_lbl, noise, netG, n_classes, z_dim, lf, device, ratio, n_clips=int(104/(1/0.25)), step_size=0.25, value=0.02, method='add')
 print(imgs5.shape)
-imgs6, noise, netG = change_noise(forest_lbl, noise, netG, n_classes, z_dim, lf, device, ratio, n_clips=int(104/(1/0.25)), step_size=0.25, value=0.01, method='sub')
+imgs6, noise, netG = change_noise(forest_lbl, noise, netG, n_classes, z_dim, lf, device, ratio, n_clips=int(104/(1/0.25)), step_size=0.25, value=0.02, method='sub')
 print(imgs6.shape)
-imgs7, noise, netG = change_noise(forest_lbl, noise, netG, n_classes, z_dim, lf, device, ratio, n_clips=int(104/(1/0.25)), step_size=0.25, value=0.01, method='add')
+imgs7, noise, netG = change_noise(forest_lbl, noise, netG, n_classes, z_dim, lf, device, ratio, n_clips=int(104/(1/0.25)), step_size=0.25, value=0.02, method='add')
 print(imgs7.shape)
-imgs8, noise, netG = change_noise(forest_lbl, noise, netG, n_classes, z_dim, lf, device, ratio, n_clips=int(104/(1/0.25)), step_size=0.25, value=0.01, method='sub')
+imgs8, noise, netG = change_noise(forest_lbl, noise, netG, n_classes, z_dim, lf, device, ratio, n_clips=int(104/(1/0.25)), step_size=0.25, value=0.02, method='sub')
 print(imgs8.shape)
-imgs9, noise, netG = change_noise(forest_lbl, noise, netG, n_classes, z_dim, lf, device, ratio, n_clips=int(104/(1/0.25)), step_size=0.25, value=0.01, method='add')
+imgs9, noise, netG = change_noise(forest_lbl, noise, netG, n_classes, z_dim, lf, device, ratio, n_clips=int(104/(1/0.25)), step_size=0.25, value=0.02, method='add')
 print(imgs9.shape)
-imgs10, noise, netG = change_noise(forest_lbl, noise, netG, n_classes, z_dim, lf, device, ratio, n_clips=int(108/(1/0.25)), step_size=0.25, value=0.01, method='sub')
+imgs10, noise, netG = change_noise(forest_lbl, noise, netG, n_classes, z_dim, lf, device, ratio, n_clips=int(108/(1/0.25)), step_size=0.25, value=0.02, method='sub')
 print(imgs10.shape)
-imgs11, noise, netG = change_noise(forest_lbl, noise, netG, n_classes, z_dim, lf, device, ratio, n_clips=int(108/(1/0.25)), step_size=0.25, value=0.01, method='add')
+imgs11, noise, netG = change_noise(forest_lbl, noise, netG, n_classes, z_dim, lf, device, ratio, n_clips=int(108/(1/0.25)), step_size=0.25, value=0.02, method='add')
 print(imgs11.shape)
-imgs12, noise, netG = change_noise(forest_lbl, noise, netG, n_classes, z_dim, lf, device, ratio, n_clips=int(104/(1/0.25)), step_size=0.25, value=0.01, method='sub')
+imgs12, noise, netG = change_noise(forest_lbl, noise, netG, n_classes, z_dim, lf, device, ratio, n_clips=int(104/(1/0.25)), step_size=0.25, value=0.02, method='sub')
 print(imgs12.shape)
-imgs13, noise, netG = change_noise(forest_lbl, noise, netG, n_classes, z_dim, lf, device, ratio, n_clips=int(104/(1/0.25)), step_size=0.25, value=0.01, method='add')
+imgs13, noise, netG = change_noise(forest_lbl, noise, netG, n_classes, z_dim, lf, device, ratio, n_clips=int(104/(1/0.25)), step_size=0.25, value=0.02, method='add')
 print(imgs13.shape)
 '''
 
@@ -133,21 +135,21 @@ imgs10, noise, netG = transit_video(sea_lbl, star_lbl, n_classes, noise, netG, l
 print(imgs10.shape)
 imgs11, noise, netG = roll_video(proj_path, star_lbl, netG, n_classes, z_dim, lf, device, ratio, n_clips=int(72/(1/0.25)), step_size=0.25, original_noise=noise)
 print(imgs11.shape)
-imgs12, noise, netG = change_noise(star_lbl, noise, netG, n_classes, z_dim, lf, device, ratio, n_clips=int(72/(1/0.25)), step_size=0.25, value=0.01, method='sub')
+imgs12, noise, netG = change_noise(star_lbl, noise, netG, n_classes, z_dim, lf, device, ratio, n_clips=int(72/(1/0.25)), step_size=0.25, value=0.02, method='sub')
 print(imgs12.shape)
-imgs13, noise, netG = change_noise(star_lbl, noise, netG, n_classes, z_dim, lf, device, ratio, n_clips=int(72/(1/0.25)), step_size=0.25, value=0.01, method='add')
+imgs13, noise, netG = change_noise(star_lbl, noise, netG, n_classes, z_dim, lf, device, ratio, n_clips=int(72/(1/0.25)), step_size=0.25, value=0.02, method='add')
 print(imgs13.shape)
-imgs14, noise, netG = change_noise(star_lbl, noise, netG, n_classes, z_dim, lf, device, ratio, n_clips=int(72/(1/0.25)), step_size=0.25, value=0.01, method='sub')
+imgs14, noise, netG = change_noise(star_lbl, noise, netG, n_classes, z_dim, lf, device, ratio, n_clips=int(72/(1/0.25)), step_size=0.25, value=0.02, method='sub')
 print(imgs14.shape)
-imgs15, noise, netG = change_noise(star_lbl, noise, netG, n_classes, z_dim, lf, device, ratio, n_clips=int(72/(1/0.25)), step_size=0.25, value=0.01, method='add')
+imgs15, noise, netG = change_noise(star_lbl, noise, netG, n_classes, z_dim, lf, device, ratio, n_clips=int(72/(1/0.25)), step_size=0.25, value=0.02, method='add')
 print(imgs15.shape)
-imgs16, noise, netG = change_noise(star_lbl, noise, netG, n_classes, z_dim, lf, device, ratio, n_clips=int(72/(1/0.25)), step_size=0.25, value=0.01, method='sub')
+imgs16, noise, netG = change_noise(star_lbl, noise, netG, n_classes, z_dim, lf, device, ratio, n_clips=int(72/(1/0.25)), step_size=0.25, value=0.02, method='sub')
 print(imgs16.shape)
-imgs17, noise, netG = change_noise(star_lbl, noise, netG, n_classes, z_dim, lf, device, ratio, n_clips=int(72/(1/0.25)), step_size=0.25, value=0.01, method='add')
+imgs17, noise, netG = change_noise(star_lbl, noise, netG, n_classes, z_dim, lf, device, ratio, n_clips=int(72/(1/0.25)), step_size=0.25, value=0.02, method='add')
 print(imgs17.shape)
-imgs18, noise, netG = change_noise(star_lbl, noise, netG, n_classes, z_dim, lf, device, ratio, n_clips=int(72/(1/0.25)), step_size=0.25, value=0.01, method='sub')
+imgs18, noise, netG = change_noise(star_lbl, noise, netG, n_classes, z_dim, lf, device, ratio, n_clips=int(72/(1/0.25)), step_size=0.25, value=0.02, method='sub')
 print(imgs18.shape)
-imgs19, noise, netG = change_noise(star_lbl, noise, netG, n_classes, z_dim, lf, device, ratio, n_clips=int(72/(1/0.25)), step_size=0.25, value=0.01, method='add')
+imgs19, noise, netG = change_noise(star_lbl, noise, netG, n_classes, z_dim, lf, device, ratio, n_clips=int(72/(1/0.25)), step_size=0.25, value=0.02, method='add')
 print(imgs19.shape)
 '''
 
@@ -182,7 +184,7 @@ imgs13, noise, netG = roll_video(proj_path, sea_lbl, netG, n_classes, z_dim, lf,
 print(imgs13.shape)
 '''
 
-'''
+
 # section s2
 imgs1, noise, netG = roll_video(proj_path, forest_lbl, netG(z_dim+n_classes, img_length), n_classes, z_dim, lf, device, ratio, n_clips=int(5/(1/0.2)), step_size=0.2, original_noise=noise)
 print(imgs1.shape)
@@ -215,7 +217,7 @@ imgs14, noise, netG = roll_video(proj_path, sea_lbl, netG, n_classes, z_dim, lf,
 print(imgs14.shape)
 imgs15, noise, netG = roll_video(proj_path, sea_lbl, netG, n_classes, z_dim, lf, device, ratio, n_clips=101, step_size=2, original_noise=noise)
 print(imgs15.shape)
-'''
+
 
 '''
 # section s1
@@ -237,7 +239,7 @@ imgs7, noise, netG = roll_video(proj_path, desert_lbl, netG, n_classes, z_dim, l
 print(imgs7.shape)
 imgs8, noise, netG = transit_video(desert_lbl, forest_lbl, n_classes, noise, netG, lf, ratio, device, step_size=0.5, z_step_size=0.33, l_step_size=0.33, transit_mode='circular')
 print(imgs8.shape)
-imgs9, noise, netG = roll_video(proj_path, forest_lbl, netG, n_classes, z_dim, lf, device, ratio, n_clips=int(740/(1/0.5)), step_size=0.5, original_noise=noise)
+imgs9, noise, netG = roll_video(proj_path, forest_lbl, netG, n_classes, z_dim, lf, device, ratio, n_clips=int(740/(1/0.25)), step_size=0.25, original_noise=noise)
 print(imgs9.shape)
 '''
 
@@ -253,9 +255,9 @@ imgs = np.vstack((imgs, imgs9))
 imgs = np.vstack((imgs, imgs10))
 imgs = np.vstack((imgs, imgs11))
 imgs = np.vstack((imgs, imgs12))
-#imgs = np.vstack((imgs, imgs13))
-#imgs = np.vstack((imgs, imgs14))
-#imgs = np.vstack((imgs, imgs15))
+imgs = np.vstack((imgs, imgs13))
+imgs = np.vstack((imgs, imgs14))
+imgs = np.vstack((imgs, imgs15))
 #imgs = np.vstack((imgs, imgs16))
 #imgs = np.vstack((imgs, imgs17))
 #imgs = np.vstack((imgs, imgs18))
