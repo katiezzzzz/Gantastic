@@ -1,10 +1,10 @@
 # Gantastic
 
 ## UROP Project with TLDR Group (Imperial College London)
-The project was done from 06/2021 to 09/2021 and the research was focused around Generative Adversarial Networks (GAN).
+The project was done from 06/2021 to 09/2021 and the research was focused around Generative Adversarial Networks (GANs).
 
 ### Exploring MNIST
-Created a basic GAN network and trained using MNIST dataset
+Created a basic GAN model and trained using MNIST dataset
 - Network architecture in `conditional_gan_mnist/code_files/networks.py`
 - Network hyper-parameters in `conditional_gan_mnist/code_files/params.py`
 - Data preprocessing functions in `conditional_gan_mnist/code_files/preprocessing.py`
